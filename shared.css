@@ -1,12 +1,4 @@
-<!DOCTYPE html><html lang="ja"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>イラスト制作 | 合同会社シティーリバー</title>
-<meta name="description" content="心を動かすアートワーク"/>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-<link rel="icon" href="favicon.ico"/>
-<style>/* CityRiver Design System - shared.css */
+/* CityRiver Design System - shared.css */
 :root{
   --accent:#4F46E5;--al:#EEF2FF;
   --cyan:#0891B2;--cl:#ECFEFF;
@@ -232,29 +224,3 @@ footer{background:var(--bg-section);border-top:1px solid var(--border);padding:3
 @media(min-width:769px){
   .nv>div:last-child .tt{display:none}
 }
-</style></head><body>
-<div class="bg-blobs"><span></span><span></span><span></span></div>
-<header class="nw"><nav class="nv">
-<a href="index.html" class="nl"><img src="Logo.png" alt="CityRiver">合同会社シティーリバー</a>
-<div class="nk"><a href="index.html#services">事業内容</a><a href="index.html#products">プロダクト</a><a href="index.html#profile">会社情報</a><a href="index.html#contact" class="nc">お問い合わせ</a><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></div>
-<div style="display:flex;gap:8px;align-items:center"><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="hb" aria-label="メニュー"><span></span><span></span><span></span></button></div>
-</nav></header>
-<div class="mm"><a href="index.html">ホーム</a><a href="index.html#services">事業内容</a><a href="index.html#products">プロダクト</a><a href="extensions.html">拡張機能</a><a href="webapps.html">Webアプリ</a><a href="windows-apps.html">Windowsアプリ</a><a href="index.html#contact">お問い合わせ</a></div><div class="cw"><section class="hero" style="padding:80px 40px 60px"><div class="ct"><div class="bc"><a href="index.html">ホーム</a><span>/</span>イラスト制作</div><div class="hbg">🎨 イラスト制作</div><h1>イラスト制作</h1><p class="hs">心を動かすアートワーク</p></div></section><section><div class="ct"><div class="rv" style="margin-bottom:40px"><h2 style="font-size:24px;font-weight:700;margin-bottom:14px">事業概要</h2><p style="font-size:15px;color:var(--text-s);line-height:1.9">ブランドの世界観やプロジェクトの想いを、細部まで丁寧に描き出すアートワークで印象を最大化します。</p></div><div class="rv rd2" style="margin-bottom:40px"><h2 style="font-size:24px;font-weight:700;margin-bottom:14px">対応範囲</h2><p style="font-size:15px;color:var(--text-s);line-height:1.9">Webイラスト、キャラクターデザイン、ロゴ制作、広告ビジュアル、書籍カバーなど幅広いジャンルに対応。</p></div><div class="rv rd3" style="margin-bottom:40px"><h2 style="font-size:24px;font-weight:700;margin-bottom:14px">制作フロー</h2><p style="font-size:15px;color:var(--text-s);line-height:1.9">ヒアリング → コンセプト設計 → ラフ → 本制作 → 納品の5ステップで進行します。</p></div><div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border)"><a href="index.html" class="btn bs"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> ホームに戻る</a></div></div></section></div>
-<footer><div class="fi"><div class="fc">&copy; <span class="yr"></span> 合同会社シティーリバー / CityRiver LLC</div><div class="fl"><a href="index.html">ホーム</a><a href="extensions.html">拡張機能</a><a href="webapps.html">Webアプリ</a><a href="windows-apps.html">Windowsアプリ</a></div></div></footer>
-<button class="bt" aria-label="トップへ戻る"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button><script>
-const H=document.documentElement,S=localStorage.getItem('theme');
-if(S)H.dataset.theme=S;else if(matchMedia('(prefers-color-scheme:dark)').matches)H.dataset.theme='dark';
-document.querySelectorAll('.tt').forEach(b=>b.addEventListener('click',()=>{const n=H.dataset.theme==='dark'?'light':'dark';H.dataset.theme=n;localStorage.setItem('theme',n)}));
-document.querySelectorAll('.hb').forEach(h=>h.addEventListener('click',()=>{h.classList.toggle('active');document.querySelector('.mm')?.classList.toggle('active')}));
-const O=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');O.unobserve(x.target)}}),{threshold:.1});
-document.querySelectorAll('.rv').forEach(e=>O.observe(e));
-function aC(){document.querySelectorAll('[data-count]').forEach(e=>{const t=parseInt(e.dataset.count);let c=0;const s=Math.max(1,Math.floor(t/40));const i=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(i)}e.textContent=c+(e.dataset.suffix||'')},30)})}
-const CO=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){aC();CO.unobserve(x.target)}}),{threshold:.3});
-document.querySelectorAll('.sr').forEach(e=>CO.observe(e));
-const BT=document.querySelector('.bt');
-if(BT){window.addEventListener('scroll',()=>BT.classList.toggle('vis',scrollY>400));BT.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}))}
-document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
-const SI=document.querySelector('.si4');
-if(SI)SI.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.cd[data-name]').forEach(c=>{c.style.display=(c.dataset.name.toLowerCase().includes(q)||c.dataset.desc?.toLowerCase().includes(q))?'':'none'})});
-document.querySelectorAll('.cb[data-cat]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.cb').forEach(x=>x.classList.remove('act'));b.classList.add('act');const c=b.dataset.cat;document.querySelectorAll('.cd[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none');document.querySelectorAll('.cs2[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none')}));
-</script></body></html>

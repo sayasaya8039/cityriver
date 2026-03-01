@@ -1,903 +1,374 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Windowsアプリ一覧 | 合同会社シティーリバー</title>
-  <meta name="description" content="合同会社シティーリバーが開発・提供するWindows向けネイティブアプリケーションの一覧。AI、開発、メディア、システムなど36種以上。" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-  <link rel="icon" href="favicon.ico" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Windowsアプリ一覧 | 合同会社シティーリバー</title>
+<meta name="description" content="合同会社シティーリバーのWindowsアプリ一覧"/>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
+<link rel="icon" href="favicon.ico"/>
+<style>/* CityRiver Design System - shared.css */
+:root{
+  --accent:#4F46E5;--al:#EEF2FF;
+  --cyan:#0891B2;--cl:#ECFEFF;
+  --amber:#D97706;--aml:#FFFBEB;
+  --green:#059669;--gl:#ECFDF5;
+  --bg:#FFF;--bg-section:#F8FAFC;
+  --text:#0F172A;--text-s:#64748B;
+  --border:#E2E8F0;--card-bg:#FFF;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.08);
+  --radius:16px;--nav-bg:rgba(255,255,255,.8)
+}
+[data-theme=dark]{
+  --bg:#0F172A;--bg-section:#1E293B;
+  --text:#F1F5F9;--text-s:#94A3B8;
+  --border:#334155;--card-bg:#1E293B;
+  --shadow:0 1px 3px rgba(0,0,0,.3);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.4);
+  --nav-bg:rgba(15,23,42,.85);
+  --al:#1E1B4B;--cl:#164E63;--aml:#451A03;--gl:#064E3B
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
 
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f8f9fa;
-      --text-primary: #0a0a0a;
-      --text-secondary: #6b7280;
-      --accent: #f59e0b;
-      --accent-light: #fffbeb;
-      --border: rgba(0, 0, 0, 0.08);
-    }
+/* Background blobs */
+.bg-blobs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none}
+.bg-blobs span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;animation:blobFloat 20s ease-in-out infinite}
+.bg-blobs span:nth-child(1){width:500px;height:500px;background:var(--accent);top:-10%;left:-5%;animation-delay:0s}
+.bg-blobs span:nth-child(2){width:400px;height:400px;background:var(--cyan);top:40%;right:-8%;animation-delay:-7s}
+.bg-blobs span:nth-child(3){width:350px;height:350px;background:var(--amber);bottom:-5%;left:30%;animation-delay:-14s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.05)}66%{transform:translate(-20px,30px) scale(.95)}}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+/* Navigation */
+.nw{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:background .3s}
+.nv{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.nl img{height:32px;width:32px;border-radius:8px}
+.nk{display:flex;align-items:center;gap:6px}
+.nk a{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-s);transition:all .2s}
+.nk a:hover{color:var(--text);background:var(--bg-section)}
+.nc{background:var(--accent)!important;color:#fff!important;border-radius:8px!important;padding:8px 18px!important;font-weight:600!important}
+.nc:hover{opacity:.9}
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.7;
-      min-height: 100vh;
-    }
+/* Theme toggle */
+.tt{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;color:var(--text-s);display:flex;align-items:center;transition:all .2s}
+.tt:hover{color:var(--text);border-color:var(--text-s)}
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-    }
+/* Hamburger */
+.hb{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hb span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hb.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hb.active span:nth-child(2){opacity:0}
+.hb.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 
-    .nav {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* Mobile menu */
+.mm{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;gap:4px;z-index:99;box-shadow:var(--shadow-lg)}
+.mm.active{display:flex}
+.mm a{padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:background .2s}
+.mm a:hover{background:var(--bg-section)}
 
-    .logo-text {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-      text-decoration: none;
-    }
+/* Content wrapper */
+.cw{padding-top:64px}
 
-    .logo-img {
-      height: 40px;
-      width: auto;
-      object-fit: contain;
-    }
+/* Reveal animation */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
 
-    .nav-link {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 14px;
-      transition: color 0.3s ease;
-    }
+/* Container */
+.ct{max-width:1200px;margin:0 auto;padding:0 24px}
 
-    .nav-link:hover { color: var(--accent); }
+/* Hero */
+.hero{padding:120px 40px 80px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.3;margin-bottom:20px;letter-spacing:-.02em}
+.gt{background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hbg{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;background:var(--al);color:var(--accent);margin-bottom:20px}
+.hs{font-size:clamp(14px,2vw,17px);color:var(--text-s);max-width:640px;margin:0 auto 32px;line-height:1.9}
+.ha{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 80px 40px 120px;
-    }
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;font-weight:600;font-size:14px;transition:all .25s;cursor:pointer;border:none;text-decoration:none}
+.bp{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bp:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,70,229,.4)}
+.bs{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.bs:hover{border-color:var(--accent);color:var(--accent)}
 
-    .breadcrumb {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-    }
+/* Section header */
+section{padding:80px 0}
+.sh{text-align:center;margin-bottom:48px}
+.sb{display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:12px}
+.st{font-size:clamp(24px,3.5vw,36px);font-weight:800;margin-bottom:12px;letter-spacing:-.01em}
+.ss{font-size:15px;color:var(--text-s);max-width:560px;margin:0 auto;line-height:1.8}
 
-    .breadcrumb a {
-      color: var(--accent);
-      text-decoration: none;
-    }
+/* Services grid */
+.svg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.sc{display:block;padding:28px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.sc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.sc h3{font-size:17px;font-weight:700;margin:14px 0 8px}
+.sc p{font-size:13px;color:var(--text-s);line-height:1.7}
+.si2{font-size:32px;display:block}
 
-    .page-header {
-      margin-bottom: 48px;
-      text-align: center;
-    }
+/* Stats row */
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:40px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);margin-bottom:40px;text-align:center}
+.si{display:flex;flex-direction:column;align-items:center}
+.sn{font-size:clamp(28px,4vw,42px);font-weight:800;background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:13px;color:var(--text-s);margin-top:4px;font-weight:500}
 
-    .page-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-light);
-      color: var(--accent);
-      padding: 8px 16px;
-      border-radius: 100px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
+/* Product grid */
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.pc{display:block;padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.pc h3{font-size:18px;font-weight:700;margin:18px 0 8px}
+.pc p{font-size:14px;color:var(--text-s);line-height:1.7;margin-bottom:16px}
+.ci{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff}
+.pu{background:linear-gradient(135deg,#7C3AED,#4F46E5)}
+.cy{background:linear-gradient(135deg,#0891B2,#06B6D4)}
+.am{background:linear-gradient(135deg,#D97706,#F59E0B)}
+.cl2{font-size:13px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.cl2:hover{gap:10px}
 
-    .page-title {
-      font-size: clamp(2.5rem, 5vw, 3.5rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
+/* Info grid */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px}
+.ic{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.ic h3{font-size:18px;font-weight:700;margin-bottom:20px}
+.ir{display:flex;padding:12px 0;border-bottom:1px solid var(--border)}
+.ir:last-child{border-bottom:none}
+.ir dt{min-width:100px;font-size:13px;color:var(--text-s);font-weight:500}
+.ir dd{font-size:14px;font-weight:500}
+.ir a{color:var(--accent)}
 
-    .page-subtitle {
-      font-size: 18px;
-      color: var(--text-secondary);
-      line-height: 1.8;
-      max-width: 700px;
-      margin: 0 auto;
-    }
+/* Contact */
+.cs{text-align:center;padding:48px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#7C3AED);color:#fff}
+.cs h2{font-size:28px;font-weight:800;margin-bottom:12px}
+.cs p{font-size:15px;opacity:.9;margin-bottom:28px;line-height:1.8}
+.ca{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cs .bp{background:#fff;color:var(--accent)}
+.cs .bs{border-color:rgba(255,255,255,.4);color:#fff}
+.cs .bs:hover{background:rgba(255,255,255,.15);border-color:#fff}
 
-    .stats-bar {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      padding: 24px 0;
-      margin-bottom: 48px;
-      border-bottom: 1px solid var(--border);
-    }
+/* Footer */
+footer{background:var(--bg-section);border-top:1px solid var(--border);padding:32px 0}
+.fi{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fc{font-size:13px;color:var(--text-s)}
+.fl{display:flex;gap:20px}
+.fl a{font-size:13px;color:var(--text-s);transition:color .2s}
+.fl a:hover{color:var(--accent)}
 
-    .stat {
-      text-align: center;
-    }
+/* Back to top */
+.bt{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;z-index:50;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bt.vis{opacity:1;transform:translateY(0)}
+.bt:hover{transform:translateY(-2px)}
 
-    .stat-number {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--accent);
-    }
+/* Breadcrumb */
+.bc{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-s);margin-bottom:24px;flex-wrap:wrap}
+.bc a{transition:color .2s}
+.bc a:hover{color:var(--accent)}
+.bc span{opacity:.4}
 
-    .stat-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
+/* Page header */
+.ph{margin-bottom:32px}
+.pb{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:14px}
+.ph h1{font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:8px}
+.ph p{font-size:15px;color:var(--text-s)}
 
-    .category-nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 48px;
-    }
+/* Search */
+.si3{margin-bottom:24px}
+.si4{width:100%;padding:14px 20px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);font-size:15px;color:var(--text);outline:none;transition:border-color .2s}
+.si4:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--al)}
 
-    .category-btn {
-      padding: 8px 18px;
-      border-radius: 100px;
-      border: 1.5px solid var(--border);
-      background: white;
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
+/* Category nav */
+.cn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.cb{padding:8px 18px;border-radius:999px;font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--bg);color:var(--text-s);cursor:pointer;transition:all .2s}
+.cb:hover{border-color:var(--accent);color:var(--accent)}
+.cb.act{background:var(--accent);color:#fff;border-color:var(--accent)}
 
-    .category-btn:hover,
-    .category-btn.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
+/* Card grid */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.cd{padding:24px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s}
+.cd:hover{box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.cd h3{font-size:16px;font-weight:700}
+.cd p{font-size:13px;color:var(--text-s);line-height:1.7;margin-bottom:14px}
+.ctg{font-size:11px;padding:3px 10px;border-radius:999px;background:var(--bg-section);color:var(--text-s);font-weight:600;white-space:nowrap}
+.cf{display:flex;justify-content:space-between;align-items:center}
+.gl{color:var(--text-s);transition:color .2s;display:flex;align-items:center}
+.gl:hover{color:var(--text)}
 
-    .category-section {
-      margin-bottom: 56px;
-    }
+/* Category section */
+.cs2{scroll-margin-top:80px}
 
-    .category-title {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: -0.01em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+/* Detail page */
+.dh{margin-bottom:40px}
+.dh h1{font-size:clamp(24px,4vw,32px);font-weight:800;margin-bottom:12px}
+.ds{font-size:16px;color:var(--text-s);line-height:1.8;margin-bottom:20px}
+.mb{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.mi{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;background:var(--bg-section);color:var(--text-s);border:1px solid var(--border)}
+.da{display:flex;gap:12px;flex-wrap:wrap}
+.dc{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.dc h2{font-size:20px;font-weight:700;margin:28px 0 14px;padding-top:20px;border-top:1px solid var(--border)}
+.dc h2:first-of-type{margin-top:20px;padding-top:0;border-top:none}
+.dc p{font-size:14px;color:var(--text-s);line-height:1.8;margin-bottom:12px}
+.dc ul{list-style:none;padding:0}
+.dc ul li{padding:8px 0 8px 24px;position:relative;font-size:14px;color:var(--text-s)}
+.dc ul li::before{content:"\2713";position:absolute;left:0;color:var(--accent);font-weight:700}
+.tl li::before{content:"\25CF"!important;font-size:8px;top:12px}
+.dc a{color:var(--accent)}
 
-    .category-title .emoji {
-      font-size: 24px;
-    }
-
-    .category-count {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 24px;
-    }
-
-    .product-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-    }
-
-    .product-item {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px 24px;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .product-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(245, 158, 11, 0.1);
-      border-color: var(--accent);
-    }
-
-    .product-item-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .product-item h3 {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      line-height: 1.4;
-    }
-
-    .product-item-tag {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 100px;
-      background: var(--accent-light);
-      color: var(--accent);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .product-item p {
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 1.7;
-      flex: 1;
-    }
-
-    .product-item-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-
-    .detail-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--accent);
-      text-decoration: none;
-      transition: gap 0.2s ease;
-    }
-
-    .detail-link:hover {
-      gap: 8px;
-    }
-
-    .gh-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      transition: all 0.2s ease;
-    }
-
-    .gh-link:hover {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-    }
-
-    footer {
-      padding: 40px;
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 14px;
-      border-top: 1px solid var(--border);
-    }
-
-    @media (max-width: 768px) {
-      .nav { padding: 16px 24px; }
-      main { padding: 60px 24px 80px; }
-      .page-title { font-size: 2rem; }
-      .product-list { grid-template-columns: 1fr; }
-      .stats-bar { gap: 24px; }
-      .stat-number { font-size: 22px; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <nav class="nav">
-      <a href="index.html" class="logo-text">
-        <img src="Logo.png" alt="CityRiver LLC" class="logo-img">
-        合同会社シティーリバー
-      </a>
-      <a href="index.html#contact" class="nav-link">Contact</a>
-    </nav>
-  </header>
-
-  <main>
-    <div class="breadcrumb">
-      <a href="index.html">ホーム</a> / <a href="index.html#products">プロダクト</a> / Windowsアプリ
-    </div>
-
-    <div class="page-header">
-      <div class="page-badge">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        Windows Applications
-      </div>
-      <h1 class="page-title">Windowsアプリ一覧</h1>
-      <p class="page-subtitle">Windows向けネイティブアプリケーション。高速で安定した動作を実現。</p>
-    </div>
-
-    <div class="stats-bar">
-      <div class="stat">
-        <div class="stat-number">36+</div>
-        <div class="stat-label">Windowsアプリ</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">8</div>
-        <div class="stat-label">カテゴリ</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">.NET・AI・ConPTY・Electron</div>
-        <div class="stat-label">主要テクノロジー</div>
-      </div>
-    </div>
-
-    <nav class="category-nav">
-      <a href="#ai" class="category-btn">AIツール</a>
-      <a href="#dev" class="category-btn">開発ツール</a>
-      <a href="#media" class="category-btn">メディア</a>
-      <a href="#system" class="category-btn">システム</a>
-      <a href="#productivity" class="category-btn">プロダクティビティ</a>
-      <a href="#privacy" class="category-btn">プライバシー</a>
-      <a href="#utility" class="category-btn">ユーティリティ</a>
-      <a href="#lifestyle" class="category-btn">ライフスタイル</a>
-    </nav>
-
-
-    <section id="ai" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x1F916;</span> AIツール</h2>
-      <p class="category-count">8 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>AI File Explorer</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>AIによるファイル分類・タグ付け機能を備えたファイルマネージャー。コンテンツを自動解析し、直感的なファイル管理を実現</p>
-          <div class="product-item-footer">
-            <a href="winapp/ai-file-explorer.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>AI File Explorer (Rust版)</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>セマンティック検索に対応したクロスプラットフォームAIファイルエクスプローラー。高速なネイティブ性能を実現</p>
-          <div class="product-item-footer">
-            <a href="winapp/ai-file-explorer-rust.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>AI Noise Gate</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>Silero VADを使った音声活動検出による仮想マイク。AIがリアルタイムでノイズを除去し、クリアな音声のみを出力</p>
-          <div class="product-item-footer">
-            <a href="winapp/ai-noise-gate.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Clipboard History AI</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>AIによるカテゴリ分類・セマンティック検索機能付きクリップボード履歴マネージャー。コピーした内容を自動整理</p>
-          <div class="product-item-footer">
-            <a href="winapp/clipboard-history-ai.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>ローカルファイル検索 (AI強化版)</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>エンベディングとAIフィルターによるセマンティックファイル検索。自然言語でファイルを探せる次世代検索ツール</p>
-          <div class="product-item-footer">
-            <a href="winapp/local-file-search.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>通知AI優先度フィルター</h3>
-            <span class="product-item-tag">v2.1.0</span>
-          </div>
-          <p>Windows通知をAIが自動で優先度判定し、重要なものだけを表示。集中モードとの連携で生産性を向上</p>
-          <div class="product-item-footer">
-            <a href="winapp/notification-filter.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>オフラインAIチャットコンパニオン</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>インターネット接続不要で動作するローカルLLM搭載AIチャットボット。プライバシーを完全に保護しながらAI対話を実現</p>
-          <div class="product-item-footer">
-            <a href="winapp/offline-ai-chat.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Limitless AI Calendar Sync</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>Limitless AIの会話ログからイベント情報をAIで自動抽出し、Googleカレンダーに同期するシステムトレイ常駐アプリ</p>
-          <div class="product-item-footer">
-            <a href="winapp/limitless-ai-calendar-sync.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="dev" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x1F6E0;</span> 開発ツール</h2>
-      <p class="category-count">8 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>AgentLimits</h3>
-            <span class="product-item-tag">v0.1.0</span>
-          </div>
-          <p>複数AIエージェント（Claude, GPT, Gemini等）のAPI使用量をリアルタイム監視するデスクトップウィジェット</p>
-          <div class="product-item-footer">
-            <a href="winapp/agent-limits.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Auto Claude</h3>
-            <span class="product-item-tag">v2.7.2</span>
-          </div>
-          <p>自律型マルチエージェントコーディングフレームワーク。Electron UIからClaude AIによる自動コード生成・修正を実行</p>
-          <div class="product-item-footer">
-            <a href="winapp/auto-claude.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            <a href="https://github.com/AndyMik90/Auto-Claude" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>bnmp</h3>
-            <span class="product-item-tag">v0.1.0</span>
-          </div>
-          <p>Zig製の超高速Nodeパッケージマネージャー。npm/pnpm/yarn/bunの代替として、圧倒的な速度でパッケージ管理を実現</p>
-          <div class="product-item-footer">
-            <a href="winapp/bnmp.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Claude Code 使用量モニター</h3>
-            <span class="product-item-tag">v0.1.0</span>
-          </div>
-          <p>Anthropic Claude APIの使用量・コストをリアルタイムで表示するデスクトップウィジェット</p>
-          <div class="product-item-footer">
-            <a href="winapp/claude-usage-display.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Codex 使用量モニター</h3>
-            <span class="product-item-tag">v0.1.0</span>
-          </div>
-          <p>OpenAI Codex APIの使用量・コストをリアルタイム監視するデスクトップウィジェット</p>
-          <div class="product-item-footer">
-            <a href="winapp/codex-usage-display.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Gemini 使用量モニター</h3>
-            <span class="product-item-tag">v0.1.0</span>
-          </div>
-          <p>Google Gemini APIの使用量・コストをリアルタイム監視するデスクトップウィジェット</p>
-          <div class="product-item-footer">
-            <a href="winapp/gemini-usage-display.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Python Win AutoUpdate</h3>
-            <span class="product-item-tag">v1.1.0</span>
-          </div>
-          <p>Pythonデスクトップアプリ向け自動更新フレームワーク。バージョン管理とワンクリック更新機能を提供</p>
-          <div class="product-item-footer">
-            <a href="winapp/python-auto-update.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>smux</h3>
-            <span class="product-item-tag">v0.2.2</span>
-          </div>
-          <p>Windows向けマルチターミナルマルチプレクサー。ConPTY統合でtmuxライクな操作をWindowsネイティブで実現</p>
-          <div class="product-item-footer">
-            <a href="winapp/smux.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="media" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x1F3AC;</span> メディア</h2>
-      <p class="category-count">5 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Drag &amp; Drop メディアコンバーター</h3>
-            <span class="product-item-tag">v0.4.0</span>
-          </div>
-          <p>ファイルをドラッグ＆ドロップするだけで動画・音声・画像を変換。FFmpeg統合でほぼすべてのフォーマットに対応</p>
-          <div class="product-item-footer">
-            <a href="winapp/media-converter.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>FusionTube</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>プライバシー重視のYouTubeデスクトップクライアント。AI要約、yt-dlpダウンロード、Invidious経由の匿名視聴に対応</p>
-          <div class="product-item-footer">
-            <a href="winapp/fusiontube.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Pict Cutter</h3>
-            <span class="product-item-tag">v1.1.0</span>
-          </div>
-          <p>アイコン生成・画像トリミングユーティリティ。バッチ処理で複数サイズのアイコンを一括作成</p>
-          <div class="product-item-footer">
-            <a href="winapp/pict-cutter.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Style-Bert-VITS2</h3>
-            <span class="product-item-tag">v2.7.0</span>
-          </div>
-          <p>Bert-VITS2ベースのニューラルTTS（テキスト読み上げ）エンジン。高品質な日本語音声合成を実現</p>
-          <div class="product-item-footer">
-            <a href="winapp/sbv2.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Upscayl</h3>
-            <span class="product-item-tag">v2.0.0</span>
-          </div>
-          <p>Real-ESRGANなどの超解像モデルを使ったAI画像アップスケーラー。低解像度画像を高品質に拡大</p>
-          <div class="product-item-footer">
-            <a href="winapp/upscayl.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            <a href="https://github.com/upscayl/upscayl" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="system" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x2699;</span> システム</h2>
-      <p class="category-count">4 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>PowerPlanAI</h3>
-            <span class="product-item-tag">v1.1.0</span>
-          </div>
-          <p>AIがCPU周波数やパフォーマンスを最適化するWindows電源プラン管理ツール。使用パターンを学習して自動調整</p>
-          <div class="product-item-footer">
-            <a href="winapp/power-plan-ai.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>SAYA64 Extreme</h3>
-            <span class="product-item-tag">v2.2.0</span>
-          </div>
-          <p>包括的なシステム情報表示・ハードウェア監視・ベンチマークツール。CPU/GPU/RAM温度、使用率、ファン速度をリアルタイム表示</p>
-          <div class="product-item-footer">
-            <a href="winapp/saya64-extreme.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>Volume Manager</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>Windowsオーディオデバイスの音量をアプリ別に制御できるシステムトレイ常駐型ボリューム管理ツール</p>
-          <div class="product-item-footer">
-            <a href="winapp/volume-manager.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>ウィンドウ管理ユーティリティ</h3>
-            <span class="product-item-tag">v0.1.0</span>
-          </div>
-          <p>グローバルホットキーでウィンドウのピン留め・透明度変更・クリックスルーを制御。マルチモニター対応</p>
-          <div class="product-item-footer">
-            <a href="winapp/window-management.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="productivity" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x1F4CB;</span> プロダクティビティ</h2>
-      <p class="category-count">4 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>自動家計簿カテゴリ分類</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>家計の支出を自動的にカテゴリ別に分類・集計するアプリケーション。レシートデータからAIが最適なカテゴリを判定</p>
-          <div class="product-item-footer">
-            <a href="winapp/household-accounting.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>コピペ超進化クリップボード</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>コピー＆ペーストを超強化するクリップボード拡張。履歴管理、定型文、テンプレート機能を搭載</p>
-          <div class="product-item-footer">
-            <a href="winapp/super-clipboard.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>ノーコード RPA</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>プログラミング不要でWindows上の繰り返し作業を自動化できるRPAツール。GUI操作をビジュアルにフロー設計</p>
-          <div class="product-item-footer">
-            <a href="winapp/no-code-rpa.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>プロダクション管理アプリ</h3>
-            <span class="product-item-tag">v0.19.0</span>
-          </div>
-          <p>カンバンスタイルのプロジェクト・タスク管理アプリケーション。ドラッグ＆ドロップでタスクを直感的に管理</p>
-          <div class="product-item-footer">
-            <a href="winapp/production-management.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="privacy" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x1F512;</span> プライバシー</h2>
-      <p class="category-count">2 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>自動スクリーンショットぼかし</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>スクリーンショット内の個人情報や機密部分を自動検出してぼかし処理を適用するプライバシー保護ツール</p>
-          <div class="product-item-footer">
-            <a href="winapp/auto-screenshot-blur.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>PrivacyShot</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>プライバシーを保護するスクリーンショットツール。撮影時に個人情報を自動検出してマスク処理</p>
-          <div class="product-item-footer">
-            <a href="winapp/privacy-shot.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="utility" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x1F527;</span> ユーティリティ</h2>
-      <p class="category-count">3 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>スクリーンショット日付整理</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>スクリーンショットを撮影日時別にフォルダへ自動分類・整理するユーティリティ</p>
-          <div class="product-item-footer">
-            <a href="winapp/screenshots-folder-organizer.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>インターネットファイル共有</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>ローカルネットワークやインターネット経由でファイルを簡単に共有できるユーティリティ</p>
-          <div class="product-item-footer">
-            <a href="winapp/internet-file-share.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>サイドスライドユーティリティバー</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>画面端からスライドして表示されるコンテキスト対応ユーティリティバー。よく使うツールに素早くアクセス</p>
-          <div class="product-item-footer">
-            <a href="winapp/side-utility-bar.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="lifestyle" class="category-section">
-      <h2 class="category-title"><span class="emoji">&#x1F3E0;</span> ライフスタイル</h2>
-      <p class="category-count">2 件のアプリ</p>
-      <div class="product-list">
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>PraiseWidget</h3>
-            <span class="product-item-tag">v1.0.18</span>
-          </div>
-          <p>AIが生成する励ましメッセージを表示するデスクトップウィジェット。毎日のモチベーションアップに</p>
-          <div class="product-item-footer">
-            <a href="winapp/praise-widget.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-        <div class="product-item">
-          <div class="product-item-header">
-            <h3>バーチャルAI植物園</h3>
-            <span class="product-item-tag">v1.0.0</span>
-          </div>
-          <p>AIが育成をサポートする仮想植物園。植物の成長シミュレーション・育て方アドバイスをAIが提供</p>
-          <div class="product-item-footer">
-            <a href="winapp/virtual-plant-garden.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <div style="display:flex;align-items:center;gap:8px;">
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
-  </footer>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
-</body>
-</html>
+/* Responsive */
+@media(max-width:768px){
+  .nk{display:none}
+  .nv>div:last-child{display:flex}
+  .hb{display:flex}
+  .hero{padding:100px 20px 60px}
+  .sr{grid-template-columns:repeat(2,1fr);padding:24px}
+  .ig{grid-template-columns:1fr}
+  .cg{grid-template-columns:1fr}
+  .pg{grid-template-columns:1fr}
+  .fi{flex-direction:column;text-align:center}
+  .fl{justify-content:center}
+}
+@media(min-width:769px){
+  .nv>div:last-child .tt{display:none}
+}
+</style></head><body>
+<div class="bg-blobs"><span></span><span></span><span></span></div>
+<header class="nw"><nav class="nv">
+<a href="index.html" class="nl"><img src="Logo.png" alt="CityRiver">合同会社シティーリバー</a>
+<div class="nk"><a href="index.html#services">事業内容</a><a href="index.html#products">プロダクト</a><a href="index.html#profile">会社情報</a><a href="index.html#contact" class="nc">お問い合わせ</a><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></div>
+<div style="display:flex;gap:8px;align-items:center"><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="hb" aria-label="メニュー"><span></span><span></span><span></span></button></div>
+</nav></header>
+<div class="mm"><a href="index.html">ホーム</a><a href="index.html#services">事業内容</a><a href="index.html#products">プロダクト</a><a href="extensions.html">拡張機能</a><a href="webapps.html">Webアプリ</a><a href="windows-apps.html">Windowsアプリ</a><a href="index.html#contact">お問い合わせ</a></div><div class="cw"><section style="padding-top:40px"><div class="ct">
+<div class="bc"><a href="index.html">ホーム</a><span>/</span><a href="index.html#products">プロダクト</a><span>/</span>Windowsアプリ一覧</div>
+<div class="ph"><div class="pb" style="background:var(--aml);color:var(--amber)">🖥️ Windowsアプリ一覧</div><h1>Windowsアプリ一覧</h1><p>36+ のプロダクトをご覧いただけます</p></div>
+<div class="si3"><input class="si4" type="text" placeholder="🔍 アプリ名で検索..."></div>
+<div class="cn"><button class="cb act" data-cat="">すべて</button><button class="cb" data-cat="AIツール">🤖 AIツール</button><button class="cb" data-cat="開発ツール">🛠️ 開発ツール</button><button class="cb" data-cat="メディア">🎬 メディア</button><button class="cb" data-cat="システム">⚙️ システム</button><button class="cb" data-cat="プロダクティビティ">📋 プロダクティビティ</button><button class="cb" data-cat="プライバシー">🔒 プライバシー</button><button class="cb" data-cat="ユーティリティ">🔧 ユーティリティ</button><button class="cb" data-cat="ライフスタイル">🏠 ライフスタイル</button></div>
+<div class="cs2" data-cat="AIツール" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">🤖 AIツール</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">8 件</p><div class="cg"><div class="cd rv" data-name="AI File Explorer" data-desc="AIによるファイル分類・タグ付け機能を備えたファイルマネージャー。コンテンツを自動解析し、直感的なファイル管理を実現" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>AI File Explorer</h3><span class="ctg">v1.0.0</span></div>
+<p>AIによるファイル分類・タグ付け機能を備えたファイルマネージャー。コンテンツを自動解析し、直感的なファイル管理を実現</p>
+<div class="cf"><a href="winapp/ai-file-explorer.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="AI File Explorer (Rust版)" data-desc="セマンティック検索に対応したクロスプラットフォームAIファイルエクスプローラー。高速なネイティブ性能を実現" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>AI File Explorer (Rust版)</h3><span class="ctg">v1.0.0</span></div>
+<p>セマンティック検索に対応したクロスプラットフォームAIファイルエクスプローラー。高速なネイティブ性能を実現</p>
+<div class="cf"><a href="winapp/ai-file-explorer-rust.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="AI Noise Gate" data-desc="Silero VADを使った音声活動検出による仮想マイク。AIがリアルタイムでノイズを除去し、クリアな音声のみを出力" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>AI Noise Gate</h3><span class="ctg">v1.0.0</span></div>
+<p>Silero VADを使った音声活動検出による仮想マイク。AIがリアルタイムでノイズを除去し、クリアな音声のみを出力</p>
+<div class="cf"><a href="winapp/ai-noise-gate.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Clipboard History AI" data-desc="AIによるカテゴリ分類・セマンティック検索機能付きクリップボード履歴マネージャー。コピーした内容を自動整理" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Clipboard History AI</h3><span class="ctg">v1.0.0</span></div>
+<p>AIによるカテゴリ分類・セマンティック検索機能付きクリップボード履歴マネージャー。コピーした内容を自動整理</p>
+<div class="cf"><a href="winapp/clipboard-history-ai.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="ローカルファイル検索 (AI強化版)" data-desc="エンベディングとAIフィルターによるセマンティックファイル検索。自然言語でファイルを探せる次世代検索ツール" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>ローカルファイル検索 (AI強化版)</h3><span class="ctg">v1.0.0</span></div>
+<p>エンベディングとAIフィルターによるセマンティックファイル検索。自然言語でファイルを探せる次世代検索ツール</p>
+<div class="cf"><a href="winapp/local-file-search.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="通知AI優先度フィルター" data-desc="Windows通知をAIが自動で優先度判定し、重要なものだけを表示。集中モードとの連携で生産性を向上" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>通知AI優先度フィルター</h3><span class="ctg">v2.1.0</span></div>
+<p>Windows通知をAIが自動で優先度判定し、重要なものだけを表示。集中モードとの連携で生産性を向上</p>
+<div class="cf"><a href="winapp/notification-filter.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="オフラインAIチャットコンパニオン" data-desc="インターネット接続不要で動作するローカルLLM搭載AIチャットボット。プライバシーを完全に保護しながらAI対話を実現" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>オフラインAIチャットコンパニオン</h3><span class="ctg">v1.0.0</span></div>
+<p>インターネット接続不要で動作するローカルLLM搭載AIチャットボット。プライバシーを完全に保護しながらAI対話を実現</p>
+<div class="cf"><a href="winapp/offline-ai-chat.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Limitless AI Calendar Sync" data-desc="Limitless AIの会話ログからイベント情報をAIで自動抽出し、Googleカレンダーに同期するシステムトレイ常駐アプリ" data-cat="AIツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Limitless AI Calendar Sync</h3><span class="ctg">v1.0.0</span></div>
+<p>Limitless AIの会話ログからイベント情報をAIで自動抽出し、Googleカレンダーに同期するシステムトレイ常駐アプリ</p>
+<div class="cf"><a href="winapp/limitless-ai-calendar-sync.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div></div></div><div class="cs2" data-cat="開発ツール" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">🛠️ 開発ツール</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">8 件</p><div class="cg"><div class="cd rv" data-name="AgentLimits" data-desc="複数AIエージェント（Claude, GPT, Gemini等）のAPI使用量をリアルタイム監視するデスクトップウィジェット" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>AgentLimits</h3><span class="ctg">v0.1.0</span></div>
+<p>複数AIエージェント（Claude, GPT, Gemini等）のAPI使用量をリアルタイム監視するデスクトップウィジェット</p>
+<div class="cf"><a href="winapp/agent-limits.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Auto Claude" data-desc="自律型マルチエージェントコーディングフレームワーク。Electron UIからClaude AIによる自動コード生成・修正を実行" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Auto Claude</h3><span class="ctg">v2.7.2</span></div>
+<p>自律型マルチエージェントコーディングフレームワーク。Electron UIからClaude AIによる自動コード生成・修正を実行</p>
+<div class="cf"><a href="winapp/auto-claude.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"><a href="https://github.com/AndyMik90/Auto-Claude" class="gl" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a></div></div></div><div class="cd rv" data-name="bnmp" data-desc="Zig製の超高速Nodeパッケージマネージャー。npm/pnpm/yarn/bunの代替として、圧倒的な速度でパッケージ管理を実現" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>bnmp</h3><span class="ctg">v0.1.0</span></div>
+<p>Zig製の超高速Nodeパッケージマネージャー。npm/pnpm/yarn/bunの代替として、圧倒的な速度でパッケージ管理を実現</p>
+<div class="cf"><a href="winapp/bnmp.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Claude Code 使用量モニター" data-desc="Anthropic Claude APIの使用量・コストをリアルタイムで表示するデスクトップウィジェット" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Claude Code 使用量モニター</h3><span class="ctg">v0.1.0</span></div>
+<p>Anthropic Claude APIの使用量・コストをリアルタイムで表示するデスクトップウィジェット</p>
+<div class="cf"><a href="winapp/claude-usage-display.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Codex 使用量モニター" data-desc="OpenAI Codex APIの使用量・コストをリアルタイム監視するデスクトップウィジェット" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Codex 使用量モニター</h3><span class="ctg">v0.1.0</span></div>
+<p>OpenAI Codex APIの使用量・コストをリアルタイム監視するデスクトップウィジェット</p>
+<div class="cf"><a href="winapp/codex-usage-display.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Gemini 使用量モニター" data-desc="Google Gemini APIの使用量・コストをリアルタイム監視するデスクトップウィジェット" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Gemini 使用量モニター</h3><span class="ctg">v0.1.0</span></div>
+<p>Google Gemini APIの使用量・コストをリアルタイム監視するデスクトップウィジェット</p>
+<div class="cf"><a href="winapp/gemini-usage-display.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Python Win AutoUpdate" data-desc="Pythonデスクトップアプリ向け自動更新フレームワーク。バージョン管理とワンクリック更新機能を提供" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Python Win AutoUpdate</h3><span class="ctg">v1.1.0</span></div>
+<p>Pythonデスクトップアプリ向け自動更新フレームワーク。バージョン管理とワンクリック更新機能を提供</p>
+<div class="cf"><a href="winapp/python-auto-update.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="smux" data-desc="Windows向けマルチターミナルマルチプレクサー。ConPTY統合でtmuxライクな操作をWindowsネイティブで実現" data-cat="開発ツール">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>smux</h3><span class="ctg">v0.2.2</span></div>
+<p>Windows向けマルチターミナルマルチプレクサー。ConPTY統合でtmuxライクな操作をWindowsネイティブで実現</p>
+<div class="cf"><a href="winapp/smux.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div></div></div><div class="cs2" data-cat="メディア" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">🎬 メディア</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">5 件</p><div class="cg"><div class="cd rv" data-name="Drag &amp; Drop メディアコンバーター" data-desc="ファイルをドラッグ＆ドロップするだけで動画・音声・画像を変換。FFmpeg統合でほぼすべてのフォーマットに対応" data-cat="メディア">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Drag &amp; Drop メディアコンバーター</h3><span class="ctg">v0.4.0</span></div>
+<p>ファイルをドラッグ＆ドロップするだけで動画・音声・画像を変換。FFmpeg統合でほぼすべてのフォーマットに対応</p>
+<div class="cf"><a href="winapp/media-converter.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="FusionTube" data-desc="プライバシー重視のYouTubeデスクトップクライアント。AI要約、yt-dlpダウンロード、Invidious経由の匿名視聴に対応" data-cat="メディア">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>FusionTube</h3><span class="ctg">v1.0.0</span></div>
+<p>プライバシー重視のYouTubeデスクトップクライアント。AI要約、yt-dlpダウンロード、Invidious経由の匿名視聴に対応</p>
+<div class="cf"><a href="winapp/fusiontube.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Pict Cutter" data-desc="アイコン生成・画像トリミングユーティリティ。バッチ処理で複数サイズのアイコンを一括作成" data-cat="メディア">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Pict Cutter</h3><span class="ctg">v1.1.0</span></div>
+<p>アイコン生成・画像トリミングユーティリティ。バッチ処理で複数サイズのアイコンを一括作成</p>
+<div class="cf"><a href="winapp/pict-cutter.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Style-Bert-VITS2" data-desc="Bert-VITS2ベースのニューラルTTS（テキスト読み上げ）エンジン。高品質な日本語音声合成を実現" data-cat="メディア">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Style-Bert-VITS2</h3><span class="ctg">v2.7.0</span></div>
+<p>Bert-VITS2ベースのニューラルTTS（テキスト読み上げ）エンジン。高品質な日本語音声合成を実現</p>
+<div class="cf"><a href="winapp/sbv2.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Upscayl" data-desc="Real-ESRGANなどの超解像モデルを使ったAI画像アップスケーラー。低解像度画像を高品質に拡大" data-cat="メディア">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Upscayl</h3><span class="ctg">v2.0.0</span></div>
+<p>Real-ESRGANなどの超解像モデルを使ったAI画像アップスケーラー。低解像度画像を高品質に拡大</p>
+<div class="cf"><a href="winapp/upscayl.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"><a href="https://github.com/upscayl/upscayl" class="gl" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a></div></div></div></div></div><div class="cs2" data-cat="システム" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">⚙️ システム</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">4 件</p><div class="cg"><div class="cd rv" data-name="PowerPlanAI" data-desc="AIがCPU周波数やパフォーマンスを最適化するWindows電源プラン管理ツール。使用パターンを学習して自動調整" data-cat="システム">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>PowerPlanAI</h3><span class="ctg">v1.1.0</span></div>
+<p>AIがCPU周波数やパフォーマンスを最適化するWindows電源プラン管理ツール。使用パターンを学習して自動調整</p>
+<div class="cf"><a href="winapp/power-plan-ai.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="SAYA64 Extreme" data-desc="包括的なシステム情報表示・ハードウェア監視・ベンチマークツール。CPU/GPU/RAM温度、使用率、ファン速度をリアルタイム表示" data-cat="システム">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>SAYA64 Extreme</h3><span class="ctg">v2.2.0</span></div>
+<p>包括的なシステム情報表示・ハードウェア監視・ベンチマークツール。CPU/GPU/RAM温度、使用率、ファン速度をリアルタイム表示</p>
+<div class="cf"><a href="winapp/saya64-extreme.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="Volume Manager" data-desc="Windowsオーディオデバイスの音量をアプリ別に制御できるシステムトレイ常駐型ボリューム管理ツール" data-cat="システム">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>Volume Manager</h3><span class="ctg">v1.0.0</span></div>
+<p>Windowsオーディオデバイスの音量をアプリ別に制御できるシステムトレイ常駐型ボリューム管理ツール</p>
+<div class="cf"><a href="winapp/volume-manager.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="ウィンドウ管理ユーティリティ" data-desc="グローバルホットキーでウィンドウのピン留め・透明度変更・クリックスルーを制御。マルチモニター対応" data-cat="システム">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>ウィンドウ管理ユーティリティ</h3><span class="ctg">v0.1.0</span></div>
+<p>グローバルホットキーでウィンドウのピン留め・透明度変更・クリックスルーを制御。マルチモニター対応</p>
+<div class="cf"><a href="winapp/window-management.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div></div></div><div class="cs2" data-cat="プロダクティビティ" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">📋 プロダクティビティ</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">4 件</p><div class="cg"><div class="cd rv" data-name="自動家計簿カテゴリ分類" data-desc="家計の支出を自動的にカテゴリ別に分類・集計するアプリケーション。レシートデータからAIが最適なカテゴリを判定" data-cat="プロダクティビティ">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>自動家計簿カテゴリ分類</h3><span class="ctg">v1.0.0</span></div>
+<p>家計の支出を自動的にカテゴリ別に分類・集計するアプリケーション。レシートデータからAIが最適なカテゴリを判定</p>
+<div class="cf"><a href="winapp/household-accounting.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="コピペ超進化クリップボード" data-desc="コピー＆ペーストを超強化するクリップボード拡張。履歴管理、定型文、テンプレート機能を搭載" data-cat="プロダクティビティ">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>コピペ超進化クリップボード</h3><span class="ctg">v1.0.0</span></div>
+<p>コピー＆ペーストを超強化するクリップボード拡張。履歴管理、定型文、テンプレート機能を搭載</p>
+<div class="cf"><a href="winapp/super-clipboard.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="ノーコード RPA" data-desc="プログラミング不要でWindows上の繰り返し作業を自動化できるRPAツール。GUI操作をビジュアルにフロー設計" data-cat="プロダクティビティ">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>ノーコード RPA</h3><span class="ctg">v1.0.0</span></div>
+<p>プログラミング不要でWindows上の繰り返し作業を自動化できるRPAツール。GUI操作をビジュアルにフロー設計</p>
+<div class="cf"><a href="winapp/no-code-rpa.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="プロダクション管理アプリ" data-desc="カンバンスタイルのプロジェクト・タスク管理アプリケーション。ドラッグ＆ドロップでタスクを直感的に管理" data-cat="プロダクティビティ">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>プロダクション管理アプリ</h3><span class="ctg">v0.19.0</span></div>
+<p>カンバンスタイルのプロジェクト・タスク管理アプリケーション。ドラッグ＆ドロップでタスクを直感的に管理</p>
+<div class="cf"><a href="winapp/production-management.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div></div></div><div class="cs2" data-cat="プライバシー" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">🔒 プライバシー</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">2 件</p><div class="cg"><div class="cd rv" data-name="自動スクリーンショットぼかし" data-desc="スクリーンショット内の個人情報や機密部分を自動検出してぼかし処理を適用するプライバシー保護ツール" data-cat="プライバシー">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>自動スクリーンショットぼかし</h3><span class="ctg">v1.0.0</span></div>
+<p>スクリーンショット内の個人情報や機密部分を自動検出してぼかし処理を適用するプライバシー保護ツール</p>
+<div class="cf"><a href="winapp/auto-screenshot-blur.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="PrivacyShot" data-desc="プライバシーを保護するスクリーンショットツール。撮影時に個人情報を自動検出してマスク処理" data-cat="プライバシー">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>PrivacyShot</h3><span class="ctg">v1.0.0</span></div>
+<p>プライバシーを保護するスクリーンショットツール。撮影時に個人情報を自動検出してマスク処理</p>
+<div class="cf"><a href="winapp/privacy-shot.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div></div></div><div class="cs2" data-cat="ユーティリティ" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">🔧 ユーティリティ</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">3 件</p><div class="cg"><div class="cd rv" data-name="スクリーンショット日付整理" data-desc="スクリーンショットを撮影日時別にフォルダへ自動分類・整理するユーティリティ" data-cat="ユーティリティ">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>スクリーンショット日付整理</h3><span class="ctg">v1.0.0</span></div>
+<p>スクリーンショットを撮影日時別にフォルダへ自動分類・整理するユーティリティ</p>
+<div class="cf"><a href="winapp/screenshots-folder-organizer.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="インターネットファイル共有" data-desc="ローカルネットワークやインターネット経由でファイルを簡単に共有できるユーティリティ" data-cat="ユーティリティ">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>インターネットファイル共有</h3><span class="ctg">v1.0.0</span></div>
+<p>ローカルネットワークやインターネット経由でファイルを簡単に共有できるユーティリティ</p>
+<div class="cf"><a href="winapp/internet-file-share.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="サイドスライドユーティリティバー" data-desc="画面端からスライドして表示されるコンテキスト対応ユーティリティバー。よく使うツールに素早くアクセス" data-cat="ユーティリティ">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>サイドスライドユーティリティバー</h3><span class="ctg">v1.0.0</span></div>
+<p>画面端からスライドして表示されるコンテキスト対応ユーティリティバー。よく使うツールに素早くアクセス</p>
+<div class="cf"><a href="winapp/side-utility-bar.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div></div></div><div class="cs2" data-cat="ライフスタイル" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">🏠 ライフスタイル</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">2 件</p><div class="cg"><div class="cd rv" data-name="PraiseWidget" data-desc="AIが生成する励ましメッセージを表示するデスクトップウィジェット。毎日のモチベーションアップに" data-cat="ライフスタイル">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>PraiseWidget</h3><span class="ctg">v1.0.18</span></div>
+<p>AIが生成する励ましメッセージを表示するデスクトップウィジェット。毎日のモチベーションアップに</p>
+<div class="cf"><a href="winapp/praise-widget.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div><div class="cd rv" data-name="バーチャルAI植物園" data-desc="AIが育成をサポートする仮想植物園。植物の成長シミュレーション・育て方アドバイスをAIが提供" data-cat="ライフスタイル">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>バーチャルAI植物園</h3><span class="ctg">v1.0.0</span></div>
+<p>AIが育成をサポートする仮想植物園。植物の成長シミュレーション・育て方アドバイスをAIが提供</p>
+<div class="cf"><a href="winapp/virtual-plant-garden.html" class="cl2">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><div style="display:flex;align-items:center;gap:8px"></div></div></div></div></div>
+</div></section></div>
+<footer><div class="fi"><div class="fc">&copy; <span class="yr"></span> 合同会社シティーリバー / CityRiver LLC</div><div class="fl"><a href="index.html">ホーム</a><a href="extensions.html">拡張機能</a><a href="webapps.html">Webアプリ</a><a href="windows-apps.html">Windowsアプリ</a></div></div></footer>
+<button class="bt" aria-label="トップへ戻る"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button><script>
+const H=document.documentElement,S=localStorage.getItem('theme');
+if(S)H.dataset.theme=S;else if(matchMedia('(prefers-color-scheme:dark)').matches)H.dataset.theme='dark';
+document.querySelectorAll('.tt').forEach(b=>b.addEventListener('click',()=>{const n=H.dataset.theme==='dark'?'light':'dark';H.dataset.theme=n;localStorage.setItem('theme',n)}));
+document.querySelectorAll('.hb').forEach(h=>h.addEventListener('click',()=>{h.classList.toggle('active');document.querySelector('.mm')?.classList.toggle('active')}));
+const O=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');O.unobserve(x.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(e=>O.observe(e));
+function aC(){document.querySelectorAll('[data-count]').forEach(e=>{const t=parseInt(e.dataset.count);let c=0;const s=Math.max(1,Math.floor(t/40));const i=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(i)}e.textContent=c+(e.dataset.suffix||'')},30)})}
+const CO=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){aC();CO.unobserve(x.target)}}),{threshold:.3});
+document.querySelectorAll('.sr').forEach(e=>CO.observe(e));
+const BT=document.querySelector('.bt');
+if(BT){window.addEventListener('scroll',()=>BT.classList.toggle('vis',scrollY>400));BT.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}))}
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+const SI=document.querySelector('.si4');
+if(SI)SI.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.cd[data-name]').forEach(c=>{c.style.display=(c.dataset.name.toLowerCase().includes(q)||c.dataset.desc?.toLowerCase().includes(q))?'':'none'})});
+document.querySelectorAll('.cb[data-cat]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.cb').forEach(x=>x.classList.remove('act'));b.classList.add('act');const c=b.dataset.cat;document.querySelectorAll('.cd[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none');document.querySelectorAll('.cs2[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none')}));
+</script></body></html>

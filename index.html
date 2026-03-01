@@ -1,732 +1,305 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>合同会社シティーリバー | CityRiver LLC</title>
-  <meta name="description" content="合同会社シティーリバーは投資業、イラスト制作、Webデザイン、note記事作成、コンビニエンスストア運営を通じて街に新しい流れを生み出します。" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-  <link rel="icon" href="favicon.ico" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f8f9fa;
-      --text-primary: #0a0a0a;
-      --text-secondary: #6b7280;
-      --accent: #0066ff;
-      --accent-light: #e6f0ff;
-      --border: rgba(0, 0, 0, 0.08);
-      --glass: rgba(255, 255, 255, 0.7);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.7;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* 背景パターン */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        radial-gradient(circle at 20% 20%, rgba(0, 102, 255, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.03) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* グリッドパターン */
-    body::after {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
-      background-size: 50px 50px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
-    }
-
-    /* ヘッダー */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo-text {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-    }
-
-    .logo-img {
-      height: 40px;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .nav a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-      letter-spacing: 0.02em;
-    }
-
-    .nav a:hover {
-      color: var(--accent);
-    }
-
-    /* メインコンテンツ */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 100px 40px 120px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ヒーローセクション */
-    .hero {
-      text-align: center;
-      padding: 80px 0 120px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .tagline {
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--accent);
-      margin-bottom: 24px;
-      animation: fadeInUp 0.8s ease;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      margin-bottom: 32px;
-      animation: fadeInUp 0.8s ease 0.2s backwards;
-    }
-
-    .hero p {
-      font-size: 18px;
-      line-height: 1.8;
-      color: var(--text-secondary);
-      max-width: 680px;
-      margin: 0 auto 48px;
-      font-weight: 400;
-      animation: fadeInUp 0.8s ease 0.4s backwards;
-    }
-
-    .hero-actions {
-      gap: 16px;
-      flex-wrap: wrap;
-      animation: fadeInUp 0.8s ease 0.6s backwards;
-    }
-
-    /* ボタン */
-    .btn {
-      display: inline-flex;
-      gap: 8px;
-      padding: 14px 32px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 15px;
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      letter-spacing: 0.01em;
-    }
-
-    .btn-primary {
-      box-shadow: 0 4px 16px rgba(0, 102, 255, 0.2);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
-    }
-
-    .btn-secondary {
-      border: 1.5px solid var(--border);
-      background: white;
-      color: var(--text-primary);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--accent);
-      background: var(--accent-light);
-    }
-
-    /* セクション共通 */
-    .section {
-      padding: 80px 0;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 64px;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 4vw, 3rem);
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .section-subtitle {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    /* 事業内容グリッド */
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .service-card {
-      background: white;
-      border-radius: 16px;
-      padding: 40px 32px;
-      border: 1px solid var(--border);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), transparent);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-      border-color: var(--accent);
-    }
-
-    .service-card:hover::before {
-      opacity: 1;
-    }
-
-    .service-card h3 {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      letter-spacing: -0.01em;
-    }
-
-    .service-card p {
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    /* プロダクトグリッド */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .product-card {
-      display: flex;
-      flex-direction: column;
-      background: white;
-      border-radius: 20px;
-      padding: 40px 32px 36px;
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .product-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .product-card--extension::before {
-      background: linear-gradient(90deg, #6366f1, #8b5cf6);
-    }
-
-    .product-card--webapp::before {
-      background: linear-gradient(90deg, #0ea5e9, #06b6d4);
-    }
-
-    .product-card--winapp::before {
-      background: linear-gradient(90deg, #f59e0b, #f97316);
-    }
-
-    .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
-    }
-
-    .product-card:hover::before {
-      opacity: 1;
-    }
-
-    .product-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-
-    .product-card:hover .product-icon {
-      transform: scale(1.1);
-    }
-
-    .product-card--extension .product-icon {
-      background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-      color: #6366f1;
-    }
-
-    .product-card--webapp .product-icon {
-      background: linear-gradient(135deg, #ecfeff, #cffafe);
-      color: #0ea5e9;
-    }
-
-    .product-card--winapp .product-icon {
-      background: linear-gradient(135deg, #fffbeb, #fef3c7);
-      color: #f59e0b;
-    }
-
-    .product-card h3 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -0.01em;
-    }
-
-    .product-card p {
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 1.7;
-      margin-bottom: 20px;
-      flex: 1;
-    }
-
-    .product-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent);
-      transition: gap 0.3s ease;
-    }
-
-    .product-card:hover .product-link {
-      gap: 10px;
-    }
-
-    /* 会社情報セクション */
-    .details {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 32px;
-    }
-
-    .info-card {
-      background: white;
-      border-radius: 16px;
-      padding: 40px;
-      border: 1px solid var(--border);
-    }
-
-    .info-card h3 {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      letter-spacing: -0.01em;
-    }
-
-    dl {
-      display: grid;
-      gap: 16px;
-      font-size: 15px;
-    }
-
-    .info-row {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 16px;
-    }
-
-    dt {
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    dd {
-      color: var(--text-primary);
-      font-weight: 400;
-    }
-
-    dd a {
-      color: var(--accent);
-      text-decoration: none;
-      transition: opacity 0.3s ease;
-    }
-
-    dd a:hover {
-      opacity: 0.7;
-    }
-
-    /* 姿勢セクション */
-    .philosophy {
-      display: grid;
-      gap: 20px;
-    }
-
-    .philosophy-quote {
-      font-size: 17px;
-      line-height: 1.8;
-      color: var(--text-primary);
-      border-left: 3px solid var(--accent);
-      padding-left: 20px;
-      font-weight: 500;
-    }
-
-    .philosophy p {
-      font-size: 15px;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-
-    /* お問い合わせセクション */
-    .contact {
-      background: var(--accent-light);
-      border-radius: 24px;
-      padding: 64px 48px;
-      text-align: center;
-      margin-top: 80px;
-    }
-
-    .contact h2 {
-      margin-bottom: 16px;
-    }
-
-    .contact > p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 40px;
-      font-size: 16px;
-    }
-
-    .contact-actions {
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .contact-info {
-      color: var(--text-secondary);
-    }
-
-    /* フッター */
-    footer {
-      padding: 60px 40px;
-      text-align: center;
-      color: var(--text-secondary);
-      border-top: 1px solid var(--border);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* アニメーション */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* レスポンシブ */
-    @media (max-width: 768px) {
-      .nav {
-        padding: 16px 24px;
-      }
-
-      main {
-        padding: 60px 24px 80px;
-      }
-
-      .hero {
-        padding: 40px 0 80px;
-      }
-
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-
-      .hero-actions {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .service-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .product-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .details {
-        grid-template-columns: 1fr;
-      }
-
-      .info-row {
-        grid-template-columns: 1fr;
-        gap: 4px;
-      }
-
-      .contact {
-        padding: 40px 24px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <nav class="nav">
-      <div class="logo-text">
-        <img src="Logo.png" alt="CityRiver LLC" class="logo-img">
-        合同会社シティーリバー
-      </div>
-      <div style="display: flex; gap: 24px; align-items: center;">
-        <a href="#products">Products</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="tagline">Flowing With The City</div>
-      <h1>街に、ビジネスと創造の<br>新しい流れを描く。</h1>
-      <p>
-        合同会社シティーリバーは、投資業・イラスト制作・Webデザイン・note記事作成・コンビニエンスストア運営という多彩な事業を通じ、
-        人と街をつなぐ価値を創造しています。
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#services">事業内容を見る</a>
-        <a class="btn btn-secondary" href="#profile">会社情報</a>
-      </div>
-    </section>
-
-    <section id="services" class="section">
-      <div class="section-header">
-        <h2 class="section-title">事業内容</h2>
-        <p class="section-subtitle">都市生活をめぐる5つの領域で、投資・クリエイティブ・店舗運営を横断的に支援します。</p>
-      </div>
-      <div class="service-grid">
-        <article class="service-card">
-          <h3><a href="investment.html" style="color: inherit; text-decoration: none;">投資業</a></h3>
-          <p>成長分野への戦略投資と、長期的な視点に立った資産形成のパートナーとして、確かなリターンを目指します。</p>
-        </article>
-        <article class="service-card">
-          <h3><a href="illustration.html" style="color: inherit; text-decoration: none;">イラスト制作</a></h3>
-          <p>ブランドの世界観やプロジェクトの想いを、細部まで丁寧に描き出すアートワークで印象を最大化します。</p>
-        </article>
-        <article class="service-card">
-          <h3><a href="webdesign.html" style="color: inherit; text-decoration: none;">Webデザイン</a></h3>
-          <p>ユーザー体験に寄り添いながら、洗練されたビジュアルと堅牢な情報設計で成果につながるサイトを構築します。</p>
-        </article>
-        <article class="service-card">
-          <h3><a href="note-writing.html" style="color: inherit; text-decoration: none;">note記事作成</a></h3>
-          <p>読者様の心に響く丁寧な文章で、ブランドストーリーや専門知識を魅力的に発信。SEO最適化で検索上位を目指します。</p>
-        </article>
-        <article class="service-card">
-          <h3><a href="convenience-store.html" style="color: inherit; text-decoration: none;">コンビニエンスストア運営</a></h3>
-          <p>地域に密着した店舗づくりで、日々の暮らしに寄り添いながら、新しいサービスの実験場としての機能も備えます。</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="products" class="section">
-      <div class="section-header">
-        <h2 class="section-title">プロダクト</h2>
-        <p class="section-subtitle">私たちが開発・提供しているブラウザ拡張機能、Webアプリ、Windowsアプリをご覧いただけます。</p>
-      </div>
-      <div class="product-grid">
-        <a href="extensions.html" class="product-card product-card--extension">
-          <div class="product-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-            </svg>
-          </div>
-          <h3>拡張機能</h3>
-          <p>Chrome・Edge対応のブラウザ拡張機能。日常のブラウジングをより便利に。</p>
-          <span class="product-link">一覧を見る <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-        </a>
-        <a href="webapps.html" class="product-card product-card--webapp">
-          <div class="product-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>
-          </div>
-          <h3>Webアプリ</h3>
-          <p>ブラウザで動作するWebアプリケーション。インストール不要ですぐに利用可能。</p>
-          <span class="product-link">一覧を見る <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-        </a>
-        <a href="windows-apps.html" class="product-card product-card--winapp">
-          <div class="product-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
-          </div>
-          <h3>Windowsアプリ</h3>
-          <p>Windows向けネイティブアプリケーション。高速で安定した動作を実現。</p>
-          <span class="product-link">一覧を見る <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-        </a>
-      </div>
-    </section>
-
-    <section id="profile" class="section">
-      <div class="section-header">
-        <h2 class="section-title">会社情報</h2>
-        <p class="section-subtitle">幅広い事業を束ねるチームとして、信頼とスピードを両立した意思決定を行っています。</p>
-      </div>
-      <div class="details">
-        <div class="info-card">
-          <h3>企業概要</h3>
-          <dl>
-            <div class="info-row">
-              <dt>会社名</dt>
-              <dd>合同会社シティーリバー</dd>
-            </div>
-            <div class="info-row">
-              <dt>代表取締役</dt>
-              <dd>市川 武宏</dd>
-            </div>
-            <div class="info-row">
-              <dt>所在地</dt>
-              <dd>〒470-0132<br>愛知県日進市梅森町上松649番地1</dd>
-            </div>
-            <div class="info-row">
-              <dt>電話番号</dt>
-              <dd><a href="tel:090-8868-6505">090-8868-6505</a></dd>
-            </div>
-            <div class="info-row">
-              <dt>メール</dt>
-              <dd><a href="/cdn-cgi/l/email-protection#c4a7adb0bdb6adb2a1b6fcf4f7fd84a3a9a5ada8eaa7aba9"><span class="__cf_email__" data-cfemail="ccafa5b8b5bea5baa9bef4fcfff58caba1ada5a0e2afa3a1">[email&#160;protected]</span></a></dd>
-            </div>
-          </dl>
-        </div>
-        <div class="info-card">
-          <h3>私たちの姿勢</h3>
-          <div class="philosophy">
-            <p class="philosophy-quote">都市に流れる水のように、多様なニーズを受け止め、柔らかくかつ確実に価値へとつなぐ。</p>
-            <p>投資では持続性と透明性を重視し、クリエイティブ領域では感性と機能性の融合を追求。店舗運営では地域との共創を軸に、グループ全体として循環するビジネスの流れをデザインします。</p>
-            <p>分野を越えて蓄積したノウハウを横断的に活かし、新しい都市体験を描くプロジェクトを支援します。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="contact">
-      <h2 class="section-title">お問い合わせ</h2>
-      <p>
-        新規プロジェクトのご相談、コラボレーションのご提案、メディア取材など、お気軽にご連絡ください。
-      </p>
-      <div class="contact-actions">
-        <a class="btn btn-primary" href="/cdn-cgi/l/email-protection#26454f525f544f5043541e16151f66414b474f4a0845494b">メールで問い合わせる</a>
-        <a class="btn btn-secondary" href="tel:090-8868-6505">電話する</a>
-      </div>
-      <div class="contact-info">
-        〒470-0132 愛知県日進市梅森町上松649番地1
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    © <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
-  </footer>
-
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>合同会社シティーリバー | 合同会社シティーリバー</title>
+<meta name="description" content="投資業、イラスト制作、Webデザイン、note記事作成、コンビニエンスストア運営を通じて街に新しい流れを生み出します。"/>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
+<link rel="icon" href="favicon.ico"/>
+<style>/* CityRiver Design System - shared.css */
+:root{
+  --accent:#4F46E5;--al:#EEF2FF;
+  --cyan:#0891B2;--cl:#ECFEFF;
+  --amber:#D97706;--aml:#FFFBEB;
+  --green:#059669;--gl:#ECFDF5;
+  --bg:#FFF;--bg-section:#F8FAFC;
+  --text:#0F172A;--text-s:#64748B;
+  --border:#E2E8F0;--card-bg:#FFF;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.08);
+  --radius:16px;--nav-bg:rgba(255,255,255,.8)
+}
+[data-theme=dark]{
+  --bg:#0F172A;--bg-section:#1E293B;
+  --text:#F1F5F9;--text-s:#94A3B8;
+  --border:#334155;--card-bg:#1E293B;
+  --shadow:0 1px 3px rgba(0,0,0,.3);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.4);
+  --nav-bg:rgba(15,23,42,.85);
+  --al:#1E1B4B;--cl:#164E63;--aml:#451A03;--gl:#064E3B
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
+
+/* Background blobs */
+.bg-blobs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none}
+.bg-blobs span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;animation:blobFloat 20s ease-in-out infinite}
+.bg-blobs span:nth-child(1){width:500px;height:500px;background:var(--accent);top:-10%;left:-5%;animation-delay:0s}
+.bg-blobs span:nth-child(2){width:400px;height:400px;background:var(--cyan);top:40%;right:-8%;animation-delay:-7s}
+.bg-blobs span:nth-child(3){width:350px;height:350px;background:var(--amber);bottom:-5%;left:30%;animation-delay:-14s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.05)}66%{transform:translate(-20px,30px) scale(.95)}}
+
+/* Navigation */
+.nw{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:background .3s}
+.nv{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.nl img{height:32px;width:32px;border-radius:8px}
+.nk{display:flex;align-items:center;gap:6px}
+.nk a{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-s);transition:all .2s}
+.nk a:hover{color:var(--text);background:var(--bg-section)}
+.nc{background:var(--accent)!important;color:#fff!important;border-radius:8px!important;padding:8px 18px!important;font-weight:600!important}
+.nc:hover{opacity:.9}
+
+/* Theme toggle */
+.tt{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;color:var(--text-s);display:flex;align-items:center;transition:all .2s}
+.tt:hover{color:var(--text);border-color:var(--text-s)}
+
+/* Hamburger */
+.hb{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hb span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hb.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hb.active span:nth-child(2){opacity:0}
+.hb.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* Mobile menu */
+.mm{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;gap:4px;z-index:99;box-shadow:var(--shadow-lg)}
+.mm.active{display:flex}
+.mm a{padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:background .2s}
+.mm a:hover{background:var(--bg-section)}
+
+/* Content wrapper */
+.cw{padding-top:64px}
+
+/* Reveal animation */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+
+/* Container */
+.ct{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Hero */
+.hero{padding:120px 40px 80px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.3;margin-bottom:20px;letter-spacing:-.02em}
+.gt{background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hbg{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;background:var(--al);color:var(--accent);margin-bottom:20px}
+.hs{font-size:clamp(14px,2vw,17px);color:var(--text-s);max-width:640px;margin:0 auto 32px;line-height:1.9}
+.ha{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;font-weight:600;font-size:14px;transition:all .25s;cursor:pointer;border:none;text-decoration:none}
+.bp{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bp:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,70,229,.4)}
+.bs{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.bs:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Section header */
+section{padding:80px 0}
+.sh{text-align:center;margin-bottom:48px}
+.sb{display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:12px}
+.st{font-size:clamp(24px,3.5vw,36px);font-weight:800;margin-bottom:12px;letter-spacing:-.01em}
+.ss{font-size:15px;color:var(--text-s);max-width:560px;margin:0 auto;line-height:1.8}
+
+/* Services grid */
+.svg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.sc{display:block;padding:28px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.sc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.sc h3{font-size:17px;font-weight:700;margin:14px 0 8px}
+.sc p{font-size:13px;color:var(--text-s);line-height:1.7}
+.si2{font-size:32px;display:block}
+
+/* Stats row */
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:40px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);margin-bottom:40px;text-align:center}
+.si{display:flex;flex-direction:column;align-items:center}
+.sn{font-size:clamp(28px,4vw,42px);font-weight:800;background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:13px;color:var(--text-s);margin-top:4px;font-weight:500}
+
+/* Product grid */
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.pc{display:block;padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.pc h3{font-size:18px;font-weight:700;margin:18px 0 8px}
+.pc p{font-size:14px;color:var(--text-s);line-height:1.7;margin-bottom:16px}
+.ci{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff}
+.pu{background:linear-gradient(135deg,#7C3AED,#4F46E5)}
+.cy{background:linear-gradient(135deg,#0891B2,#06B6D4)}
+.am{background:linear-gradient(135deg,#D97706,#F59E0B)}
+.cl2{font-size:13px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.cl2:hover{gap:10px}
+
+/* Info grid */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px}
+.ic{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.ic h3{font-size:18px;font-weight:700;margin-bottom:20px}
+.ir{display:flex;padding:12px 0;border-bottom:1px solid var(--border)}
+.ir:last-child{border-bottom:none}
+.ir dt{min-width:100px;font-size:13px;color:var(--text-s);font-weight:500}
+.ir dd{font-size:14px;font-weight:500}
+.ir a{color:var(--accent)}
+
+/* Contact */
+.cs{text-align:center;padding:48px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#7C3AED);color:#fff}
+.cs h2{font-size:28px;font-weight:800;margin-bottom:12px}
+.cs p{font-size:15px;opacity:.9;margin-bottom:28px;line-height:1.8}
+.ca{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cs .bp{background:#fff;color:var(--accent)}
+.cs .bs{border-color:rgba(255,255,255,.4);color:#fff}
+.cs .bs:hover{background:rgba(255,255,255,.15);border-color:#fff}
+
+/* Footer */
+footer{background:var(--bg-section);border-top:1px solid var(--border);padding:32px 0}
+.fi{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fc{font-size:13px;color:var(--text-s)}
+.fl{display:flex;gap:20px}
+.fl a{font-size:13px;color:var(--text-s);transition:color .2s}
+.fl a:hover{color:var(--accent)}
+
+/* Back to top */
+.bt{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;z-index:50;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bt.vis{opacity:1;transform:translateY(0)}
+.bt:hover{transform:translateY(-2px)}
+
+/* Breadcrumb */
+.bc{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-s);margin-bottom:24px;flex-wrap:wrap}
+.bc a{transition:color .2s}
+.bc a:hover{color:var(--accent)}
+.bc span{opacity:.4}
+
+/* Page header */
+.ph{margin-bottom:32px}
+.pb{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:14px}
+.ph h1{font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:8px}
+.ph p{font-size:15px;color:var(--text-s)}
+
+/* Search */
+.si3{margin-bottom:24px}
+.si4{width:100%;padding:14px 20px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);font-size:15px;color:var(--text);outline:none;transition:border-color .2s}
+.si4:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--al)}
+
+/* Category nav */
+.cn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.cb{padding:8px 18px;border-radius:999px;font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--bg);color:var(--text-s);cursor:pointer;transition:all .2s}
+.cb:hover{border-color:var(--accent);color:var(--accent)}
+.cb.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Card grid */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.cd{padding:24px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s}
+.cd:hover{box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.cd h3{font-size:16px;font-weight:700}
+.cd p{font-size:13px;color:var(--text-s);line-height:1.7;margin-bottom:14px}
+.ctg{font-size:11px;padding:3px 10px;border-radius:999px;background:var(--bg-section);color:var(--text-s);font-weight:600;white-space:nowrap}
+.cf{display:flex;justify-content:space-between;align-items:center}
+.gl{color:var(--text-s);transition:color .2s;display:flex;align-items:center}
+.gl:hover{color:var(--text)}
+
+/* Category section */
+.cs2{scroll-margin-top:80px}
+
+/* Detail page */
+.dh{margin-bottom:40px}
+.dh h1{font-size:clamp(24px,4vw,32px);font-weight:800;margin-bottom:12px}
+.ds{font-size:16px;color:var(--text-s);line-height:1.8;margin-bottom:20px}
+.mb{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.mi{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;background:var(--bg-section);color:var(--text-s);border:1px solid var(--border)}
+.da{display:flex;gap:12px;flex-wrap:wrap}
+.dc{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.dc h2{font-size:20px;font-weight:700;margin:28px 0 14px;padding-top:20px;border-top:1px solid var(--border)}
+.dc h2:first-of-type{margin-top:20px;padding-top:0;border-top:none}
+.dc p{font-size:14px;color:var(--text-s);line-height:1.8;margin-bottom:12px}
+.dc ul{list-style:none;padding:0}
+.dc ul li{padding:8px 0 8px 24px;position:relative;font-size:14px;color:var(--text-s)}
+.dc ul li::before{content:"\2713";position:absolute;left:0;color:var(--accent);font-weight:700}
+.tl li::before{content:"\25CF"!important;font-size:8px;top:12px}
+.dc a{color:var(--accent)}
+
+/* Responsive */
+@media(max-width:768px){
+  .nk{display:none}
+  .nv>div:last-child{display:flex}
+  .hb{display:flex}
+  .hero{padding:100px 20px 60px}
+  .sr{grid-template-columns:repeat(2,1fr);padding:24px}
+  .ig{grid-template-columns:1fr}
+  .cg{grid-template-columns:1fr}
+  .pg{grid-template-columns:1fr}
+  .fi{flex-direction:column;text-align:center}
+  .fl{justify-content:center}
+}
+@media(min-width:769px){
+  .nv>div:last-child .tt{display:none}
+}
+</style></head><body>
+<div class="bg-blobs"><span></span><span></span><span></span></div>
+<header class="nw"><nav class="nv">
+<a href="index.html" class="nl"><img src="Logo.png" alt="CityRiver">合同会社シティーリバー</a>
+<div class="nk"><a href="index.html#services">事業内容</a><a href="index.html#products">プロダクト</a><a href="index.html#profile">会社情報</a><a href="index.html#contact" class="nc">お問い合わせ</a><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></div>
+<div style="display:flex;gap:8px;align-items:center"><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="hb" aria-label="メニュー"><span></span><span></span><span></span></button></div>
+</nav></header>
+<div class="mm"><a href="index.html">ホーム</a><a href="index.html#services">事業内容</a><a href="index.html#products">プロダクト</a><a href="extensions.html">拡張機能</a><a href="webapps.html">Webアプリ</a><a href="windows-apps.html">Windowsアプリ</a><a href="index.html#contact">お問い合わせ</a></div><div class="cw"><section class="hero"><div class="ct">
+<div class="hbg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.5 4.5H18l-3.5 2.8 1.3 4.2L12 12l-3.8 2.5 1.3-4.2L6 7.5h4.5z"/></svg> Flowing With The City</div>
+<h1>街に、<span class="gt">ビジネスと創造</span>の<br>新しい流れを描く。</h1>
+<p class="hs">投資業・イラスト制作・Webデザイン・note記事作成・コンビニエンスストア運営。<br>多彩な事業を通じ、人と街をつなぐ価値を創造しています。</p>
+<div class="ha"><a class="btn bp" href="#services">事業内容を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a class="btn bs" href="#profile">会社情報</a></div>
+</div></section>
+<section id="services"><div class="ct">
+<div class="sh rv"><div class="sb" style="background:var(--al);color:var(--accent)">事業紹介</div><h2 class="st">事業内容</h2><p class="ss">都市生活をめぐる5つの領域で、投資・クリエイティブ・店舗運営を横断的に支援します。</p></div>
+<div class="svg">
+<a href="investment.html" class="sc rv rd1"><span class="si2">📈</span><h3>投資業</h3><p>成長分野への戦略投資と、長期的な資産形成のパートナーです。</p></a>
+<a href="illustration.html" class="sc rv rd2"><span class="si2">🎨</span><h3>イラスト制作</h3><p>ブランドの世界観を、丁寧なアートワークで印象を最大化します。</p></a>
+<a href="webdesign.html" class="sc rv rd3"><span class="si2">💻</span><h3>Webデザイン</h3><p>洗練されたビジュアルと情報設計で成果につながるサイトを構築。</p></a>
+<a href="note-writing.html" class="sc rv rd1"><span class="si2">✍️</span><h3>note記事作成</h3><p>読者の心に響く丁寧な文章で、魅力的にブランドを発信します。</p></a>
+<a href="convenience-store.html" class="sc rv rd2"><span class="si2">🏪</span><h3>コンビニエンスストア</h3><p>地域に密着した店舗づくりで、暮らしに寄り添うサービス。</p></a>
+</div></div></section>
+<section id="products" style="background:var(--bg-section)"><div class="ct">
+<div class="sh rv"><div class="sb" style="background:var(--cl);color:var(--cyan)">プロダクト</div><h2 class="st">開発プロダクト</h2><p class="ss">ブラウザ拡張機能、Webアプリ、Windowsアプリを開発・提供しています。</p></div>
+<div class="sr rv">
+<div class="si"><div class="sn" data-count="30" data-suffix="+">0</div><div class="sl">拡張機能</div></div>
+<div class="si"><div class="sn" data-count="33" data-suffix="+">0</div><div class="sl">Webアプリ</div></div>
+<div class="si"><div class="sn" data-count="36" data-suffix="+">0</div><div class="sl">Windowsアプリ</div></div>
+<div class="si"><div class="sn" data-count="99" data-suffix="+">0</div><div class="sl">プロダクト合計</div></div>
+</div>
+<div class="pg">
+<a href="extensions.html" class="pc cd rv rd1"><div class="ci pu"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><h3>ブラウザ拡張機能</h3><p>Chrome・Edge対応。日常のブラウジングをより便利に。</p><span class="cl2">30+の拡張機能を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+<a href="webapps.html" class="pc cd rv rd2"><div class="ci cy"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Webアプリ</h3><p>インストール不要。ブラウザですぐに利用可能。</p><span class="cl2">33+のWebアプリを見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+<a href="windows-apps.html" class="pc cd rv rd3"><div class="ci am"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h3>Windowsアプリ</h3><p>高速で安定したネイティブアプリケーション。</p><span class="cl2">36+のWindowsアプリを見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+</div></div></section>
+<section id="profile"><div class="ct">
+<div class="sh rv"><div class="sb" style="background:var(--gl);color:var(--green)">会社概要</div><h2 class="st">会社情報</h2><p class="ss">信頼とスピードを両立した意思決定を行っています。</p></div>
+<div class="ig">
+<div class="ic rv"><h3>📋 企業概要</h3><dl>
+<div class="ir"><dt>会社名</dt><dd>合同会社シティーリバー</dd></div>
+<div class="ir"><dt>代表</dt><dd>市川 武宏</dd></div>
+<div class="ir"><dt>所在地</dt><dd>〒470-0132 愛知県日進市梅森町上松649番地1</dd></div>
+<div class="ir"><dt>電話</dt><dd><a href="tel:090-8868-6505">090-8868-6505</a></dd></div>
+<div class="ir"><dt>メール</dt><dd><a href="mailto:cityriver8039@gmail.com">cityriver8039@gmail.com</a></dd></div>
+</dl></div>
+<div class="ic rv rd1"><h3>💡 私たちの姿勢</h3>
+<div style="border-left:3px solid var(--accent);padding-left:20px;margin-bottom:16px"><p style="font-size:16px;font-weight:500;color:var(--text);line-height:1.8">都市に流れる水のように、多様なニーズを受け止め、柔らかくかつ確実に価値へとつなぐ。</p></div>
+<p style="font-size:14px;color:var(--text-s);line-height:1.8">投資では持続性と透明性を重視し、クリエイティブ領域では感性と機能性の融合を追求。店舗運営では地域との共創を軸に、循環するビジネスの流れをデザインします。</p>
+</div></div></div></section>
+<section id="contact"><div class="ct"><div class="cs rv">
+<h2>お問い合わせ</h2><p>新規プロジェクトのご相談、コラボレーション、メディア取材など、お気軽にご連絡ください。</p>
+<div class="ca"><a class="btn bp" href="mailto:cityriver8039@gmail.com">メールで問い合わせる</a><a class="btn bs" href="tel:090-8868-6505">電話する</a></div>
+</div></div></section></div>
+<footer><div class="fi"><div class="fc">&copy; <span class="yr"></span> 合同会社シティーリバー / CityRiver LLC</div><div class="fl"><a href="index.html">ホーム</a><a href="extensions.html">拡張機能</a><a href="webapps.html">Webアプリ</a><a href="windows-apps.html">Windowsアプリ</a></div></div></footer>
+<button class="bt" aria-label="トップへ戻る"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button><script>
+const H=document.documentElement,S=localStorage.getItem('theme');
+if(S)H.dataset.theme=S;else if(matchMedia('(prefers-color-scheme:dark)').matches)H.dataset.theme='dark';
+document.querySelectorAll('.tt').forEach(b=>b.addEventListener('click',()=>{const n=H.dataset.theme==='dark'?'light':'dark';H.dataset.theme=n;localStorage.setItem('theme',n)}));
+document.querySelectorAll('.hb').forEach(h=>h.addEventListener('click',()=>{h.classList.toggle('active');document.querySelector('.mm')?.classList.toggle('active')}));
+const O=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');O.unobserve(x.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(e=>O.observe(e));
+function aC(){document.querySelectorAll('[data-count]').forEach(e=>{const t=parseInt(e.dataset.count);let c=0;const s=Math.max(1,Math.floor(t/40));const i=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(i)}e.textContent=c+(e.dataset.suffix||'')},30)})}
+const CO=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){aC();CO.unobserve(x.target)}}),{threshold:.3});
+document.querySelectorAll('.sr').forEach(e=>CO.observe(e));
+const BT=document.querySelector('.bt');
+if(BT){window.addEventListener('scroll',()=>BT.classList.toggle('vis',scrollY>400));BT.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}))}
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+const SI=document.querySelector('.si4');
+if(SI)SI.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.cd[data-name]').forEach(c=>{c.style.display=(c.dataset.name.toLowerCase().includes(q)||c.dataset.desc?.toLowerCase().includes(q))?'':'none'})});
+document.querySelectorAll('.cb[data-cat]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.cb').forEach(x=>x.classList.remove('act'));b.classList.add('act');const c=b.dataset.cat;document.querySelectorAll('.cd[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none');document.querySelectorAll('.cs2[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none')}));
+</script></body></html>

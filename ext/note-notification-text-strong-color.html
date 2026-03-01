@@ -1,438 +1,267 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Note通知テキスト強調カラー | 合同会社シティーリバー</title>
-  <meta name="description" content="note.comの通知ドロップダウンのテキストを見やすくする拡張機能" />
-  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
-  <link rel="icon" href="../favicon.ico" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f8f9fa;
-      --text-primary: #0a0a0a;
-      --text-secondary: #6b7280;
-      --accent: #6366f1;
-      --accent-light: #eef2ff;
-      --border: rgba(0, 0, 0, 0.08);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.7;
-      min-height: 100vh;
-    }
-    header {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav {
-      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .logo-text {
-      display: flex; align-items: center; gap: 12px;
-      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
-      color: var(--text-primary); text-decoration: none;
-    }
-    .logo-img { height: 40px; width: auto; object-fit: contain; }
-    .nav-link {
-      color: var(--text-secondary); text-decoration: none;
-      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
-    }
-    .nav-link:hover { color: var(--accent); }
-    main {
-      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
-    }
-    .breadcrumb {
-      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
-    }
-    .breadcrumb a { color: var(--accent); text-decoration: none; }
-    .page-hero {
-      margin-bottom: 48px;
-    }
-    .page-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--accent-light); color: var(--accent);
-      padding: 6px 14px; border-radius: 100px;
-      font-size: 12px; font-weight: 600; margin-bottom: 16px;
-    }
-    .page-title {
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 700; letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-    .page-desc {
-      font-size: 18px; color: var(--text-secondary);
-      line-height: 1.8; max-width: 700px;
-    }
-    .meta-bar {
-      display: flex; gap: 20px; flex-wrap: wrap;
-      margin-top: 24px; padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-    .meta-item {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 14px; color: var(--text-secondary);
-    }
-    .meta-item strong {
-      color: var(--text-primary); font-weight: 600;
-    }
-    .actions {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      margin-top: 24px;
-    }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 24px; border-radius: 12px; border: none;
-      cursor: pointer; font-weight: 600; font-size: 14px;
-      text-decoration: none; transition: all 0.3s ease;
-    }
-    .btn-primary {
-      background: var(--accent); color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    }
-    .btn-outline {
-      background: white; color: var(--text-primary);
-      border: 1.5px solid var(--border);
-    }
-    .btn-outline:hover {
-      border-color: var(--accent); background: var(--accent-light);
-    }
-    .content {
-      margin-top: 48px;
-      border-top: 1px solid var(--border);
-      padding-top: 48px;
-    }
-    .content h2 {
-      font-size: 24px; font-weight: 700;
-      margin: 40px 0 16px; letter-spacing: -0.01em;
-    }
-    .content h2:first-child { margin-top: 0; }
-    .content h3 {
-      font-size: 18px; font-weight: 600;
-      margin: 28px 0 12px;
-    }
-    .content p {
-      font-size: 16px; line-height: 1.8;
-      color: var(--text-secondary); margin-bottom: 16px;
-    }
-    .content ul {
-      margin: 12px 0 20px 24px;
-      color: var(--text-secondary); font-size: 15px;
-    }
-    .content li {
-      margin-bottom: 6px; line-height: 1.7;
-    }
-    .content code {
-      background: var(--bg-secondary); padding: 2px 6px;
-      border-radius: 4px; font-size: 14px;
-    }
-    .content pre {
-      background: #1e293b; color: #e2e8f0;
-      border-radius: 12px; padding: 20px 24px;
-      overflow-x: auto; margin: 16px 0 24px;
-      font-size: 14px; line-height: 1.6;
-    }
-    .content pre code {
-      background: none; padding: 0; color: inherit;
-    }
-    .content a {
-      color: var(--accent); text-decoration: none;
-    }
-    .content a:hover { text-decoration: underline; }
-    .info-section {
-      margin-top: 40px; background: var(--bg-secondary);
-      border-radius: 16px; padding: 32px;
-    }
-    .info-section h2 {
-      margin-top: 0; font-size: 20px;
-    }
-    .perm-list {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      list-style: none; margin: 16px 0 0 0;
-    }
-    .perm-list li {
-      background: white; border: 1px solid var(--border);
-      padding: 4px 12px; border-radius: 8px;
-      font-size: 13px; color: var(--text-secondary);
-    }
-    .back-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 48px; padding-top: 32px;
-      border-top: 1px solid var(--border);
-      color: var(--accent); text-decoration: none;
-      font-weight: 600; font-size: 15px;
-    }
-    .back-link:hover { text-decoration: underline; }
-    footer {
-      padding: 40px; text-align: center;
-      color: var(--text-secondary); font-size: 14px;
-      border-top: 1px solid var(--border);
-    }
-    @media (max-width: 768px) {
-      .nav { padding: 16px 24px; }
-      main { padding: 60px 24px 80px; }
-      .page-title { font-size: 1.8rem; }
-      .meta-bar { gap: 12px; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <nav class="nav">
-      <a href="../index.html" class="logo-text">
-        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
-        合同会社シティーリバー
-      </a>
-      <a href="../index.html#contact" class="nav-link">Contact</a>
-    </nav>
-  </header>
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Note通知テキスト強調カラー | 合同会社シティーリバー</title>
+<meta name="description" content="note.comの通知ドロップダウンのテキストを見やすくする拡張機能"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png"/>
+<link rel="icon" href="../favicon.ico"/>
+<style>/* CityRiver Design System - shared.css */
+:root{
+  --accent:#4F46E5;--al:#EEF2FF;
+  --cyan:#0891B2;--cl:#ECFEFF;
+  --amber:#D97706;--aml:#FFFBEB;
+  --green:#059669;--gl:#ECFDF5;
+  --bg:#FFF;--bg-section:#F8FAFC;
+  --text:#0F172A;--text-s:#64748B;
+  --border:#E2E8F0;--card-bg:#FFF;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.08);
+  --radius:16px;--nav-bg:rgba(255,255,255,.8)
+}
+[data-theme=dark]{
+  --bg:#0F172A;--bg-section:#1E293B;
+  --text:#F1F5F9;--text-s:#94A3B8;
+  --border:#334155;--card-bg:#1E293B;
+  --shadow:0 1px 3px rgba(0,0,0,.3);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.4);
+  --nav-bg:rgba(15,23,42,.85);
+  --al:#1E1B4B;--cl:#164E63;--aml:#451A03;--gl:#064E3B
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
 
-  <main>
-    <div class="breadcrumb">
-      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../extensions.html">拡張機能</a> / Note通知テキスト強調カラー
-    </div>
+/* Background blobs */
+.bg-blobs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none}
+.bg-blobs span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;animation:blobFloat 20s ease-in-out infinite}
+.bg-blobs span:nth-child(1){width:500px;height:500px;background:var(--accent);top:-10%;left:-5%;animation-delay:0s}
+.bg-blobs span:nth-child(2){width:400px;height:400px;background:var(--cyan);top:40%;right:-8%;animation-delay:-7s}
+.bg-blobs span:nth-child(3){width:350px;height:350px;background:var(--amber);bottom:-5%;left:30%;animation-delay:-14s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.05)}66%{transform:translate(-20px,30px) scale(.95)}}
 
-    <div class="page-hero">
-      <div class="page-badge">note.com</div>
-      <h1 class="page-title">Note通知テキスト強調カラー</h1>
-      <p class="page-desc">note.comの通知ドロップダウンのテキストを見やすくする拡張機能</p>
-      <div class="meta-bar">
-        <div class="meta-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <strong>v1.2.1</strong>
-        </div>
-        <div class="meta-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          Chrome / Edge
-        </div>
-        <div class="meta-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Manifest V3
-        </div>
-      </div>
-      <div class="actions">
-        <a href="https://github.com/sayasaya8039/Note_Notification_Text_Strong_Color" class="btn btn-primary" target="_blank" rel="noopener">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              GitHub
-            </a>
-        <a href="../extensions.html" class="btn btn-outline">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          一覧に戻る
-        </a>
-      </div>
-    </div>
+/* Navigation */
+.nw{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:background .3s}
+.nv{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.nl img{height:32px;width:32px;border-radius:8px}
+.nk{display:flex;align-items:center;gap:6px}
+.nk a{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-s);transition:all .2s}
+.nk a:hover{color:var(--text);background:var(--bg-section)}
+.nc{background:var(--accent)!important;color:#fff!important;border-radius:8px!important;padding:8px 18px!important;font-weight:600!important}
+.nc:hover{opacity:.9}
 
-    <div class="content">
-      <h2>概要</h2>
-        <p><strong>Note通知テキスト強調カラー</strong>は、<a href="https://note.com" target="_blank" rel="noopener">note.com</a> の通知ドロップダウンに表示されるテキストを見やすくするChrome拡張機能です。</p>
-        <p>note.comの通知パネルはデフォルトではテキストが薄く読みづらいことがあります。この拡張機能を使うことで、フォントの太さ・サイズ・色を自由にカスタマイズし、通知テキストの視認性を大幅に向上させることができます。</p>
-        <h2>スクリーンショット</h2>
-        <p>> ※ スクリーンショットは後日追加予定です。</p>
-        <p>| ポップアップUI | 通知パネル（適用前） | 通知パネル（適用後） |</p>
-        <p>|:-:|:-:|:-:|</p>
-        <p>|  |  |  |</p>
-        <h2>機能一覧</h2>
-        <p>| 機能 | 説明 |</p>
-        <p>|------|------|</p>
-        <p>| フォント太さ調整 | 400〜900の範囲でスライダー操作（デフォルト: 600） |</p>
-        <p>| フォントサイズ調整 | 12〜20pxの範囲でスライダー操作（デフォルト: 14px） |</p>
-        <p>| テキストカラー変更 | カラーピッカーで任意の色を選択（デフォルト: #1a1a1a） |</p>
-        <p>| 新しいタブで開くボタン | 各通知の下に「新しいタブで開く」リンクを自動追加 |</p>
-        <p>| 有効/無効トグル | ワンクリックで拡張機能のON/OFFを切り替え |</p>
-        <p>| リアルタイムプレビュー | ポップアップ内でスタイル変更を即座に確認 |</p>
-        <p>| ダークモード対応 | OSのテーマ設定に連動したポップアップUI |</p>
-        <p>| 動的DOM対応 | MutationObserverにより、後から読み込まれる通知要素にも自動適用 |</p>
-        <p>| 設定永続化 | chrome.storage.syncでデバイス間の設定同期に対応 |</p>
-        <p>| デフォルトリセット | ボタン一つで全設定を初期状態に復元 |</p>
-        <h2>インストール方法</h2>
-        <h3>開発者モードで読み込む（推奨）</h3>
-        <p>1. このリポジトリをクローンまたはダウンロードします。</p>
-        <pre><code class="lang-bash">
-        git clone https://github.com/your-username/Note_Notification_Text_Strong_Color.git
-        </code></pre>
-        <p>2. Chromeで <code>chrome://extensions/</code> を開きます。</p>
-        <p>3. 右上の「<strong>デベロッパーモード</strong>」を有効にします。</p>
-        <p>4. 「<strong>パッケージ化されていない拡張機能を読み込む</strong>」をクリックします。</p>
-        <p>5. ダウンロードした <code>Note_Notification_Text_Strong_Color</code> フォルダを選択します。</p>
-        <p>6. 拡張機能が追加され、ツールバーにアイコンが表示されます。</p>
-        <h3>ZIPファイルから読み込む</h3>
-        <p>1. リリースページからZIPファイルをダウンロードします。</p>
-        <p>2. ZIPファイルを任意のフォルダに解凍します。</p>
-        <p>3. 上記の手順2〜6と同様に読み込みます。</p>
-        <h3>ZIPファイルのビルド</h3>
-        <pre><code class="lang-bash">
-        npm run build
-        </code></pre>
-        <p><code>note-notification-text-strong-color.zip</code> が生成されます。</p>
-        <h2>使い方</h2>
-        <p>1. <a href="https://note.com" target="_blank" rel="noopener">note.com</a> を開きます。</p>
-        <p>2. ツールバーの拡張機能アイコンをクリックしてポップアップを開きます。</p>
-        <p>3. 各設定を調整します。</p>
-        <ul>
-        <li><strong>フォント太さ</strong>: スライダーを左右に動かして太さを変更（400=細い、900=太い）</li>
-        <li><strong>フォントサイズ</strong>: スライダーを左右に動かしてサイズを変更（12px〜20px）</li>
-        <li><strong>テキストカラー</strong>: カラーピッカーをクリックして色を選択</li>
-        <li><strong>新しいタブで開くボタン</strong>: トグルでON/OFF切り替え</li>
-        </ul>
-        <p>4. プレビューエリアで変更内容をリアルタイムに確認できます。</p>
-        <p>5. 設定は自動的に保存され、次回以降も反映されます。</p>
-        <p>6. 通知ベルをクリックすると、カスタマイズされたスタイルで通知が表示されます。</p>
-        <h3>新しいタブで開く機能</h3>
-        <p>通知パネル内の各通知アイテムの下に「新しいタブで開く」リンクが自動で追加されます。このリンクをクリックすると、通知先のページが新しいタブで開きます。通知パネルを閉じずに複数の通知を確認したい場合に便利です。</p>
-        <h3>拡張機能の無効化</h3>
-        <p>ポップアップ上部の「<strong>拡張機能を有効にする</strong>」トグルをOFFにすると、元のスタイルに戻ります。</p>
-        <h3>設定のリセット</h3>
-        <p>ポップアップ下部の「<strong>デフォルトに戻す</strong>」ボタンをクリックすると、すべての設定が初期値に戻ります。</p>
-        <h2>技術詳細</h2>
-        <h3>アーキテクチャ</h3>
-        <p>この拡張機能は、Chrome Extension Manifest V3に準拠しており、以下の構成で動作します。</p>
-        <pre><code class="lang-">
-        [ポップアップUI] &lt;--&gt; [chrome.storage.sync] &lt;--&gt; [Content Script]
-            popup.js              設定の永続化           content.js + content.css
-                                                              |
-                                                              v
-                                                       [Background SW]
-                                                        background.js
-                                                      (新しいタブを開く)
-        </code></pre>
-        <h3>スタイル適用の仕組み</h3>
-        <p>1. <strong>CSS変数による制御</strong>: <code>:root</code> にCSS変数（<code>--nnts-font-weight</code>, <code>--nnts-font-size</code>, <code>--nnts-text-color</code>）を設定し、content.cssのセレクタから参照します。</p>
-        <p>2. <strong>インラインスタイル補強</strong>: CSS変数だけでは適用されないケース（Svelteのスコープ付きクラス等）に対応するため、content.jsから <code>!important</code> 付きのインラインスタイルも併用します。</p>
-        <p>3. <strong>属性セレクタの活用</strong>: note.comはSvelteベースのため、クラス名にハッシュが付与されます。<code>[class*="notifItem"]</code> のような部分一致セレクタで、ハッシュ付きクラスにも確実にマッチします。</p>
-        <h3>新しいタブで開く機能の実装</h3>
-        <p>note.comの通知アイテムは透明な <code><a></code> オーバーレイ（<code>m-navbarNoticeItem__link</code>）で全体が覆われているため、通常の方法では新しいタブを開くことができません。この拡張機能では以下の方式で実装しています。</p>
-        <p>1. <strong>オーバーレイリンクの直接検出</strong>: <code>a[class*="navbarNoticeItem__link"]</code> セレクタでnote.comの通知オーバーレイリンクを特定</p>
-        <p>2. <strong>sibling挿入</strong>: <code>insertAdjacentElement("afterend")</code> で各通知アイテムの<strong>直後</strong>にボタンを配置</p>
-        <p>3. <strong>windowキャプチャフェーズ</strong>: イベント伝播の最上位（<code>window</code>のcapture phase）でクリックを処理し、note.comのイベントハンドラより先に動作</p>
-        <p>4. <strong>Background Service Worker</strong>: <code>chrome.tabs.create()</code> APIで確実に新しいタブを開く（ポップアップブロッカーの影響を受けない）</p>
-        <h3>MutationObserverによる動的対応</h3>
-        <p>note.comの通知パネルは、ベルアイコンのクリック時に動的にDOMが生成されます。MutationObserverで <code>childList</code> の変更を監視し、新しい通知要素が追加された際に自動的にスタイルとボタンを適用します。</p>
-        <h3>設定の同期</h3>
-        <p><code>chrome.storage.sync</code> を使用して設定を保存します。ポップアップからの変更は <code>chrome.storage.onChanged</code> リスナーで即座にContent Scriptに反映されます。ページのリロードは不要です。</p>
-        <h2>プロジェクト構成</h2>
-        <pre><code class="lang-">
-        Note_Notification_Text_Strong_Color/
-        ├── manifest.json          # 拡張機能のマニフェスト（Manifest V3）
-        ├── package.json           # npmスクリプト定義（ZIPビルド用）
-        ├── README.md              # このファイル
-        ├── icons/                 # 拡張機能アイコン
-        │   ├── icon16.png         #   ツールバー用（16x16）
-        │   ├── icon32.png         #   タスクバー用（32x32）
-        │   ├── icon48.png         #   拡張機能管理画面用（48x48）
-        │   └── icon128.png        #   Chromeウェブストア用（128x128）
-        └── src/                   # ソースコード
-            ├── background.js      #   Background Service Worker（タブ操作）
-            ├── content.css        #   通知要素のスタイル定義（CSS変数使用）
-            ├── content.js         #   Content Script（スタイル適用・ボタン挿入）
-            ├── popup.html         #   ポップアップUIのHTML
-            ├── popup.css          #   ポップアップUIのスタイル（ダークモード対応）
-            └── popup.js           #   ポップアップUIのロジック（設定管理・プレビュー）
-        </code></pre>
-        <h2>カスタマイズ</h2>
-        <h3>CSS変数</h3>
-        <p><code>src/content.css</code> で定義されているCSS変数を直接編集することで、デフォルト値を変更できます。</p>
-        <pre><code class="lang-css">
-        :root {
-          --nnts-font-weight: 600;        /* フォント太さ（400-900） */
-          --nnts-font-size: 14px;         /* フォントサイズ（12-20px） */
-          --nnts-text-color: #1a1a1a;     /* テキストカラー */
-          --nnts-line-height: 1.6;        /* 行間 */
-          --nnts-letter-spacing: 0.02em;  /* 字間 */
-        }
-        </code></pre>
-        <h3>デフォルト設定値</h3>
-        <p><code>src/content.js</code> および <code>src/popup.js</code> の <code>DEFAULTS</code> オブジェクトを編集することで、初期設定値を変更できます。</p>
-        <pre><code class="lang-javascript">
-        const DEFAULTS = {
-          enabled: true,          // 有効/無効
-          fontWeight: 600,        // フォント太さ
-          fontSize: 14,           // フォントサイズ（px）
-          textColor: "#1a1a1a",   // テキストカラー
-          newTabButton: true,     // 新しいタブで開くボタン
-        };
-        </code></pre>
-        <h2>技術スタック</h2>
-        <p>| 技術 | 用途 |</p>
-        <p>|------|------|</p>
-        <p>| Chrome Extension Manifest V3 | 拡張機能の基盤 |</p>
-        <p>| Background Service Worker | 新しいタブを開く（chrome.tabs.create） |</p>
-        <p>| Vanilla JavaScript | フレームワーク不使用で軽量動作 |</p>
-        <p>| CSS変数 + 属性セレクタ | Svelteのスコープ付きクラスに対応 |</p>
-        <p>| MutationObserver API | 動的に生成される通知DOMの監視 |</p>
-        <p>| chrome.storage.sync API | デバイス間の設定同期・永続化 |</p>
-        <h2>更新履歴</h2>
-        <h3>v1.2.0 (2026-02-13)</h3>
-        <ul>
-        <li>「新しいタブで開く」ボタン機能を追加</li>
-        <li>各通知アイテムの下にリンクを自動配置</li>
-        <li>Background Service Worker経由で確実にタブを開く</li>
-        <li>windowキャプチャフェーズでnote.comのイベントより先にクリックを処理</li>
-        <li>note.comのオーバーレイリンク構造（<code>m-navbarNoticeItem__link</code>）に対応</li>
-        <li>ポップアップUIに「新しいタブで開くボタン」ON/OFFトグルを追加</li>
-        <li>Background Service Worker（<code>background.js</code>）を新規追加</li>
-        </ul>
-        <h3>v1.0.0 (2026-02-12)</h3>
-        <ul>
-        <li>初回リリース</li>
-        <li>フォント太さ・サイズ・カラーのカスタマイズ機能</li>
-        <li>リアルタイムプレビュー</li>
-        <li>ダークモード対応ポップアップUI</li>
-        <li>MutationObserverによる動的DOM対応</li>
-        <li>SPA（pushState / replaceState / popstate）対応</li>
-        </ul>
-        <h2>動作要件</h2>
-        <ul>
-        <li>Google Chrome 88以降（Manifest V3対応ブラウザ）</li>
-        <li>note.com へのアクセス</li>
-        </ul>
-        <h2>ライセンス</h2>
-        <p>MIT License</p>
-        <p>Copyright (c) 2026</p>
-        <p>Permission is hereby granted, free of charge, to any person obtaining a copy</p>
-        <p>of this software and associated documentation files (the "Software"), to deal</p>
-        <p>in the Software without restriction, including without limitation the rights</p>
-        <p>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</p>
-        <p>copies of the Software, and to permit persons to whom the Software is</p>
-        <p>furnished to do so, subject to the following conditions:</p>
-        <p>The above copyright notice and this permission notice shall be included in all</p>
-        <p>copies or substantial portions of the Software.</p>
-        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</p>
-        <p>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</p>
-        <p>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</p>
-        <p>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</p>
-        <p>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</p>
-        <p>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</p>
-        <p>SOFTWARE.</p>
-    </div>
-    
-        <div class="info-section">
-          <h2>使用する権限</h2>
-          <ul class="perm-list"><li>storage</li></ul>
-        </div>
+/* Theme toggle */
+.tt{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;color:var(--text-s);display:flex;align-items:center;transition:all .2s}
+.tt:hover{color:var(--text);border-color:var(--text-s)}
 
-    <a href="../extensions.html" class="back-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      拡張機能一覧に戻る
-    </a>
-  </main>
+/* Hamburger */
+.hb{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hb span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hb.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hb.active span:nth-child(2){opacity:0}
+.hb.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 
-  <footer>
-    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
-  </footer>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
-</body>
-</html>
+/* Mobile menu */
+.mm{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;gap:4px;z-index:99;box-shadow:var(--shadow-lg)}
+.mm.active{display:flex}
+.mm a{padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:background .2s}
+.mm a:hover{background:var(--bg-section)}
+
+/* Content wrapper */
+.cw{padding-top:64px}
+
+/* Reveal animation */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+
+/* Container */
+.ct{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Hero */
+.hero{padding:120px 40px 80px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.3;margin-bottom:20px;letter-spacing:-.02em}
+.gt{background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hbg{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;background:var(--al);color:var(--accent);margin-bottom:20px}
+.hs{font-size:clamp(14px,2vw,17px);color:var(--text-s);max-width:640px;margin:0 auto 32px;line-height:1.9}
+.ha{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;font-weight:600;font-size:14px;transition:all .25s;cursor:pointer;border:none;text-decoration:none}
+.bp{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bp:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,70,229,.4)}
+.bs{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.bs:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Section header */
+section{padding:80px 0}
+.sh{text-align:center;margin-bottom:48px}
+.sb{display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:12px}
+.st{font-size:clamp(24px,3.5vw,36px);font-weight:800;margin-bottom:12px;letter-spacing:-.01em}
+.ss{font-size:15px;color:var(--text-s);max-width:560px;margin:0 auto;line-height:1.8}
+
+/* Services grid */
+.svg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.sc{display:block;padding:28px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.sc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.sc h3{font-size:17px;font-weight:700;margin:14px 0 8px}
+.sc p{font-size:13px;color:var(--text-s);line-height:1.7}
+.si2{font-size:32px;display:block}
+
+/* Stats row */
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:40px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);margin-bottom:40px;text-align:center}
+.si{display:flex;flex-direction:column;align-items:center}
+.sn{font-size:clamp(28px,4vw,42px);font-weight:800;background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:13px;color:var(--text-s);margin-top:4px;font-weight:500}
+
+/* Product grid */
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.pc{display:block;padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.pc h3{font-size:18px;font-weight:700;margin:18px 0 8px}
+.pc p{font-size:14px;color:var(--text-s);line-height:1.7;margin-bottom:16px}
+.ci{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff}
+.pu{background:linear-gradient(135deg,#7C3AED,#4F46E5)}
+.cy{background:linear-gradient(135deg,#0891B2,#06B6D4)}
+.am{background:linear-gradient(135deg,#D97706,#F59E0B)}
+.cl2{font-size:13px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.cl2:hover{gap:10px}
+
+/* Info grid */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px}
+.ic{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.ic h3{font-size:18px;font-weight:700;margin-bottom:20px}
+.ir{display:flex;padding:12px 0;border-bottom:1px solid var(--border)}
+.ir:last-child{border-bottom:none}
+.ir dt{min-width:100px;font-size:13px;color:var(--text-s);font-weight:500}
+.ir dd{font-size:14px;font-weight:500}
+.ir a{color:var(--accent)}
+
+/* Contact */
+.cs{text-align:center;padding:48px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#7C3AED);color:#fff}
+.cs h2{font-size:28px;font-weight:800;margin-bottom:12px}
+.cs p{font-size:15px;opacity:.9;margin-bottom:28px;line-height:1.8}
+.ca{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cs .bp{background:#fff;color:var(--accent)}
+.cs .bs{border-color:rgba(255,255,255,.4);color:#fff}
+.cs .bs:hover{background:rgba(255,255,255,.15);border-color:#fff}
+
+/* Footer */
+footer{background:var(--bg-section);border-top:1px solid var(--border);padding:32px 0}
+.fi{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fc{font-size:13px;color:var(--text-s)}
+.fl{display:flex;gap:20px}
+.fl a{font-size:13px;color:var(--text-s);transition:color .2s}
+.fl a:hover{color:var(--accent)}
+
+/* Back to top */
+.bt{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;z-index:50;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bt.vis{opacity:1;transform:translateY(0)}
+.bt:hover{transform:translateY(-2px)}
+
+/* Breadcrumb */
+.bc{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-s);margin-bottom:24px;flex-wrap:wrap}
+.bc a{transition:color .2s}
+.bc a:hover{color:var(--accent)}
+.bc span{opacity:.4}
+
+/* Page header */
+.ph{margin-bottom:32px}
+.pb{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:14px}
+.ph h1{font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:8px}
+.ph p{font-size:15px;color:var(--text-s)}
+
+/* Search */
+.si3{margin-bottom:24px}
+.si4{width:100%;padding:14px 20px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);font-size:15px;color:var(--text);outline:none;transition:border-color .2s}
+.si4:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--al)}
+
+/* Category nav */
+.cn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.cb{padding:8px 18px;border-radius:999px;font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--bg);color:var(--text-s);cursor:pointer;transition:all .2s}
+.cb:hover{border-color:var(--accent);color:var(--accent)}
+.cb.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Card grid */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.cd{padding:24px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s}
+.cd:hover{box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.cd h3{font-size:16px;font-weight:700}
+.cd p{font-size:13px;color:var(--text-s);line-height:1.7;margin-bottom:14px}
+.ctg{font-size:11px;padding:3px 10px;border-radius:999px;background:var(--bg-section);color:var(--text-s);font-weight:600;white-space:nowrap}
+.cf{display:flex;justify-content:space-between;align-items:center}
+.gl{color:var(--text-s);transition:color .2s;display:flex;align-items:center}
+.gl:hover{color:var(--text)}
+
+/* Category section */
+.cs2{scroll-margin-top:80px}
+
+/* Detail page */
+.dh{margin-bottom:40px}
+.dh h1{font-size:clamp(24px,4vw,32px);font-weight:800;margin-bottom:12px}
+.ds{font-size:16px;color:var(--text-s);line-height:1.8;margin-bottom:20px}
+.mb{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.mi{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;background:var(--bg-section);color:var(--text-s);border:1px solid var(--border)}
+.da{display:flex;gap:12px;flex-wrap:wrap}
+.dc{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.dc h2{font-size:20px;font-weight:700;margin:28px 0 14px;padding-top:20px;border-top:1px solid var(--border)}
+.dc h2:first-of-type{margin-top:20px;padding-top:0;border-top:none}
+.dc p{font-size:14px;color:var(--text-s);line-height:1.8;margin-bottom:12px}
+.dc ul{list-style:none;padding:0}
+.dc ul li{padding:8px 0 8px 24px;position:relative;font-size:14px;color:var(--text-s)}
+.dc ul li::before{content:"\2713";position:absolute;left:0;color:var(--accent);font-weight:700}
+.tl li::before{content:"\25CF"!important;font-size:8px;top:12px}
+.dc a{color:var(--accent)}
+
+/* Responsive */
+@media(max-width:768px){
+  .nk{display:none}
+  .nv>div:last-child{display:flex}
+  .hb{display:flex}
+  .hero{padding:100px 20px 60px}
+  .sr{grid-template-columns:repeat(2,1fr);padding:24px}
+  .ig{grid-template-columns:1fr}
+  .cg{grid-template-columns:1fr}
+  .pg{grid-template-columns:1fr}
+  .fi{flex-direction:column;text-align:center}
+  .fl{justify-content:center}
+}
+@media(min-width:769px){
+  .nv>div:last-child .tt{display:none}
+}
+</style></head><body>
+<div class="bg-blobs"><span></span><span></span><span></span></div>
+<header class="nw"><nav class="nv">
+<a href="../index.html" class="nl"><img src="../Logo.png" alt="CityRiver">合同会社シティーリバー</a>
+<div class="nk"><a href="../index.html#services">事業内容</a><a href="../index.html#products">プロダクト</a><a href="../index.html#profile">会社情報</a><a href="../index.html#contact" class="nc">お問い合わせ</a><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></div>
+<div style="display:flex;gap:8px;align-items:center"><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="hb" aria-label="メニュー"><span></span><span></span><span></span></button></div>
+</nav></header>
+<div class="mm"><a href="../index.html">ホーム</a><a href="../index.html#services">事業内容</a><a href="../index.html#products">プロダクト</a><a href="../extensions.html">拡張機能</a><a href="../webapps.html">Webアプリ</a><a href="../windows-apps.html">Windowsアプリ</a><a href="../index.html#contact">お問い合わせ</a></div><div class="cw"><section style="padding-top:40px"><div class="ct" style="max-width:900px">
+<div class="bc"><a href="../index.html">ホーム</a><span>/</span><a href="../index.html#products">プロダクト</a><span>/</span><a href="../extensions.html">拡張機能</a><span>/</span>Note通知テキスト強調カラー</div>
+<div class="dh"><div class="pb" style="background:var(--al);color:var(--accent)">note.com</div><h1>Note通知テキスト強調カラー</h1><p class="ds">note.comの通知ドロップダウンのテキストを見やすくする拡張機能</p>
+<div class="mb"><div class="mi"><strong>v1.2.1</strong></div><div class="mi"></div><div class="mi">note.com</div></div>
+<div class="da"><a href="https://github.com/sayasaya8039/Note_Notification_Text_Strong_Color" class="btn bp" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> GitHub</a><a href="../extensions.html" class="btn bs"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> 一覧に戻る</a></div></div>
+<div class="dc"><p>note.comの通知ドロップダウンのテキストを見やすくする拡張機能</p><h2>主な機能</h2><ul><li>Windowsネイティブの高速動作</li><li>シンプルで直感的なUI</li><li>最適化された設計</li></ul><h2>技術スタック</h2><ul class="tl"></ul><h2>ソースコード</h2><p><a href="https://github.com/sayasaya8039/Note_Notification_Text_Strong_Color" target="_blank" rel="noopener">GitHub</a> で公開中。Issue・Pull Requestを歓迎します。</p></div>
+<a href="../extensions.html" class="btn bs" style="margin-top:40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> 拡張機能に戻る</a>
+</div></section></div>
+<footer><div class="fi"><div class="fc">&copy; <span class="yr"></span> 合同会社シティーリバー / CityRiver LLC</div><div class="fl"><a href="../index.html">ホーム</a><a href="../extensions.html">拡張機能</a><a href="../webapps.html">Webアプリ</a><a href="../windows-apps.html">Windowsアプリ</a></div></div></footer>
+<button class="bt" aria-label="トップへ戻る"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button><script>
+const H=document.documentElement,S=localStorage.getItem('theme');
+if(S)H.dataset.theme=S;else if(matchMedia('(prefers-color-scheme:dark)').matches)H.dataset.theme='dark';
+document.querySelectorAll('.tt').forEach(b=>b.addEventListener('click',()=>{const n=H.dataset.theme==='dark'?'light':'dark';H.dataset.theme=n;localStorage.setItem('theme',n)}));
+document.querySelectorAll('.hb').forEach(h=>h.addEventListener('click',()=>{h.classList.toggle('active');document.querySelector('.mm')?.classList.toggle('active')}));
+const O=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');O.unobserve(x.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(e=>O.observe(e));
+function aC(){document.querySelectorAll('[data-count]').forEach(e=>{const t=parseInt(e.dataset.count);let c=0;const s=Math.max(1,Math.floor(t/40));const i=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(i)}e.textContent=c+(e.dataset.suffix||'')},30)})}
+const CO=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){aC();CO.unobserve(x.target)}}),{threshold:.3});
+document.querySelectorAll('.sr').forEach(e=>CO.observe(e));
+const BT=document.querySelector('.bt');
+if(BT){window.addEventListener('scroll',()=>BT.classList.toggle('vis',scrollY>400));BT.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}))}
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+const SI=document.querySelector('.si4');
+if(SI)SI.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.cd[data-name]').forEach(c=>{c.style.display=(c.dataset.name.toLowerCase().includes(q)||c.dataset.desc?.toLowerCase().includes(q))?'':'none'})});
+document.querySelectorAll('.cb[data-cat]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.cb').forEach(x=>x.classList.remove('act'));b.classList.add('act');const c=b.dataset.cat;document.querySelectorAll('.cd[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none');document.querySelectorAll('.cs2[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none')}));
+</script></body></html>

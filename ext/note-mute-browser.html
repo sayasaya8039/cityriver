@@ -1,522 +1,267 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NoteMute | 合同会社シティーリバー</title>
-  <meta name="description" content="note.com の記事をユーザー名・キーワードでミュート（非表示）する拡張機能" />
-  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
-  <link rel="icon" href="../favicon.ico" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f8f9fa;
-      --text-primary: #0a0a0a;
-      --text-secondary: #6b7280;
-      --accent: #6366f1;
-      --accent-light: #eef2ff;
-      --border: rgba(0, 0, 0, 0.08);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.7;
-      min-height: 100vh;
-    }
-    header {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav {
-      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .logo-text {
-      display: flex; align-items: center; gap: 12px;
-      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
-      color: var(--text-primary); text-decoration: none;
-    }
-    .logo-img { height: 40px; width: auto; object-fit: contain; }
-    .nav-link {
-      color: var(--text-secondary); text-decoration: none;
-      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
-    }
-    .nav-link:hover { color: var(--accent); }
-    main {
-      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
-    }
-    .breadcrumb {
-      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
-    }
-    .breadcrumb a { color: var(--accent); text-decoration: none; }
-    .page-hero {
-      margin-bottom: 48px;
-    }
-    .page-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--accent-light); color: var(--accent);
-      padding: 6px 14px; border-radius: 100px;
-      font-size: 12px; font-weight: 600; margin-bottom: 16px;
-    }
-    .page-title {
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 700; letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-    .page-desc {
-      font-size: 18px; color: var(--text-secondary);
-      line-height: 1.8; max-width: 700px;
-    }
-    .meta-bar {
-      display: flex; gap: 20px; flex-wrap: wrap;
-      margin-top: 24px; padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-    .meta-item {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 14px; color: var(--text-secondary);
-    }
-    .meta-item strong {
-      color: var(--text-primary); font-weight: 600;
-    }
-    .actions {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      margin-top: 24px;
-    }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 24px; border-radius: 12px; border: none;
-      cursor: pointer; font-weight: 600; font-size: 14px;
-      text-decoration: none; transition: all 0.3s ease;
-    }
-    .btn-primary {
-      background: var(--accent); color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    }
-    .btn-outline {
-      background: white; color: var(--text-primary);
-      border: 1.5px solid var(--border);
-    }
-    .btn-outline:hover {
-      border-color: var(--accent); background: var(--accent-light);
-    }
-    .content {
-      margin-top: 48px;
-      border-top: 1px solid var(--border);
-      padding-top: 48px;
-    }
-    .content h2 {
-      font-size: 24px; font-weight: 700;
-      margin: 40px 0 16px; letter-spacing: -0.01em;
-    }
-    .content h2:first-child { margin-top: 0; }
-    .content h3 {
-      font-size: 18px; font-weight: 600;
-      margin: 28px 0 12px;
-    }
-    .content p {
-      font-size: 16px; line-height: 1.8;
-      color: var(--text-secondary); margin-bottom: 16px;
-    }
-    .content ul {
-      margin: 12px 0 20px 24px;
-      color: var(--text-secondary); font-size: 15px;
-    }
-    .content li {
-      margin-bottom: 6px; line-height: 1.7;
-    }
-    .content code {
-      background: var(--bg-secondary); padding: 2px 6px;
-      border-radius: 4px; font-size: 14px;
-    }
-    .content pre {
-      background: #1e293b; color: #e2e8f0;
-      border-radius: 12px; padding: 20px 24px;
-      overflow-x: auto; margin: 16px 0 24px;
-      font-size: 14px; line-height: 1.6;
-    }
-    .content pre code {
-      background: none; padding: 0; color: inherit;
-    }
-    .content a {
-      color: var(--accent); text-decoration: none;
-    }
-    .content a:hover { text-decoration: underline; }
-    .info-section {
-      margin-top: 40px; background: var(--bg-secondary);
-      border-radius: 16px; padding: 32px;
-    }
-    .info-section h2 {
-      margin-top: 0; font-size: 20px;
-    }
-    .perm-list {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      list-style: none; margin: 16px 0 0 0;
-    }
-    .perm-list li {
-      background: white; border: 1px solid var(--border);
-      padding: 4px 12px; border-radius: 8px;
-      font-size: 13px; color: var(--text-secondary);
-    }
-    .back-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 48px; padding-top: 32px;
-      border-top: 1px solid var(--border);
-      color: var(--accent); text-decoration: none;
-      font-weight: 600; font-size: 15px;
-    }
-    .back-link:hover { text-decoration: underline; }
-    footer {
-      padding: 40px; text-align: center;
-      color: var(--text-secondary); font-size: 14px;
-      border-top: 1px solid var(--border);
-    }
-    @media (max-width: 768px) {
-      .nav { padding: 16px 24px; }
-      main { padding: 60px 24px 80px; }
-      .page-title { font-size: 1.8rem; }
-      .meta-bar { gap: 12px; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <nav class="nav">
-      <a href="../index.html" class="logo-text">
-        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
-        合同会社シティーリバー
-      </a>
-      <a href="../index.html#contact" class="nav-link">Contact</a>
-    </nav>
-  </header>
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>NoteMute | 合同会社シティーリバー</title>
+<meta name="description" content="note.com の記事をユーザー名・キーワードでミュート（非表示）する拡張機能"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png"/>
+<link rel="icon" href="../favicon.ico"/>
+<style>/* CityRiver Design System - shared.css */
+:root{
+  --accent:#4F46E5;--al:#EEF2FF;
+  --cyan:#0891B2;--cl:#ECFEFF;
+  --amber:#D97706;--aml:#FFFBEB;
+  --green:#059669;--gl:#ECFDF5;
+  --bg:#FFF;--bg-section:#F8FAFC;
+  --text:#0F172A;--text-s:#64748B;
+  --border:#E2E8F0;--card-bg:#FFF;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.08);
+  --radius:16px;--nav-bg:rgba(255,255,255,.8)
+}
+[data-theme=dark]{
+  --bg:#0F172A;--bg-section:#1E293B;
+  --text:#F1F5F9;--text-s:#94A3B8;
+  --border:#334155;--card-bg:#1E293B;
+  --shadow:0 1px 3px rgba(0,0,0,.3);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.4);
+  --nav-bg:rgba(15,23,42,.85);
+  --al:#1E1B4B;--cl:#164E63;--aml:#451A03;--gl:#064E3B
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
 
-  <main>
-    <div class="breadcrumb">
-      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../extensions.html">拡張機能</a> / NoteMute
-    </div>
+/* Background blobs */
+.bg-blobs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none}
+.bg-blobs span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;animation:blobFloat 20s ease-in-out infinite}
+.bg-blobs span:nth-child(1){width:500px;height:500px;background:var(--accent);top:-10%;left:-5%;animation-delay:0s}
+.bg-blobs span:nth-child(2){width:400px;height:400px;background:var(--cyan);top:40%;right:-8%;animation-delay:-7s}
+.bg-blobs span:nth-child(3){width:350px;height:350px;background:var(--amber);bottom:-5%;left:30%;animation-delay:-14s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.05)}66%{transform:translate(-20px,30px) scale(.95)}}
 
-    <div class="page-hero">
-      <div class="page-badge">note.com</div>
-      <h1 class="page-title">NoteMute</h1>
-      <p class="page-desc">note.com の記事をユーザー名・キーワードでミュート（非表示）する拡張機能</p>
-      <div class="meta-bar">
-        <div class="meta-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <strong>v1.5.0</strong>
-        </div>
-        <div class="meta-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          Chrome / Edge
-        </div>
-        <div class="meta-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Manifest V3
-        </div>
-      </div>
-      <div class="actions">
-        <a href="https://github.com/sayasaya8039/note-mute-browser" class="btn btn-primary" target="_blank" rel="noopener">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              GitHub
-            </a>
-        <a href="../extensions.html" class="btn btn-outline">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          一覧に戻る
-        </a>
-      </div>
-    </div>
+/* Navigation */
+.nw{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:background .3s}
+.nv{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.nl img{height:32px;width:32px;border-radius:8px}
+.nk{display:flex;align-items:center;gap:6px}
+.nk a{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-s);transition:all .2s}
+.nk a:hover{color:var(--text);background:var(--bg-section)}
+.nc{background:var(--accent)!important;color:#fff!important;border-radius:8px!important;padding:8px 18px!important;font-weight:600!important}
+.nc:hover{opacity:.9}
 
-    <div class="content">
-      <p>note.com のタイムライン・検索・プロフィールページから、指定したユーザーやキーワードを含む記事を非表示にする Chrome 拡張機能です。有料記事・メンバーシップ記事のフィルタリングにも対応。</p>
-        <h2>機能</h2>
-        <h3>ミュート</h3>
-        <ul>
-        <li><strong>ユーザーミュート</strong> — 指定ユーザーの記事をすべて非表示</li>
-        <li><strong>キーワードミュート</strong> — タイトル・本文にキーワードを含む記事を非表示（AND/OR 切替対応）</li>
-        <li><strong>除外キーワード</strong> — 特定キーワードを含む記事はミュートしない（ホワイトリスト）</li>
-        <li><strong>ワンクリックミュート</strong> — 記事カード上のボタンからモーダルで即座にミュート</li>
-        <li><strong>有効期限</strong> — 1h / 1d / 7d / 30d / 永久から選択可能</li>
-        <li><strong>コンテキストメニュー</strong> — 右クリックからユーザーミュート・キーワードミュート</li>
-        </ul>
-        <h3>記事フィルタ</h3>
-        <ul>
-        <li><strong>有料記事フィルタ</strong> — バッジ付きの有料記事を自動非表示</li>
-        <li><strong>メンバーシップ記事フィルタ</strong> — メンバーシップ限定記事を自動非表示</li>
-        </ul>
-        <h3>プリセット</h3>
-        <ul>
-        <li><strong>AI記事フィルタ</strong> — ChatGPT / Claude / Gemini 等の AI 関連キーワードを一括ミュート</li>
-        <li><strong>炎上ワードフィルタ</strong> — 炎上・批判系キーワードを一括ミュート</li>
-        <li><strong>スパムフィルタ</strong> — 副業・情報商材系キーワードを一括ミュート</li>
-        </ul>
-        <h3>その他</h3>
-        <ul>
-        <li><strong>リアルタイム反映</strong> — ミュート設定変更が全タブに即時反映</li>
-        <li><strong>SPA 完全対応</strong> — Navigation API / 無限スクロール・ページ遷移でも漏れなく検知</li>
-        <li><strong>統計ダッシュボード</strong> — 日別・月別・ユーザー別のミュート統計を表示</li>
-        <li><strong>インポート / エクスポート</strong> — ミュート設定を JSON で共有・バックアップ</li>
-        <li><strong>ダークモード対応</strong> — OS / 手動でテーマ切替（自動・ライト・ダーク）</li>
-        <li><strong>完全クライアントサイド</strong> — サーバーへの通信なし、プライバシー安全</li>
-        </ul>
-        <h2>対応ページ</h2>
-        <p>| ページ | パス |</p>
-        <p>|--------|------|</p>
-        <p>| ホーム（タイムライン） | <code>note.com/</code> |</p>
-        <p>| フォロー中 | <code>note.com/following</code> |</p>
-        <p>| 検索結果 | <code>note.com/search*</code> |</p>
-        <p>| ハッシュタグ | <code>note.com/hashtag/*</code> |</p>
-        <p>| ユーザープロフィール | <code>note.com/[username]</code> |</p>
-        <h2>技術仕様</h2>
-        <p>| 項目 | 値 |</p>
-        <p>|------|-----|</p>
-        <p>| Manifest | V3 |</p>
-        <p>| Permissions | <code>storage</code>, <code>contextMenus</code> |</p>
-        <p>| Host Permissions | <code>https://note.com/*</code> |</p>
-        <p>| Background | Service Worker (module) |</p>
-        <p>| Content Script | TypeScript（DOM API） |</p>
-        <p>| Popup UI | React 19 + Tailwind CSS 3 |</p>
-        <p>| ビルド | Vite 6 + TypeScript 5 |</p>
-        <p>| リンター / フォーマッター | Biome |</p>
-        <p>| テスト | Vitest 4 + happy-dom |</p>
-        <h2>インストール</h2>
-        <h3>方法 1: ソースからビルド</h3>
-        <pre><code class="lang-bash">
-        # 1. リポジトリをクローン
-        git clone https://github.com/&lt;your-username&gt;/note-mute-browser.git
-        cd note-mute-browser
-        
-        # 2. 依存関係をインストール
-        npm install
-        
-        # 3. ビルド
-        npm run build
-        </code></pre>
-        <h3>方法 2: ビルド済みフォルダを使用</h3>
-        <p><code>note_mute_browser/</code> フォルダがビルド済み成果物です。</p>
-        <h3>Chrome にロード</h3>
-        <p>1. Chrome で <code>chrome://extensions/</code> を開く</p>
-        <p>2. 右上の <strong>「デベロッパーモード」</strong> を ON にする</p>
-        <p>3. <strong>「パッケージ化されていない拡張機能を読み込む」</strong> をクリック</p>
-        <p>4. <code>note_mute_browser/</code> フォルダ（ビルド出力）を選択</p>
-        <p>5. NoteMute のアイコンがツールバーに表示される</p>
-        <h3>Edge / Brave にロード</h3>
-        <p>同じ手順です。Edge は <code>edge://extensions/</code>、Brave は <code>brave://extensions/</code> を使用してください。</p>
-        <h2>使い方</h2>
-        <h3>ポップアップからミュート</h3>
-        <p>1. ツールバーの NoteMute アイコンをクリック</p>
-        <p>2. 「ユーザー」または「キーワード」タブを選択</p>
-        <p>3. 入力欄にユーザー名またはキーワードを入力して追加</p>
-        <h3>記事カードからミュート</h3>
-        <p>1. note.com の記事カードにマウスを乗せる</p>
-        <p>2. 右上に表示されるミュートボタンをクリック</p>
-        <p>3. モーダルでユーザーミュートまたはキーワードミュートを選択</p>
-        <p>4. 有効期限を選んで確定</p>
-        <h3>コンテキストメニュー</h3>
-        <p>1. note.com 上でユーザーリンクを右クリック → 「このユーザーをミュート」</p>
-        <p>2. テキストを選択して右クリック → 「"..." をキーワードミュート」</p>
-        <h3>有料記事フィルタ</h3>
-        <p>1. ポップアップの設定パネルを開く</p>
-        <p>2. 「有料記事を非表示」にチェック</p>
-        <p>3. タイムライン上のバッジ付き記事が自動的に非表示に</p>
-        <h3>グローバル ON/OFF</h3>
-        <p>ポップアップ上部のトグルスイッチで、拡張機能全体の有効/無効を切り替えられます。</p>
-        <h2>開発</h2>
-        <pre><code class="lang-bash">
-        # 開発モード（ファイル変更を監視して自動ビルド）
-        npm run dev
-        
-        # 本番ビルド
-        npm run build
-        
-        # 型チェック
-        npm run typecheck
-        
-        # リント
-        npm run lint
-        
-        # フォーマット
-        npm run format
-        
-        # テスト
-        npm run test
-        
-        # テスト（ウォッチモード）
-        npm run test:watch
-        </code></pre>
-        <h3>プロジェクト構成</h3>
-        <pre><code class="lang-">
-        note_mute_browser/
-        ├── src/
-        │   ├── __tests__/
-        │   │   └── setup.ts             # Chrome API モック（テスト共通）
-        │   ├── background/
-        │   │   └── index.ts             # Service Worker（メッセージハブ・ストレージ管理）
-        │   ├── content/
-        │   │   ├── index.ts             # DOM 操作・ミュート処理・有料記事検出
-        │   │   ├── selectors.ts         # DOM セレクタ定数・キャッシュ
-        │   │   └── styles.css           # ミュートボタン・非表示スタイル
-        │   ├── popup/
-        │   │   ├── App.tsx              # ポップアップメインコンポーネント
-        │   │   ├── index.tsx            # React エントリーポイント
-        │   │   ├── index.css            # Tailwind CSS エントリー
-        │   │   ├── popup.html           # ポップアップ HTML
-        │   │   └── components/
-        │   │       ├── AddForm.tsx      # ミュート追加フォーム
-        │   │       ├── MuteList.tsx     # ミュートリスト表示
-        │   │       ├── SearchBox.tsx    # 検索ボックス
-        │   │       ├── SettingsPanel.tsx # 設定パネル
-        │   │       └── StatsPanel.tsx   # 統計ダッシュボード
-        │   ├── onboarding/
-        │   │   └── onboarding.html     # 初回インストール案内ページ
-        │   └── shared/
-        │       ├── __tests__/
-        │       │   └── storage.test.ts  # ストレージ CRUD テスト（22件）
-        │       ├── constants.ts         # 共通定数・ユーティリティ
-        │       ├── storage.ts           # chrome.storage ラッパー（sync/local 自動切替）
-        │       └── types.ts             # 共通型定義・メッセージング型
-        ├── public/
-        │   └── icons/                   # 拡張機能アイコン（16/48/128px）
-        ├── manifest.json                # Manifest V3 定義
-        ├── package.json
-        ├── vite.config.ts               # Vite ビルド設定
-        ├── vitest.config.ts             # Vitest テスト設定
-        ├── tsconfig.json
-        ├── biome.json
-        ├── tailwind.config.js
-        └── postcss.config.js
-        </code></pre>
-        <h3>アーキテクチャ</h3>
-        <pre><code class="lang-">
-        ┌──────────┐    sendMessage     ┌────────────┐    sendMessage    ┌──────────────┐
-        │  Popup   │ ──────────────── &gt; │ Background │ ───────────────&gt; │   Content    │
-        │ (React)  │ &lt; ──────────────── │  (SW)      │ &lt; ────────────── │   Script     │
-        └──────────┘    response        └────────────┘   MUTES_UPDATED  └──────────────┘
-                                              │                                │
-                                              v                                v
-                                      chrome.storage               MutationObserver +
-                                      (sync/local 自動切替)         Navigation API
-                                      (mutes, settings, stats)     (DOM 監視・非表示・
-                                                                    有料記事検出)
-        </code></pre>
-        <h3>パフォーマンス最適化</h3>
-        <ul>
-        <li><strong>MutationObserver バッチ処理</strong> — 250ms デバウンスで DOM 変更をバッチ処理</li>
-        <li><strong>WeakSet / WeakMap キャッシュ</strong> — 処理済みカード・ユーザー名をメモリ効率よくキャッシュ</li>
-        <li><strong>キーワード事前分割</strong> — exclude / normal を事前分割し、カードごとの filter() を排除</li>
-        <li><strong>toLowerCase 重複排除</strong> — キーワードマッチ時に title/body の小文字変換を1回に集約</li>
-        <li><strong>CSS 一元管理</strong> — manifest CSS のみで隠蔽スタイルを管理（JS 注入を廃止）</li>
-        <li><strong>リトライタイマー自動キャンセル</strong> — MutationObserver 発火時に不要な初期化リトライを打ち切り</li>
-        <li><strong>Promise.all 並列化</strong> — ミュートリスト・設定の取得を並列実行</li>
-        <li><strong>pendingNodes Set</strong> — 重複ノードの自動排除</li>
-        </ul>
-        <h2>変更履歴</h2>
-        <h3>v1.5.0 (2026-02-22)</h3>
-        <ul>
-        <li><strong>改善</strong>: CSS 一元管理（JS 注入の INJECTED_CSS を廃止、manifest CSS に統合）</li>
-        <li><strong>改善</strong>: リトライタイマーを MutationObserver 発火時に自動キャンセル</li>
-        <li><strong>改善</strong>: fullRescan 時に processedCards を初期化（再評価漏れ防止）</li>
-        <li><strong>改善</strong>: matchesKeyword の toLowerCase 呼び出しを事前計算で1回に集約</li>
-        <li><strong>改善</strong>: Escape キーリスナーをモーダル表示時のみ有効化</li>
-        <li><strong>改善</strong>: cleanupEmptyAncestors を Array.from 排除の for ループに最適化</li>
-        <li><strong>改善</strong>: fetchAndCacheMutes を Promise.all で並列化</li>
-        <li><strong>修正</strong>: MUTES_UPDATED 受信時に設定を取得してからリスキャン（stale settings 防止）</li>
-        <li><strong>改善</strong>: pendingNodes を Set 化（重複ノード排除）</li>
-        <li><strong>改善</strong>: コンテキストメニューのキーワード長を200文字に制限</li>
-        <li><strong>改善</strong>: App.tsx の typeMutes / existingValues を useMemo でメモ化</li>
-        <li><strong>改善</strong>: estimateSize を Blob → TextEncoder に変更（同期・軽量化）</li>
-        <li><strong>改善</strong>: getMuteList の期限切れクリーンアップを5分間隔に抑制</li>
-        <li><strong>改善</strong>: createDurationRow を innerHTML → DOM API に変換（XSS リスク排除）</li>
-        </ul>
-        <h3>v1.4.0 (2026-02-22)</h3>
-        <ul>
-        <li><strong>追加</strong>: ユーザー名 WeakMap キャッシュ（重複抽出の排除）</li>
-        <li><strong>追加</strong>: Grid コンテナキャッシュ（バッチ処理ごとの再クエリ排除）</li>
-        <li><strong>追加</strong>: Navigation API（Chrome 102+）による SPA ナビゲーション検知</li>
-        <li><strong>追加</strong>: テスト基盤（Vitest 4 + happy-dom + Chrome API モック）</li>
-        <li><strong>追加</strong>: storage.ts テスト（22件: CRUD・インポート・設定・統計・バージョン）</li>
-        </ul>
-        <h3>v1.3.0 (2026-02-22)</h3>
-        <ul>
-        <li><strong>追加</strong>: インポート時のスキーマバリデーション（isValidMuteEntry）</li>
-        <li><strong>改善</strong>: キーワードエントリを exclude / normal に事前分割（カードごとの filter 排除）</li>
-        <li><strong>改善</strong>: detectPaidArticle の DOM クエリを3回→2回に統合</li>
-        <li><strong>改善</strong>: 非表示要素を Set で追跡（restoreHiddenCards の querySelectorAll 排除）</li>
-        <li><strong>追加</strong>: Background メッセージハンドラに default case（未知メッセージの安全な処理）</li>
-        </ul>
-        <h3>v1.2.0 (2026-02-22)</h3>
-        <ul>
-        <li><strong>修正</strong>: デバッグ用 console.log を本番コードから除去</li>
-        <li><strong>修正</strong>: innerHTML を DOM API に置換（XSS リスク排除）</li>
-        <li><strong>修正</strong>: manifest.json と package.json のバージョンを同期</li>
-        </ul>
-        <h3>v1.1.1 (2026-02-22)</h3>
-        <ul>
-        <li><strong>修正</strong>: 有料記事フィルタが note.com の新レイアウトで機能しない問題を修正</li>
-        </ul>
-        <h3>v1.1.0</h3>
-        <ul>
-        <li><strong>追加</strong>: 有料記事フィルタ（バッジ付き記事の自動非表示）</li>
-        <li><strong>追加</strong>: メンバーシップ記事フィルタ</li>
-        <li><strong>追加</strong>: プリセット機能（AI記事 / 炎上ワード / スパム）</li>
-        <li><strong>追加</strong>: ミュート有効期限（1h / 1d / 7d / 30d / 永久）</li>
-        <li><strong>追加</strong>: 除外キーワード（ホワイトリスト）</li>
-        <li><strong>追加</strong>: フィルタロジック切替（AND / OR）</li>
-        <li><strong>追加</strong>: 統計ダッシュボード</li>
-        <li><strong>追加</strong>: インポート / エクスポート</li>
-        <li><strong>追加</strong>: テーマ切替（自動 / ライト / ダーク）</li>
-        <li><strong>追加</strong>: オンボーディングページ</li>
-        <li><strong>改善</strong>: 無限スクロール時のバッチラッパー透過化（Grid gap 修正）</li>
-        <li><strong>改善</strong>: モーダル位置計算の修正（スクロール時の画面外配置を修正）</li>
-        </ul>
-        <h3>v1.0.0</h3>
-        <ul>
-        <li>初回リリース</li>
-        <li>ユーザーミュート / キーワードミュート</li>
-        <li>ワンクリックミュートボタン</li>
-        <li>SPA 対応（MutationObserver + pushState 監視）</li>
-        </ul>
-        <h2>ZIP 圧縮（Chrome Web Store 提出用）</h2>
-        <pre><code class="lang-bash">
-        # Linux / macOS / WSL
-        cd /path/to/note_mute_browser && zip -r NoteMute.zip note_mute_browser/
-        
-        # PowerShell（Windows）
-        Compress-Archive -Path "note_mute_browser\*" -DestinationPath "NoteMute.zip"
-        </code></pre>
-        <h2>プライバシー</h2>
-        <ul>
-        <li><strong>完全クライアントサイド</strong> — サーバーへの通信は一切ありません</li>
-        <li><strong>最小権限</strong> — <code>storage</code> + <code>contextMenus</code> 権限のみ使用</li>
-        <li><strong>データ保存先</strong> — ブラウザのローカルストレージのみ</li>
-        </ul>
-        <h2>ライセンス</h2>
-        <p>MIT</p>
-    </div>
-    
-        <div class="info-section">
-          <h2>使用する権限</h2>
-          <ul class="perm-list"><li>storage</li><li>contextMenus</li></ul>
-        </div>
+/* Theme toggle */
+.tt{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;color:var(--text-s);display:flex;align-items:center;transition:all .2s}
+.tt:hover{color:var(--text);border-color:var(--text-s)}
 
-    <a href="../extensions.html" class="back-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      拡張機能一覧に戻る
-    </a>
-  </main>
+/* Hamburger */
+.hb{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hb span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hb.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hb.active span:nth-child(2){opacity:0}
+.hb.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 
-  <footer>
-    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
-  </footer>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
-</body>
-</html>
+/* Mobile menu */
+.mm{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;gap:4px;z-index:99;box-shadow:var(--shadow-lg)}
+.mm.active{display:flex}
+.mm a{padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:background .2s}
+.mm a:hover{background:var(--bg-section)}
+
+/* Content wrapper */
+.cw{padding-top:64px}
+
+/* Reveal animation */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+
+/* Container */
+.ct{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Hero */
+.hero{padding:120px 40px 80px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.3;margin-bottom:20px;letter-spacing:-.02em}
+.gt{background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hbg{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;background:var(--al);color:var(--accent);margin-bottom:20px}
+.hs{font-size:clamp(14px,2vw,17px);color:var(--text-s);max-width:640px;margin:0 auto 32px;line-height:1.9}
+.ha{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;font-weight:600;font-size:14px;transition:all .25s;cursor:pointer;border:none;text-decoration:none}
+.bp{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bp:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,70,229,.4)}
+.bs{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.bs:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Section header */
+section{padding:80px 0}
+.sh{text-align:center;margin-bottom:48px}
+.sb{display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:12px}
+.st{font-size:clamp(24px,3.5vw,36px);font-weight:800;margin-bottom:12px;letter-spacing:-.01em}
+.ss{font-size:15px;color:var(--text-s);max-width:560px;margin:0 auto;line-height:1.8}
+
+/* Services grid */
+.svg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.sc{display:block;padding:28px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.sc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.sc h3{font-size:17px;font-weight:700;margin:14px 0 8px}
+.sc p{font-size:13px;color:var(--text-s);line-height:1.7}
+.si2{font-size:32px;display:block}
+
+/* Stats row */
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:40px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);margin-bottom:40px;text-align:center}
+.si{display:flex;flex-direction:column;align-items:center}
+.sn{font-size:clamp(28px,4vw,42px);font-weight:800;background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:13px;color:var(--text-s);margin-top:4px;font-weight:500}
+
+/* Product grid */
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.pc{display:block;padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.pc h3{font-size:18px;font-weight:700;margin:18px 0 8px}
+.pc p{font-size:14px;color:var(--text-s);line-height:1.7;margin-bottom:16px}
+.ci{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff}
+.pu{background:linear-gradient(135deg,#7C3AED,#4F46E5)}
+.cy{background:linear-gradient(135deg,#0891B2,#06B6D4)}
+.am{background:linear-gradient(135deg,#D97706,#F59E0B)}
+.cl2{font-size:13px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.cl2:hover{gap:10px}
+
+/* Info grid */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px}
+.ic{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.ic h3{font-size:18px;font-weight:700;margin-bottom:20px}
+.ir{display:flex;padding:12px 0;border-bottom:1px solid var(--border)}
+.ir:last-child{border-bottom:none}
+.ir dt{min-width:100px;font-size:13px;color:var(--text-s);font-weight:500}
+.ir dd{font-size:14px;font-weight:500}
+.ir a{color:var(--accent)}
+
+/* Contact */
+.cs{text-align:center;padding:48px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#7C3AED);color:#fff}
+.cs h2{font-size:28px;font-weight:800;margin-bottom:12px}
+.cs p{font-size:15px;opacity:.9;margin-bottom:28px;line-height:1.8}
+.ca{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cs .bp{background:#fff;color:var(--accent)}
+.cs .bs{border-color:rgba(255,255,255,.4);color:#fff}
+.cs .bs:hover{background:rgba(255,255,255,.15);border-color:#fff}
+
+/* Footer */
+footer{background:var(--bg-section);border-top:1px solid var(--border);padding:32px 0}
+.fi{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fc{font-size:13px;color:var(--text-s)}
+.fl{display:flex;gap:20px}
+.fl a{font-size:13px;color:var(--text-s);transition:color .2s}
+.fl a:hover{color:var(--accent)}
+
+/* Back to top */
+.bt{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;z-index:50;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bt.vis{opacity:1;transform:translateY(0)}
+.bt:hover{transform:translateY(-2px)}
+
+/* Breadcrumb */
+.bc{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-s);margin-bottom:24px;flex-wrap:wrap}
+.bc a{transition:color .2s}
+.bc a:hover{color:var(--accent)}
+.bc span{opacity:.4}
+
+/* Page header */
+.ph{margin-bottom:32px}
+.pb{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:14px}
+.ph h1{font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:8px}
+.ph p{font-size:15px;color:var(--text-s)}
+
+/* Search */
+.si3{margin-bottom:24px}
+.si4{width:100%;padding:14px 20px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);font-size:15px;color:var(--text);outline:none;transition:border-color .2s}
+.si4:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--al)}
+
+/* Category nav */
+.cn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.cb{padding:8px 18px;border-radius:999px;font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--bg);color:var(--text-s);cursor:pointer;transition:all .2s}
+.cb:hover{border-color:var(--accent);color:var(--accent)}
+.cb.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Card grid */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.cd{padding:24px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s}
+.cd:hover{box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.cd h3{font-size:16px;font-weight:700}
+.cd p{font-size:13px;color:var(--text-s);line-height:1.7;margin-bottom:14px}
+.ctg{font-size:11px;padding:3px 10px;border-radius:999px;background:var(--bg-section);color:var(--text-s);font-weight:600;white-space:nowrap}
+.cf{display:flex;justify-content:space-between;align-items:center}
+.gl{color:var(--text-s);transition:color .2s;display:flex;align-items:center}
+.gl:hover{color:var(--text)}
+
+/* Category section */
+.cs2{scroll-margin-top:80px}
+
+/* Detail page */
+.dh{margin-bottom:40px}
+.dh h1{font-size:clamp(24px,4vw,32px);font-weight:800;margin-bottom:12px}
+.ds{font-size:16px;color:var(--text-s);line-height:1.8;margin-bottom:20px}
+.mb{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.mi{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;background:var(--bg-section);color:var(--text-s);border:1px solid var(--border)}
+.da{display:flex;gap:12px;flex-wrap:wrap}
+.dc{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.dc h2{font-size:20px;font-weight:700;margin:28px 0 14px;padding-top:20px;border-top:1px solid var(--border)}
+.dc h2:first-of-type{margin-top:20px;padding-top:0;border-top:none}
+.dc p{font-size:14px;color:var(--text-s);line-height:1.8;margin-bottom:12px}
+.dc ul{list-style:none;padding:0}
+.dc ul li{padding:8px 0 8px 24px;position:relative;font-size:14px;color:var(--text-s)}
+.dc ul li::before{content:"\2713";position:absolute;left:0;color:var(--accent);font-weight:700}
+.tl li::before{content:"\25CF"!important;font-size:8px;top:12px}
+.dc a{color:var(--accent)}
+
+/* Responsive */
+@media(max-width:768px){
+  .nk{display:none}
+  .nv>div:last-child{display:flex}
+  .hb{display:flex}
+  .hero{padding:100px 20px 60px}
+  .sr{grid-template-columns:repeat(2,1fr);padding:24px}
+  .ig{grid-template-columns:1fr}
+  .cg{grid-template-columns:1fr}
+  .pg{grid-template-columns:1fr}
+  .fi{flex-direction:column;text-align:center}
+  .fl{justify-content:center}
+}
+@media(min-width:769px){
+  .nv>div:last-child .tt{display:none}
+}
+</style></head><body>
+<div class="bg-blobs"><span></span><span></span><span></span></div>
+<header class="nw"><nav class="nv">
+<a href="../index.html" class="nl"><img src="../Logo.png" alt="CityRiver">合同会社シティーリバー</a>
+<div class="nk"><a href="../index.html#services">事業内容</a><a href="../index.html#products">プロダクト</a><a href="../index.html#profile">会社情報</a><a href="../index.html#contact" class="nc">お問い合わせ</a><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></div>
+<div style="display:flex;gap:8px;align-items:center"><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="hb" aria-label="メニュー"><span></span><span></span><span></span></button></div>
+</nav></header>
+<div class="mm"><a href="../index.html">ホーム</a><a href="../index.html#services">事業内容</a><a href="../index.html#products">プロダクト</a><a href="../extensions.html">拡張機能</a><a href="../webapps.html">Webアプリ</a><a href="../windows-apps.html">Windowsアプリ</a><a href="../index.html#contact">お問い合わせ</a></div><div class="cw"><section style="padding-top:40px"><div class="ct" style="max-width:900px">
+<div class="bc"><a href="../index.html">ホーム</a><span>/</span><a href="../index.html#products">プロダクト</a><span>/</span><a href="../extensions.html">拡張機能</a><span>/</span>NoteMute</div>
+<div class="dh"><div class="pb" style="background:var(--al);color:var(--accent)">note.com</div><h1>NoteMute</h1><p class="ds">note.com の記事をユーザー名・キーワードでミュート（非表示）する拡張機能</p>
+<div class="mb"><div class="mi"><strong>v1.5.0</strong></div><div class="mi"></div><div class="mi">note.com</div></div>
+<div class="da"><a href="https://github.com/sayasaya8039/note-mute-browser" class="btn bp" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> GitHub</a><a href="../extensions.html" class="btn bs"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> 一覧に戻る</a></div></div>
+<div class="dc"><p>note.com の記事をユーザー名・キーワードでミュート（非表示）する拡張機能</p><h2>主な機能</h2><ul><li>Windowsネイティブの高速動作</li><li>シンプルで直感的なUI</li><li>最適化された設計</li></ul><h2>技術スタック</h2><ul class="tl"></ul><h2>ソースコード</h2><p><a href="https://github.com/sayasaya8039/note-mute-browser" target="_blank" rel="noopener">GitHub</a> で公開中。Issue・Pull Requestを歓迎します。</p></div>
+<a href="../extensions.html" class="btn bs" style="margin-top:40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> 拡張機能に戻る</a>
+</div></section></div>
+<footer><div class="fi"><div class="fc">&copy; <span class="yr"></span> 合同会社シティーリバー / CityRiver LLC</div><div class="fl"><a href="../index.html">ホーム</a><a href="../extensions.html">拡張機能</a><a href="../webapps.html">Webアプリ</a><a href="../windows-apps.html">Windowsアプリ</a></div></div></footer>
+<button class="bt" aria-label="トップへ戻る"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button><script>
+const H=document.documentElement,S=localStorage.getItem('theme');
+if(S)H.dataset.theme=S;else if(matchMedia('(prefers-color-scheme:dark)').matches)H.dataset.theme='dark';
+document.querySelectorAll('.tt').forEach(b=>b.addEventListener('click',()=>{const n=H.dataset.theme==='dark'?'light':'dark';H.dataset.theme=n;localStorage.setItem('theme',n)}));
+document.querySelectorAll('.hb').forEach(h=>h.addEventListener('click',()=>{h.classList.toggle('active');document.querySelector('.mm')?.classList.toggle('active')}));
+const O=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');O.unobserve(x.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(e=>O.observe(e));
+function aC(){document.querySelectorAll('[data-count]').forEach(e=>{const t=parseInt(e.dataset.count);let c=0;const s=Math.max(1,Math.floor(t/40));const i=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(i)}e.textContent=c+(e.dataset.suffix||'')},30)})}
+const CO=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){aC();CO.unobserve(x.target)}}),{threshold:.3});
+document.querySelectorAll('.sr').forEach(e=>CO.observe(e));
+const BT=document.querySelector('.bt');
+if(BT){window.addEventListener('scroll',()=>BT.classList.toggle('vis',scrollY>400));BT.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}))}
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+const SI=document.querySelector('.si4');
+if(SI)SI.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.cd[data-name]').forEach(c=>{c.style.display=(c.dataset.name.toLowerCase().includes(q)||c.dataset.desc?.toLowerCase().includes(q))?'':'none'})});
+document.querySelectorAll('.cb[data-cat]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.cb').forEach(x=>x.classList.remove('act'));b.classList.add('act');const c=b.dataset.cat;document.querySelectorAll('.cd[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none');document.querySelectorAll('.cs2[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none')}));
+</script></body></html>
