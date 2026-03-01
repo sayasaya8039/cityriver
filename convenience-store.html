@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>コンビニエンスストア運営 | 合同会社シティーリバー</title>
+  <meta name="description" content="地域に密着した店舗づくりで、日々の暮らしに寄り添いながら、新しいサービスの実験場としての機能も備えます。" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #0066ff;
+      --accent-light: #e6f0ff;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 14px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px 120px;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .breadcrumb a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .page-header {
+      margin-bottom: 64px;
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .hero-image {
+      width: 100%;
+      border-radius: 16px;
+      margin: 48px 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .content-section {
+      margin-bottom: 64px;
+    }
+
+    .content-section h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    .content-section p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .content-image {
+      width: 100%;
+      border-radius: 12px;
+      margin: 32px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin: 40px 0;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 24px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .highlight-box {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .cta-section {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 48px;
+      text-align: center;
+      margin-top: 64px;
+    }
+
+    .cta-section h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 16px rgba(0, 102, 255, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+    }
+
+    footer {
+      padding: 40px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 16px 24px;
+      }
+
+      main {
+        padding: 60px 24px 80px;
+      }
+
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-section {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="index.html" class="logo-text">
+        <span class="logo-mark">CR</span>
+        合同会社シティーリバー
+      </a>
+      <a href="index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="index.html">ホーム</a> / <a href="index.html#services">事業内容</a> / コンビニエンスストア運営
+    </div>
+
+    <div class="page-header">
+      <h1 class="page-title">コンビニエンスストア運営</h1>
+      <p class="page-subtitle">
+        地域に密着した店舗づくりで、日々の暮らしに寄り添いながら、新しいサービスの実験場としての機能も備えます。
+      </p>
+    </div>
+
+    <img src="https://www.genspark.ai/api/files/s/4okNovND?cache_control=3600" alt="清潔で明るいコンビニ店内" class="hero-image" />
+
+    <div class="content-section">
+      <h2>地域の"よりどころ"として</h2>
+      <p>
+        コンビニエンスストアは、単なる商品販売の場ではありません。地域の人々が毎日訪れ、暮らしを支える重要なインフラです。私たちは、地域に根ざした温かみのある店舗運営を通じて、お客様一人ひとりとの信頼関係を大切にしています。
+      </p>
+      <p>
+        同時に、デジタル技術やクリエイティブな発想を取り入れ、これからのコンビニの新しい可能性を探る実験の場としても活用。地域貢献と革新的な挑戦を両立させています。
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>地域密着型運営</h3>
+        <p>地域のニーズに合わせた品揃えと、顔の見える接客で安心感を提供します。</p>
+      </div>
+      <div class="feature-card">
+        <h3>清潔で快適な環境</h3>
+        <p>いつ訪れても心地よい店内環境を維持し、リピーターを増やします。</p>
+      </div>
+      <div class="feature-card">
+        <h3>多様なサービス</h3>
+        <p>商品販売だけでなく、公共料金収納、宅配受取など生活支援サービスも充実。</p>
+      </div>
+      <div class="feature-card">
+        <h3>新サービスの実験場</h3>
+        <p>デジタルサイネージやキャッシュレス決済など、新技術の導入を積極的に試みます。</p>
+      </div>
+    </div>
+
+    <img src="https://www.genspark.ai/api/files/s/HzQX3og9?cache_control=3600" alt="夕暮れ時のコンビニ外観" class="content-image" />
+
+    <div class="content-section">
+      <h2>運営の特徴</h2>
+      <p>
+        私たちのコンビニ運営は、伝統的な接客の温かさと、最新技術を活用した効率性を融合させています。
+      </p>
+      
+      <div class="highlight-box">
+        <p><strong>ホスピタリティの追求</strong><br>
+        お客様一人ひとりに丁寧な挨拶と笑顔で対応。常連のお客様の好みも把握し、パーソナルなサービスを提供します。</p>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong>品質管理の徹底</strong><br>
+        鮮度チェック、清掃、陳列の美しさにこだわり、いつ訪れても気持ちの良い店舗を維持します。</p>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong>地域イベントへの参加</strong><br>
+        地域の祭りやイベントに積極的に協力し、地域コミュニティの一員としての役割を果たします。</p>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong>スタッフ教育</strong><br>
+        接客スキル、商品知識、緊急時対応など、充実した研修でスタッフの成長を支援します。</p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2>イノベーションへの挑戦</h2>
+      <p>
+        私たちは、コンビニを"未来の店舗"を実験する場としても活用しています。デジタルサイネージでの情報発信、キャッシュレス決済の推進、地域連動型のキャンペーンなど、新しい試みを続けています。
+      </p>
+      <p>
+        グループの他事業（Webデザイン、イラスト制作、note記事作成）と連携し、店舗プロモーションやブランディングにも独自の強みを発揮。単なるチェーン店ではない、個性ある店舗づくりを目指しています。
+      </p>
+    </div>
+
+    <div class="content-section">
+      <h2>持続可能な店舗運営</h2>
+      <p>
+        環境への配慮も重要なテーマです。食品ロスの削減、省エネ機器の導入、地域産品の取り扱いなど、持続可能な店舗運営に取り組んでいます。地域の皆様と共に、未来に続く店づくりを実現します。
+      </p>
+    </div>
+
+    <div class="cta-section">
+      <h2>コンビニ運営に関するご相談</h2>
+      <p>店舗運営のノウハウ共有、コラボレーション企画など、お気軽にお問い合わせください。</p>
+      <a href="/cdn-cgi/l/email-protection#abc8c2dfd2d9c2ddced9939b9892ebccc6cac2c785c8c4c6" class="btn">お問い合わせ</a>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

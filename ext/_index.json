@@ -1,0 +1,272 @@
+[
+  {
+    "dir": "Automatic_email_classification_prioritization",
+    "slug": "automatic-email-classification-prioritization",
+    "name": "Gmail Priority Sorter - メール優先度自動分類",
+    "desc": "AIがGmailの受信トレイを分析し、重要メールを上位に並べ替え、緊急度スコアを自動付与します",
+    "ver": "1.1.0",
+    "github": "https://github.com/sayasaya8039/gmail-priority-sorter",
+    "category": "生産性向上"
+  },
+  {
+    "dir": "Completely_my_own_mode_for_note",
+    "slug": "completely-my-own-mode-for-note",
+    "name": "完全自分だけモード for note.com",
+    "desc": "note.comの下書きと完全に分離した「本当の自分だけ専用ビュー」を実現するChrome拡張機能",
+    "ver": "1.3.2",
+    "github": null,
+    "category": "note.com"
+  },
+  {
+    "dir": "Currency_to_Yen",
+    "slug": "currency-to-yen",
+    "name": "Currency to Yen",
+    "desc": "Web上の通貨（$, €, £等）を日本円に変換して表示",
+    "ver": "1.1.0",
+    "github": "https://github.com/sayasaya8039/Currency_to_Yen",
+    "category": "ショッピング"
+  },
+  {
+    "dir": "Dream_Diary_Assistant",
+    "slug": "dream-diary-assistant",
+    "name": "Dream Diary Assistant",
+    "desc": "AIベースの夢日記アシスタント - 夢の解釈とイラスト生成",
+    "ver": "1.4.1",
+    "github": "https://github.com/sayasaya8039/Dream_Diary_Assistant",
+    "category": "AI・プロンプト"
+  },
+  {
+    "dir": "ExtensionIdeaAI",
+    "slug": "extensionideaai",
+    "name": "ExtensionIdeaAI - 拡張機能アイデアジェネレーター",
+    "desc": "ブラウジング中のページを分析して、AIが拡張機能のアイデアを提案します。オフラインで動作します。",
+    "ver": "1.0.8",
+    "github": null,
+    "category": "AI・プロンプト"
+  },
+  {
+    "dir": "ImageGenPrompter",
+    "slug": "imagegenprompter",
+    "name": "Image Gen Prompter",
+    "desc": "Ultra-detail AI image prompt generator (Midjourney/SD/Flux/DALL-E) with Gemini/OpenAI/Claude API",
+    "ver": "4.0.6",
+    "github": "https://github.com/sayasaya8039/image-gen-prompter",
+    "category": "AI・プロンプト"
+  },
+  {
+    "dir": "Keep_Clipper_v3",
+    "slug": "keep-clipper-v3",
+    "name": "Keep Clipper",
+    "desc": "ワンクリックで選択テキスト・画像・ページURLをGoogle Keepに保存します。",
+    "ver": "2.1.0",
+    "github": "https://github.com/sayasaya8039/Keep_Clipper",
+    "category": "ユーティリティ"
+  },
+  {
+    "dir": "Local_Prompt_Library",
+    "slug": "local-prompt-library",
+    "name": "Local Prompt Library",
+    "desc": "Save, manage, and reuse image generation prompts",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AI・プロンプト"
+  },
+  {
+    "dir": "Manus_delete",
+    "slug": "manus-delete",
+    "name": "AI Chat Bulk Delete",
+    "desc": "ChatGPT、Claude、Gemini、Grok、Genspark、Manusの会話履歴を一括削除できる拡張機能",
+    "ver": "2.13.0",
+    "github": "https://github.com/sayasaya8039/ai-chat-bulk-delete",
+    "category": "ユーティリティ"
+  },
+  {
+    "dir": "Mindfulness_Browser_Assistant",
+    "slug": "mindfulness-browser-assistant",
+    "name": "Mindfulness Browser Assistant",
+    "desc": "デジタル疲労を軽減するマインドフルネス・ブラウザアシスタント",
+    "ver": "0.1.0",
+    "github": "https://github.com/sayasaya8039/Mindfulness_Browser_Assistant",
+    "category": "生産性向上"
+  },
+  {
+    "dir": "Mini_Stock_Portfolio",
+    "slug": "mini-stock-portfolio",
+    "name": "Mini Stock Portfolio",
+    "desc": "日本株・米国株のポートフォリオ管理 - リアルタイム株価とニュース表示",
+    "ver": "1.0.0",
+    "github": "https://github.com/sayasaya8039/Mini_Stock_Portfolio",
+    "category": "生産性向上"
+  },
+  {
+    "dir": "News_Article_Bias_Checker",
+    "slug": "news-article-bias-checker",
+    "name": "ニュース記事バイアスチェッカー",
+    "desc": "ニュース記事の政治的バイアスを分析し、視覚的に表示します。",
+    "ver": "1.3.0",
+    "github": "https://github.com/sayasaya8039/News_Article_Bias_Checker",
+    "category": "生産性向上"
+  },
+  {
+    "dir": "Note Markdown Cleaner",
+    "slug": "note-markdown-cleaner",
+    "name": "Note Markdown Cleaner",
+    "desc": "Note編集画面で意図しない ** を起動時に一括削除して通知",
+    "ver": "0.2",
+    "github": null,
+    "category": "note.com"
+  },
+  {
+    "dir": "Note_Notification_Text_Strong_Color",
+    "slug": "note-notification-text-strong-color",
+    "name": "Note通知テキスト強調カラー",
+    "desc": "note.comの通知ドロップダウンのテキストを見やすくする拡張機能",
+    "ver": "1.2.1",
+    "github": "https://github.com/sayasaya8039/Note_Notification_Text_Strong_Color",
+    "category": "note.com"
+  },
+  {
+    "dir": "Sakura_Resale_Detector",
+    "slug": "sakura-resale-detector",
+    "name": "メルカリ/Amazon サクラ＆転売 探知機",
+    "desc": "商品ページのサクラレビューと転売品を自動検出します",
+    "ver": "1.3.0",
+    "github": null,
+    "category": "ショッピング"
+  },
+  {
+    "dir": "Screenshot-Annotator",
+    "slug": "screenshot-annotator",
+    "name": "Screenshot Annotator",
+    "desc": "スクリーンショットに矢印・図形・テキストを追加できる画像編集ツール",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ユーティリティ"
+  },
+  {
+    "dir": "URL Extractor for NotebookLM",
+    "slug": "url-extractor-for-notebooklm",
+    "name": "URL Extractor for NotebookLM",
+    "desc": "note.com・YouTubeの検索結果からURLを一括抽出。NotebookLMへのソース追加に最適化",
+    "ver": "2.0.0",
+    "github": null,
+    "category": "note.com"
+  },
+  {
+    "dir": "X_Offline_Enhancer",
+    "slug": "x-offline-enhancer",
+    "name": "X Offline Enhancer",
+    "desc": "Save X/Twitter threads for offline reading with PiP video support",
+    "ver": "1.1.0",
+    "github": "https://github.com/sayasaya8039/X-Offline-Enhancer",
+    "category": "SNS・動画"
+  },
+  {
+    "dir": "YouTue_Dammy_Killer",
+    "slug": "youtue-dammy-killer",
+    "name": "YouTube Dummy Killer",
+    "desc": "YouTubeのパクリ動画を検出してオリジナルを表示し、パクリチャンネルをブロック",
+    "ver": "1.3.0",
+    "github": "https://github.com/sayasaya8039/YouTube-Dummy-Killer",
+    "category": "SNS・動画"
+  },
+  {
+    "dir": "amazon-real-review",
+    "slug": "amazon-real-review",
+    "name": "Amazon 本音レビュー",
+    "desc": "Amazonの商品ページでReddit・YouTube・価格.com・X・5ch・Zenn・Qiitaの本音レビューを表示",
+    "ver": "1.0.0",
+    "github": "https://github.com/sayasaya8039/amazon-real-review",
+    "category": "ショッピング"
+  },
+  {
+    "dir": "bookmark_reader",
+    "slug": "bookmark-reader",
+    "name": "後で読む",
+    "desc": "記事を保存して、読みたい時に通知でお知らせします",
+    "ver": "1.0.0",
+    "github": "https://github.com/sayasaya8039/bookmark_reader",
+    "category": "生産性向上"
+  },
+  {
+    "dir": "gemini-exporter-extension",
+    "slug": "gemini-exporter-extension",
+    "name": "AI Chat Exporter",
+    "desc": "AI会話をMarkdown/HTML/Text/PDFでエクスポート（Gemini, Claude, ChatGPT, Grok, Perplexity対応）",
+    "ver": "3.0.0",
+    "github": null,
+    "category": "ユーティリティ"
+  },
+  {
+    "dir": "note-draft-generator_custam",
+    "slug": "note-draft-generator-custam",
+    "name": "note Draft Generator",
+    "desc": "選択テキストからnoteの記事タイトル＆見出し案をAIで生成する拡張機能。",
+    "ver": "0.1.0",
+    "github": "https://github.com/sayasaya8039/note-draft-generator_custam",
+    "category": "note.com"
+  },
+  {
+    "dir": "note_custom_browser",
+    "slug": "note-custom-browser",
+    "name": "note タイトルフィルター",
+    "desc": "鬱陶しいタイトルの記事を非表示にします",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "note.com"
+  },
+  {
+    "dir": "note_mute_browser",
+    "slug": "note-mute-browser",
+    "name": "NoteMute",
+    "desc": "note.com の記事をユーザー名・キーワードでミュート（非表示）する拡張機能",
+    "ver": "1.5.0",
+    "github": "https://github.com/sayasaya8039/note-mute-browser",
+    "category": "note.com"
+  },
+  {
+    "dir": "note_url_copy",
+    "slug": "note-url-copy",
+    "name": "Clean URL Copy",
+    "desc": "広告・アフィリエイト・CM等の余分なパラメータを排除してURLをコピーします。",
+    "ver": "0.2.0",
+    "github": "https://github.com/sayasaya8039/Clean_URL_Copy",
+    "category": "note.com"
+  },
+  {
+    "dir": "note_viewer",
+    "slug": "note-viewer",
+    "name": "Note Viewer",
+    "desc": "note.comの記事を別ウィンドウで表示",
+    "ver": "1.0.0",
+    "github": "https://github.com/sayasaya8039/note_viewer",
+    "category": "note.com"
+  },
+  {
+    "dir": "screenshot-translator",
+    "slug": "screenshot-translator",
+    "name": "Screenshot Translator",
+    "desc": "Translate and summarize text from screenshots",
+    "ver": "1.0.0",
+    "github": "https://github.com/sayasaya8039/screenshot-translator",
+    "category": "AI・プロンプト"
+  },
+  {
+    "dir": "websnip-chrome-extension-master",
+    "slug": "websnip-chrome-extension-master",
+    "name": "WebSnip",
+    "desc": "Smart web content copier with structural context for AI tools. Extract text, images, videos, and links with CSS selectors.",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ユーティリティ"
+  },
+  {
+    "dir": "x_good_hide",
+    "slug": "x-good-hide",
+    "name": "Like Privacy Toggle",
+    "desc": "X/Twitter のいいねを公開・非公開で切り替えるための UI 拡張（ローカル記録型）。",
+    "ver": "0.1.0",
+    "github": "https://github.com/sayasaya8039/x_good_hide",
+    "category": "SNS・動画"
+  }
+]

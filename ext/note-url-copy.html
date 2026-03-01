@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clean URL Copy | 合同会社シティーリバー</title>
+  <meta name="description" content="広告・アフィリエイト・CM等の余分なパラメータを排除してURLをコピーします。" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #6366f1;
+      --accent-light: #eef2ff;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo-text {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--text-primary); text-decoration: none;
+    }
+    .logo-img { height: 40px; width: auto; object-fit: contain; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none;
+      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--accent); }
+    main {
+      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
+    }
+    .breadcrumb {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .page-hero {
+      margin-bottom: 48px;
+    }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light); color: var(--accent);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    }
+    .page-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .page-desc {
+      font-size: 18px; color: var(--text-secondary);
+      line-height: 1.8; max-width: 700px;
+    }
+    .meta-bar {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--text-secondary);
+    }
+    .meta-item strong {
+      color: var(--text-primary); font-weight: 600;
+    }
+    .actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px; border: none;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .btn-outline {
+      background: white; color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent); background: var(--accent-light);
+    }
+    .content {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .content h2 {
+      font-size: 24px; font-weight: 700;
+      margin: 40px 0 16px; letter-spacing: -0.01em;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 {
+      font-size: 18px; font-weight: 600;
+      margin: 28px 0 12px;
+    }
+    .content p {
+      font-size: 16px; line-height: 1.8;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .content ul {
+      margin: 12px 0 20px 24px;
+      color: var(--text-secondary); font-size: 15px;
+    }
+    .content li {
+      margin-bottom: 6px; line-height: 1.7;
+    }
+    .content code {
+      background: var(--bg-secondary); padding: 2px 6px;
+      border-radius: 4px; font-size: 14px;
+    }
+    .content pre {
+      background: #1e293b; color: #e2e8f0;
+      border-radius: 12px; padding: 20px 24px;
+      overflow-x: auto; margin: 16px 0 24px;
+      font-size: 14px; line-height: 1.6;
+    }
+    .content pre code {
+      background: none; padding: 0; color: inherit;
+    }
+    .content a {
+      color: var(--accent); text-decoration: none;
+    }
+    .content a:hover { text-decoration: underline; }
+    .info-section {
+      margin-top: 40px; background: var(--bg-secondary);
+      border-radius: 16px; padding: 32px;
+    }
+    .info-section h2 {
+      margin-top: 0; font-size: 20px;
+    }
+    .perm-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      list-style: none; margin: 16px 0 0 0;
+    }
+    .perm-list li {
+      background: white; border: 1px solid var(--border);
+      padding: 4px 12px; border-radius: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--accent); text-decoration: none;
+      font-weight: 600; font-size: 15px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    footer {
+      padding: 40px; text-align: center;
+      color: var(--text-secondary); font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      main { padding: 60px 24px 80px; }
+      .page-title { font-size: 1.8rem; }
+      .meta-bar { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="../index.html" class="logo-text">
+        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
+        合同会社シティーリバー
+      </a>
+      <a href="../index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../extensions.html">拡張機能</a> / Clean URL Copy
+    </div>
+
+    <div class="page-hero">
+      <div class="page-badge">note.com</div>
+      <h1 class="page-title">Clean URL Copy</h1>
+      <p class="page-desc">広告・アフィリエイト・CM等の余分なパラメータを排除してURLをコピーします。</p>
+      <div class="meta-bar">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <strong>v0.2.0</strong>
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Chrome / Edge
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Manifest V3
+        </div>
+      </div>
+      <div class="actions">
+        <a href="https://github.com/sayasaya8039/Clean_URL_Copy" class="btn btn-primary" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+        <a href="../extensions.html" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          一覧に戻る
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>広告・アフィリエイト・CM等の余分なパラメータを排除してURLをコピーする Chrome 拡張です。どのサイトでも使用でき、URLからトラッキングパラメータ（UTM、広告ID、アフィリエイトIDなど）を自動的に削除します。</p>
+        <h2>インストール方法</h2>
+        <h3>方法1: Git でクローンする場合</h3>
+        <p>1. ターミナル（コマンドプロンプト）を開きます。</p>
+        <p>2. 以下のコマンドを実行してリポジトリをクローンします：</p>
+        <pre><code class="lang-bash">
+        git clone https://github.com/sayasaya8039/Clean_URL_Copy.git
+        </code></pre>
+        <p>3. クローンしたフォルダに移動します：</p>
+        <pre><code class="lang-bash">
+        cd Clean_URL_Copy
+        </code></pre>
+        <h3>方法2: ZIP ファイルでダウンロードする場合</h3>
+        <p>1. GitHub のリポジトリページ（https://github.com/sayasaya8039/Clean_URL_Copy）にアクセスします。</p>
+        <p>2. ページ右上の緑色の「Code」ボタンをクリックします。</p>
+        <p>3. 「Download ZIP」を選択して ZIP ファイルをダウンロードします。</p>
+        <p>4. ダウンロードした ZIP ファイルを解凍します。</p>
+        <p>5. 解凍したフォルダ（<code>Clean_URL_Copy-main</code>）を使用します。</p>
+        <h2>使い方</h2>
+        <p>1. Chrome の拡張機能管理画面（<code>chrome://extensions/</code>）を開き、右上の「デベロッパーモード」をオンにする。</p>
+        <p>2. 「パッケージ化されていない拡張機能を読み込む」をクリックし、クローンまたはダウンロードしたフォルダ（<code>Clean_URL_Copy</code> または <code>Clean_URL_Copy-main</code>）を選択する。</p>
+        <p>3. 任意のページ上、もしくはリンクを右クリックし、「クリーンなURLをコピー」または「リンクのクリーンなURLをコピー」を選ぶ。</p>
+        <p>4. クリップボードにクリーンなURLがコピーされるので、任意の場所に貼り付けて利用する。</p>
+        <h3>ページに出ているURLをまとめて見る／コピーする</h3>
+        <p>1. 任意のページをアクティブにする。</p>
+        <p>2. ツールバーの拡張アイコンをクリックすると、ポップアップが開き自動でURL取得が走ります。</p>
+        <ul>
+        <li>もしくは拡張の「詳細」から「拡張機能のオプション」を開いても同様に自動取得されます。</li>
+        </ul>
+        <p>3. そのページに表示されているURL一覧が表示され、各URLは自動的にクリーンアップされています。各URLをクリックするとコピーできます。</p>
+        <h2>削除されるパラメータ</h2>
+        <p>以下のようなトラッキングパラメータが自動的に削除されます：</p>
+        <ul>
+        <li><strong>UTMパラメータ</strong>: <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>utm_term</code>, <code>utm_content</code>, <code>utm_id</code></li>
+        <li><strong>広告トラッキング</strong>: <code>gclid</code>, <code>fbclid</code>, <code>msclkid</code>, <code>twclid</code>, <code>li_fat_id</code>, <code>mc_cid</code>, <code>mc_eid</code></li>
+        <li><strong>アフィリエイト</strong>: <code>affiliate_id</code>, <code>aff_id</code>, <code>aff</code>, <code>af_id</code>, <code>af</code>, <code>ref</code>, <code>referrer</code>, <code>source</code></li>
+        <li><strong>キャンペーン</strong>: <code>campaign_id</code>, <code>campaign</code>, <code>cmp_id</code></li>
+        <li><strong>その他のトラッキング</strong>: <code>_ga</code>, <code>_gl</code>, <code>igshid</code>, <code>igsh</code>, <code>si</code>, <code>s</code>, <code>mibextid</code>, <code>feature</code>, <code>mkt_tok</code>, <code>trk</code>, <code>trk_info</code>, <code>ncid</code>, <code>nc</code>, <code>ocid</code>, <code>oc</code>, <code>clickid</code>, <code>click_id</code>, <code>partner_id</code>, <code>partner</code>, <code>pid</code>, <code>rid</code>, <code>r</code>, <code>ref_id</code>, <code>refid</code>, <code>ref_src</code>, <code>ref_source</code>, <code>ref_medium</code>, <code>ref_campaign</code>, <code>ref_term</code>, <code>ref_content</code></li>
+        </ul>
+        <h2>補足</h2>
+        <ul>
+        <li>すべてのサイトで使用できます。</li>
+        <li>クリップボード書き込みはブラウザの権限が必要です。初回利用時に許可を求められたら承認してください。</li>
+        </ul>
+    </div>
+    
+        <div class="info-section">
+          <h2>使用する権限</h2>
+          <ul class="perm-list"><li>contextMenus</li><li>scripting</li><li>activeTab</li><li>tabs</li><li>clipboardWrite</li><li>storage</li></ul>
+        </div>
+
+    <a href="../extensions.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      拡張機能一覧に戻る
+    </a>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

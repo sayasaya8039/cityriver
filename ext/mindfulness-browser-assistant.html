@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mindfulness Browser Assistant | 合同会社シティーリバー</title>
+  <meta name="description" content="デジタル疲労を軽減するマインドフルネス・ブラウザアシスタント" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #10b981;
+      --accent-light: #ecfdf5;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo-text {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--text-primary); text-decoration: none;
+    }
+    .logo-img { height: 40px; width: auto; object-fit: contain; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none;
+      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--accent); }
+    main {
+      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
+    }
+    .breadcrumb {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .page-hero {
+      margin-bottom: 48px;
+    }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light); color: var(--accent);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    }
+    .page-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .page-desc {
+      font-size: 18px; color: var(--text-secondary);
+      line-height: 1.8; max-width: 700px;
+    }
+    .meta-bar {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--text-secondary);
+    }
+    .meta-item strong {
+      color: var(--text-primary); font-weight: 600;
+    }
+    .actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px; border: none;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .btn-outline {
+      background: white; color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent); background: var(--accent-light);
+    }
+    .content {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .content h2 {
+      font-size: 24px; font-weight: 700;
+      margin: 40px 0 16px; letter-spacing: -0.01em;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 {
+      font-size: 18px; font-weight: 600;
+      margin: 28px 0 12px;
+    }
+    .content p {
+      font-size: 16px; line-height: 1.8;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .content ul {
+      margin: 12px 0 20px 24px;
+      color: var(--text-secondary); font-size: 15px;
+    }
+    .content li {
+      margin-bottom: 6px; line-height: 1.7;
+    }
+    .content code {
+      background: var(--bg-secondary); padding: 2px 6px;
+      border-radius: 4px; font-size: 14px;
+    }
+    .content pre {
+      background: #1e293b; color: #e2e8f0;
+      border-radius: 12px; padding: 20px 24px;
+      overflow-x: auto; margin: 16px 0 24px;
+      font-size: 14px; line-height: 1.6;
+    }
+    .content pre code {
+      background: none; padding: 0; color: inherit;
+    }
+    .content a {
+      color: var(--accent); text-decoration: none;
+    }
+    .content a:hover { text-decoration: underline; }
+    .info-section {
+      margin-top: 40px; background: var(--bg-secondary);
+      border-radius: 16px; padding: 32px;
+    }
+    .info-section h2 {
+      margin-top: 0; font-size: 20px;
+    }
+    .perm-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      list-style: none; margin: 16px 0 0 0;
+    }
+    .perm-list li {
+      background: white; border: 1px solid var(--border);
+      padding: 4px 12px; border-radius: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--accent); text-decoration: none;
+      font-weight: 600; font-size: 15px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    footer {
+      padding: 40px; text-align: center;
+      color: var(--text-secondary); font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      main { padding: 60px 24px 80px; }
+      .page-title { font-size: 1.8rem; }
+      .meta-bar { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="../index.html" class="logo-text">
+        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
+        合同会社シティーリバー
+      </a>
+      <a href="../index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../extensions.html">拡張機能</a> / Mindfulness Browser Assistant
+    </div>
+
+    <div class="page-hero">
+      <div class="page-badge">生産性向上</div>
+      <h1 class="page-title">Mindfulness Browser Assistant</h1>
+      <p class="page-desc">デジタル疲労を軽減するマインドフルネス・ブラウザアシスタント</p>
+      <div class="meta-bar">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <strong>v0.1.0</strong>
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Chrome / Edge
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Manifest V3
+        </div>
+      </div>
+      <div class="actions">
+        <a href="https://github.com/sayasaya8039/Mindfulness_Browser_Assistant" class="btn btn-primary" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+        <a href="../extensions.html" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          一覧に戻る
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>デジタル疲労を軽減するマインドフルネス・ブラウザアシスタント Chrome拡張機能</p>
+        <h2>概要</h2>
+        <p>Mindfulness Browser Assistant は、長時間のブラウジングによるデジタル疲労を軽減するための Chrome 拡張機能です。Opera の Air 機能にインスパイアされ、呼吸ガイド・瞑想タイマー・バイノーラルビート・ストレッチガイドなど、包括的なウェルネス機能をブラウザ上で提供します。</p>
+        <p>グラスモーフィズムデザインによる美しいサイドパネルUIで、作業を中断せずにマインドフルネスを実践できます。</p>
+        <h2>機能一覧</h2>
+        <h3>🌬 呼吸ガイド</h3>
+        <p>アニメーション付きの呼吸サークルで、3つのパターンから選択可能：</p>
+        <ul>
+        <li><strong>リラックス</strong> (4-7-8) — 副交感神経を活性化する深い呼吸</li>
+        <li><strong>集中</strong> (4-4-4-4) — バランスの取れた集中力向上パターン</li>
+        <li><strong>安らぎ</strong> (2-0-4) — すぐにできるクイックリリーフ</li>
+        </ul>
+        <p>セッション時間: 1分 / 2分 / 3分 / 5分</p>
+        <h3>🧘 瞑想タイマー</h3>
+        <p>ベルサウンド付きの瞑想セッション（528Hzソルフェジオ周波数）：</p>
+        <ul>
+        <li><strong>クイック・カーム</strong> — 3分間の短い休息</li>
+        <li><strong>ボディスキャン</strong> — 5分間の全身リラックス</li>
+        <li><strong>ディープ・フォーカス</strong> — 10分間の深い集中</li>
+        <li><strong>エクステンド・ピース</strong> — 15分間の本格瞑想</li>
+        </ul>
+        <h3>🎵 オーディオミキサー</h3>
+        <p>Web Audio APIによるリアルタイム音響合成：</p>
+        <p><strong>バイノーラルビート（4プリセット）</strong></p>
+        <p>| プリセット | ベース周波数 | ビート周波数 | 脳波帯域 |</p>
+        <p>|-----------|------------|------------|---------|</p>
+        <p>| 集中 | 200Hz | 10Hz | Alpha |</p>
+        <p>| リラックス | 150Hz | 6Hz | Theta |</p>
+        <p>| 睡眠 | 100Hz | 4Hz | Theta |</p>
+        <p>| 活力 | 250Hz | 14Hz | Beta |</p>
+        <p><strong>環境音（5トラック同時再生可能）</strong></p>
+        <ul>
+        <li>🌧️ <strong>雨</strong> — ホワイトノイズ + バンドパスフィルタ + LFO変調</li>
+        <li>🌲 <strong>森</strong> — ピンクノイズ + 3声の鳥のさえずり（周波数変調）</li>
+        <li>🔥 <strong>焚き火</strong> — ブラウンノイズ + クラックリング変調</li>
+        <li>🌊 <strong>波</strong> — ピンクノイズ + 8秒周期のウェーブリズム</li>
+        <li>💨 <strong>風</strong> — ピンクノイズ + スイープフィルタ + ガスト変調</li>
+        </ul>
+        <p>各トラックの個別ボリューム調整、マスターボリューム、プリセット保存/読み込みに対応。</p>
+        <h3>🤸 ストレッチガイド</h3>
+        <p>ステップバイステップのタイマー付きストレッチルーティン：</p>
+        <ul>
+        <li><strong>首・肩</strong> — 4ステップ / 約2分</li>
+        <li><strong>全身リセット</strong> — 6ステップ / 約3分</li>
+        </ul>
+        <h3>⚙ 設定</h3>
+        <ul>
+        <li><strong>テーマ</strong>: ライト / ダーク / 自動</li>
+        <li><strong>グラス不透明度</strong>: グラスモーフィズムの透明度調整</li>
+        <li><strong>通知</strong>: 間隔（15〜60分）、強度（やさしい / 普通 / 強制）</li>
+        <li><strong>オーディオ</strong>: マスターボリューム、バイノーラル有効/無効</li>
+        <li><strong>センシング</strong>: ドゥームスクロール検知</li>
+        </ul>
+        <h3>📊 セッション統計</h3>
+        <ul>
+        <li>今日の集中時間・休憩回数・気分スコア</li>
+        <li>過去7日間の集中時間バーチャート</li>
+        <li>週間サマリー（合計集中・休憩・平均気分・記録日数）</li>
+        <li>5段階の気分ログ（😔😕😐🙂😊）</li>
+        </ul>
+        <h3>🛡 ドゥームスクロール検知</h3>
+        <ul>
+        <li>スクロール速度と持続時間をリングバッファで監視</li>
+        <li>5分以上の高速スクロール（500px/秒超）を検知</li>
+        <li>自動で休憩を促すトースト通知</li>
+        </ul>
+        <h3>🔔 休憩リマインダー</h3>
+        <p>3段階の通知強度：</p>
+        <ul>
+        <li><strong>やさしい</strong> — サイドパネル内トースト</li>
+        <li><strong>普通</strong> — Chrome通知</li>
+        <li><strong>強制</strong> — フルスクリーンオーバーレイ（呼吸/ストレッチへのショートカット付き）</li>
+        </ul>
+        <h2>技術スタック</h2>
+        <p>| 技術 | 用途 |</p>
+        <p>|------|------|</p>
+        <p>| <strong>React 18</strong> | UI コンポーネント |</p>
+        <p>| <strong>TypeScript 5</strong> | 型安全な開発 |</p>
+        <p>| <strong>Vite 5</strong> | ビルドツール |</p>
+        <p>| <strong>CRXJS</strong> | Chrome拡張Viteプラグイン |</p>
+        <p>| <strong>Web Audio API</strong> | バイノーラルビート・環境音合成 |</p>
+        <p>| <strong>Chrome Storage API</strong> | 設定・セッションデータ永続化 |</p>
+        <p>| <strong>Chrome Alarms API</strong> | 定期リマインダー |</p>
+        <p>| <strong>Shadow DOM</strong> | コンテンツスクリプトのスタイル分離 |</p>
+        <h2>アーキテクチャ</h2>
+        <pre><code class="lang-">
+        Popup (ポップアップUI)
+          │
+          ├─ chrome.scripting.executeScript
+          │    └─ CustomEvent('__mindfulness_cmd')
+          │
+        Content Script (Shadow DOM内React App)
+          ├─ document.addEventListener('__mindfulness_cmd')
+          ├─ サイドパネルUI (380px 右サイドバー)
+          ├─ Web Audio API (バイノーラル + 環境音)
+          └─ ScrollMonitor (ドゥームスクロール検知)
+          │
+        Background Service Worker
+          ├─ chrome.alarms (休憩リマインダー)
+          ├─ chrome.notifications (システム通知)
+          └─ chrome.storage (設定管理)
+        </code></pre>
+        <h2>セットアップ</h2>
+        <h3>必要環境</h3>
+        <ul>
+        <li>Node.js 18+</li>
+        <li>npm / pnpm</li>
+        </ul>
+        <h3>インストール</h3>
+        <pre><code class="lang-bash">
+        git clone https://github.com/sayasaya8039/Mindfulness_Browser_Assistant.git
+        cd Mindfulness_Browser_Assistant
+        npm install
+        </code></pre>
+        <h3>ビルド</h3>
+        <pre><code class="lang-bash">
+        npm run build
+        </code></pre>
+        <p><code>dist/</code> フォルダにビルド成果物が生成されます。</p>
+        <h3>Chrome に読み込み</h3>
+        <p>1. Chrome で <code>chrome://extensions</code> を開く</p>
+        <p>2. 右上の「デベロッパーモード」を有効にする</p>
+        <p>3. 「パッケージ化されていない拡張機能を読み込む」をクリック</p>
+        <p>4. <code>dist</code> フォルダを選択</p>
+        <h3>開発モード</h3>
+        <pre><code class="lang-bash">
+        npm run dev
+        </code></pre>
+        <p>ファイル変更を監視し、自動リビルドします。</p>
+        <h2>使い方</h2>
+        <p>1. 任意のウェブページで、画面右端の <strong>‹</strong> トグルボタンをクリック</p>
+        <p>2. または拡張機能アイコンからポップアップを開き、<strong>「マインドフルネスパネルを開く」</strong> をクリック</p>
+        <p>3. タブで機能を切り替え（呼吸 / 瞑想 / 音響 / ストレッチ / 設定）</p>
+        <p>4. パネル外をクリックすると閉じます</p>
+        <h2>プロジェクト構成</h2>
+        <pre><code class="lang-">
+        src/
+        ├── App.tsx                    # メインシェル（サイドパネル）
+        ├── popup/
+        │   ├── Popup.tsx              # ポップアップUI
+        │   ├── index.html
+        │   └── index.tsx
+        ├── background/
+        │   └── index.ts               # Service Worker
+        ├── content/
+        │   ├── index.tsx              # コンテンツスクリプト（Shadow DOM）
+        │   └── index.css
+        ├── components/
+        │   ├── BreathingGuide.tsx     # 呼吸ガイド
+        │   ├── MeditationPlayer.tsx   # 瞑想タイマー
+        │   ├── AudioMixer.tsx         # オーディオミキサー
+        │   ├── StretchGuide.tsx       # ストレッチガイド
+        │   ├── SettingsPanel.tsx      # 設定パネル
+        │   ├── BreakOverlay.tsx       # 休憩オーバーレイ
+        │   ├── SessionStats.tsx       # セッション統計
+        │   ├── MoodLogger.tsx         # 気分ログ
+        │   └── Toast.tsx              # トースト通知
+        ├── hooks/
+        │   ├── useSettings.ts         # 設定カスタムフック
+        │   └── useSessionLog.ts       # セッションログフック
+        ├── utils/
+        │   ├── BinauralBeatEngine.ts  # バイノーラルビート生成
+        │   ├── SoundscapeEngine.ts    # 環境音合成
+        │   ├── ScrollMonitor.ts       # スクロール監視
+        │   ├── storage.ts             # Chrome Storage ユーティリティ
+        │   ├── quotes.ts              # 日替わり名言（32種）
+        │   └── theme.ts               # テーマ管理
+        ├── types/
+        │   └── index.ts               # 型定義
+        └── assets/
+            ├── icon16.png
+            ├── icon48.png
+            └── icon128.png
+        </code></pre>
+        <h2>ライセンス</h2>
+        <p>MIT License</p>
+        <h2>作者</h2>
+        <p>sayasaya — <a href="https://github.com/sayasaya8039" target="_blank" rel="noopener">@sayasaya8039</a></p>
+    </div>
+    
+        <div class="info-section">
+          <h2>使用する権限</h2>
+          <ul class="perm-list"><li>storage</li><li>alarms</li><li>activeTab</li><li>tabs</li><li>notifications</li><li>scripting</li></ul>
+        </div>
+
+    <a href="../extensions.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      拡張機能一覧に戻る
+    </a>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

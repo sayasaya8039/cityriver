@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>拡張機能一覧 | 合同会社シティーリバー</title>
+  <meta name="description" content="合同会社シティーリバーが開発・提供するChrome・Edge対応ブラウザ拡張機能の一覧。note.com支援、AI、ショッピング、SNSなど30種以上。" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #6366f1;
+      --accent-light: #eef2ff;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover { color: var(--accent); }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px 120px;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .breadcrumb a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .page-header {
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .page-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 24px 0;
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Category filter */
+    .category-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .category-btn {
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .category-btn:hover,
+    .category-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Category sections */
+    .category-section {
+      margin-bottom: 56px;
+    }
+
+    .category-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-title .emoji {
+      font-size: 24px;
+    }
+
+    .category-count {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .product-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(99, 102, 241, 0.08);
+      border-color: var(--accent);
+    }
+
+    .product-item-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .product-item h3 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+    }
+
+    .product-item-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: var(--accent-light);
+      color: var(--accent);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .product-item p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .product-item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .detail-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s ease;
+    }
+
+    .detail-link:hover {
+      gap: 8px;
+    }
+
+    .gh-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+
+    .gh-link:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    footer {
+      padding: 40px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      main { padding: 60px 24px 80px; }
+      .page-title { font-size: 2rem; }
+      .product-list { grid-template-columns: 1fr; }
+      .stats-bar { gap: 24px; }
+      .stat-number { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="index.html" class="logo-text">
+        <img src="Logo.png" alt="CityRiver LLC" class="logo-img">
+        合同会社シティーリバー
+      </a>
+      <a href="index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="index.html">ホーム</a> / <a href="index.html#products">プロダクト</a> / 拡張機能
+    </div>
+
+    <div class="page-header">
+      <div class="page-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        Browser Extensions
+      </div>
+      <h1 class="page-title">拡張機能一覧</h1>
+      <p class="page-subtitle">Chrome・Edge対応のブラウザ拡張機能を開発・提供しています。日常のブラウジングをより便利に、快適に。</p>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-number">30+</div>
+        <div class="stat-label">拡張機能</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">6</div>
+        <div class="stat-label">カテゴリ</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">Chrome / Edge</div>
+        <div class="stat-label">対応ブラウザ</div>
+      </div>
+    </div>
+
+    <nav class="category-nav">
+      <a href="#note" class="category-btn">note.com</a>
+      <a href="#ai" class="category-btn">AI・プロンプト</a>
+      <a href="#shopping" class="category-btn">ショッピング</a>
+      <a href="#sns" class="category-btn">SNS・動画</a>
+      <a href="#utility" class="category-btn">ユーティリティ</a>
+      <a href="#productivity" class="category-btn">生産性向上</a>
+    </nav>
+
+    <!-- note.com 関連 -->
+    <section id="note" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F4DD;</span> note.com 関連</h2>
+      <p class="category-count">9 件の拡張機能</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>完全自分だけモード for note.com</h3>
+            <span class="product-item-tag">v1.3.2</span>
+          </div>
+          <p>note.comの下書きと完全に分離した「本当の自分だけ専用ビュー」を実現するChrome拡張機能</p>
+          <div class="product-item-footer">
+            <a href="ext/completely-my-own-mode-for-note.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>NoteMute</h3>
+            <span class="product-item-tag">v1.5.0</span>
+          </div>
+          <p>note.com の記事をユーザー名・キーワードでミュート（非表示）する拡張機能</p>
+          <div class="product-item-footer">
+            <a href="ext/note-mute-browser.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/note-mute-browser" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>note タイトルフィルター</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>鬱陶しいタイトルの記事を非表示にします</p>
+          <div class="product-item-footer">
+            <a href="ext/note-custom-browser.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Note通知テキスト強調カラー</h3>
+            <span class="product-item-tag">v1.2.1</span>
+          </div>
+          <p>note.comの通知ドロップダウンのテキストを見やすくする拡張機能</p>
+          <div class="product-item-footer">
+            <a href="ext/note-notification-text-strong-color.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/Note_Notification_Text_Strong_Color" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Note Viewer</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>note.comの記事を別ウィンドウで表示</p>
+          <div class="product-item-footer">
+            <a href="ext/note-viewer.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/note_viewer" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>note Draft Generator</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>選択テキストからnoteの記事タイトル＆見出し案をAIで生成する拡張機能</p>
+          <div class="product-item-footer">
+            <a href="ext/note-draft-generator-custam.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/note-draft-generator_custam" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Note Markdown Cleaner</h3>
+            <span class="product-item-tag">v0.2</span>
+          </div>
+          <p>Note編集画面で意図しない ** を起動時に一括削除して通知</p>
+          <div class="product-item-footer">
+            <a href="ext/note-markdown-cleaner.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Clean URL Copy</h3>
+            <span class="product-item-tag">v0.2.0</span>
+          </div>
+          <p>広告・アフィリエイト・CM等の余分なパラメータを排除してURLをコピーします</p>
+          <div class="product-item-footer">
+            <a href="ext/note-url-copy.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/Clean_URL_Copy" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>URL Extractor for NotebookLM</h3>
+            <span class="product-item-tag">v2.0.0</span>
+          </div>
+          <p>note.com・YouTubeの検索結果からURLを一括抽出。NotebookLMへのソース追加に最適化</p>
+          <div class="product-item-footer">
+            <a href="ext/url-extractor-for-notebooklm.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI・プロンプト -->
+    <section id="ai" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F916;</span> AI・プロンプト</h2>
+      <p class="category-count">5 件の拡張機能</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Image Gen Prompter</h3>
+            <span class="product-item-tag">v4.0.6</span>
+          </div>
+          <p>Midjourney/SD/Flux/DALL-E対応の超詳細AIプロンプトジェネレーター。Gemini/OpenAI/Claude APIに対応</p>
+          <div class="product-item-footer">
+            <a href="ext/imagegenprompter.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/image-gen-prompter" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Dream Diary Assistant</h3>
+            <span class="product-item-tag">v1.4.1</span>
+          </div>
+          <p>AIベースの夢日記アシスタント - 夢の解釈とイラスト生成</p>
+          <div class="product-item-footer">
+            <a href="ext/dream-diary-assistant.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/Dream_Diary_Assistant" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>ExtensionIdeaAI</h3>
+            <span class="product-item-tag">v1.0.8</span>
+          </div>
+          <p>ブラウジング中のページを分析して、AIが拡張機能のアイデアを提案。オフラインで動作</p>
+          <div class="product-item-footer">
+            <a href="ext/extensionideaai.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Local Prompt Library</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>画像生成プロンプトを保存・管理・再利用できるライブラリ</p>
+          <div class="product-item-footer">
+            <a href="ext/local-prompt-library.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Screenshot Translator</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>スクリーンショットからテキストを翻訳・要約</p>
+          <div class="product-item-footer">
+            <a href="ext/screenshot-translator.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/screenshot-translator" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ショッピング -->
+    <section id="shopping" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F6D2;</span> ショッピング</h2>
+      <p class="category-count">3 件の拡張機能</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Amazon 本音レビュー</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>Amazonの商品ページでReddit・YouTube・価格.com・X・5ch・Zenn・Qiitaの本音レビューを表示</p>
+          <div class="product-item-footer">
+            <a href="ext/amazon-real-review.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/amazon-real-review" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>メルカリ/Amazon サクラ＆転売 探知機</h3>
+            <span class="product-item-tag">v1.3.0</span>
+          </div>
+          <p>商品ページのサクラレビューと転売品を自動検出します</p>
+          <div class="product-item-footer">
+            <a href="ext/sakura-resale-detector.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Currency to Yen</h3>
+            <span class="product-item-tag">v1.1.0</span>
+          </div>
+          <p>Web上の通貨（$, €, £等）を日本円に変換して表示</p>
+          <div class="product-item-footer">
+            <a href="ext/currency-to-yen.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/Currency_to_Yen" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SNS・動画 -->
+    <section id="sns" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F4F1;</span> SNS・動画</h2>
+      <p class="category-count">3 件の拡張機能</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Like Privacy Toggle</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>X/Twitter のいいねを公開・非公開で切り替えるための UI 拡張（ローカル記録型）</p>
+          <div class="product-item-footer">
+            <a href="ext/x-good-hide.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/x_good_hide" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>X Offline Enhancer</h3>
+            <span class="product-item-tag">v1.1.0</span>
+          </div>
+          <p>X/Twitterのスレッドをオフラインで保存・閲覧。PiP動画再生対応</p>
+          <div class="product-item-footer">
+            <a href="ext/x-offline-enhancer.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/X-Offline-Enhancer" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>YouTube Dummy Killer</h3>
+            <span class="product-item-tag">v1.3.0</span>
+          </div>
+          <p>YouTubeのパクリ動画を検出してオリジナルを表示し、パクリチャンネルをブロック</p>
+          <div class="product-item-footer">
+            <a href="ext/youtue-dammy-killer.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/YouTube-Dummy-Killer" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ユーティリティ -->
+    <section id="utility" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F527;</span> ユーティリティ</h2>
+      <p class="category-count">5 件の拡張機能</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>AI Chat Exporter</h3>
+            <span class="product-item-tag">v3.0.0</span>
+          </div>
+          <p>AI会話をMarkdown/HTML/Text/PDFでエクスポート（Gemini, Claude, ChatGPT, Grok, Perplexity対応）</p>
+          <div class="product-item-footer">
+            <a href="ext/gemini-exporter-extension.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>AI Chat Bulk Delete</h3>
+            <span class="product-item-tag">v2.13.0</span>
+          </div>
+          <p>ChatGPT、Claude、Gemini、Grok、Genspark、Manusの会話履歴を一括削除できる拡張機能</p>
+          <div class="product-item-footer">
+            <a href="ext/manus-delete.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/ai-chat-bulk-delete" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Screenshot Annotator</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>スクリーンショットに矢印・図形・テキストを追加できる画像編集ツール</p>
+          <div class="product-item-footer">
+            <a href="ext/screenshot-annotator.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Keep Clipper</h3>
+            <span class="product-item-tag">v2.1.0</span>
+          </div>
+          <p>ワンクリックで選択テキスト・画像・ページURLをGoogle Keepに保存します</p>
+          <div class="product-item-footer">
+            <a href="ext/keep-clipper-v3.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/Keep_Clipper" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>WebSnip</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>AIツール向けスマートWebコンテンツコピー。CSSセレクタでテキスト・画像・動画・リンクを抽出</p>
+          <div class="product-item-footer">
+            <a href="ext/websnip-chrome-extension-master.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 生産性向上 -->
+    <section id="productivity" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F4C8;</span> 生産性向上</h2>
+      <p class="category-count">5 件の拡張機能</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Gmail Priority Sorter</h3>
+            <span class="product-item-tag">v1.1.0</span>
+          </div>
+          <p>AIがGmailの受信トレイを分析し、重要メールを上位に並べ替え、緊急度スコアを自動付与します</p>
+          <div class="product-item-footer">
+            <a href="ext/automatic-email-classification-prioritization.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/gmail-priority-sorter" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>後で読む</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>記事を保存して、読みたい時に通知でお知らせします</p>
+          <div class="product-item-footer">
+            <a href="ext/bookmark-reader.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/bookmark_reader" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Mini Stock Portfolio</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>日本株・米国株のポートフォリオ管理 - リアルタイム株価とニュース表示</p>
+          <div class="product-item-footer">
+            <a href="ext/mini-stock-portfolio.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/Mini_Stock_Portfolio" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>ニュース記事バイアスチェッカー</h3>
+            <span class="product-item-tag">v1.3.0</span>
+          </div>
+          <p>ニュース記事の政治的バイアスを分析し、視覚的に表示します</p>
+          <div class="product-item-footer">
+            <a href="ext/news-article-bias-checker.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/News_Article_Bias_Checker" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Mindfulness Browser Assistant</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>デジタル疲労を軽減するマインドフルネス・ブラウザアシスタント</p>
+          <div class="product-item-footer">
+            <a href="ext/mindfulness-browser-assistant.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <a href="https://github.com/sayasaya8039/Mindfulness_Browser_Assistant" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

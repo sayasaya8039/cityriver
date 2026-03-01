@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Webデザイン | 合同会社シティーリバー</title>
+  <meta name="description" content="ユーザー体験に寄り添いながら、洗練されたビジュアルと堅牢な情報設計で成果につながるサイトを構築します。" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #0066ff;
+      --accent-light: #e6f0ff;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 14px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px 120px;
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .breadcrumb a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .page-header {
+      margin-bottom: 64px;
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .hero-image {
+      width: 100%;
+      border-radius: 16px;
+      margin: 48px 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .content-section {
+      margin-bottom: 64px;
+    }
+
+    .content-section h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    .content-section p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .content-image {
+      width: 100%;
+      border-radius: 12px;
+      margin: 32px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin: 40px 0;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 24px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .highlight-box {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .cta-section {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 48px;
+      text-align: center;
+      margin-top: 64px;
+    }
+
+    .cta-section h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 16px rgba(0, 102, 255, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+    }
+
+    footer {
+      padding: 40px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 16px 24px;
+      }
+
+      main {
+        padding: 60px 24px 80px;
+      }
+
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-section {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="index.html" class="logo-text">
+        <span class="logo-mark">CR</span>
+        合同会社シティーリバー
+      </a>
+      <a href="index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="index.html">ホーム</a> / <a href="index.html#services">事業内容</a> / Webデザイン
+    </div>
+
+    <div class="page-header">
+      <h1 class="page-title">Webデザイン</h1>
+      <p class="page-subtitle">
+        ユーザー体験に寄り添いながら、洗練されたビジュアルと堅牢な情報設計で成果につながるサイトを構築します。
+      </p>
+    </div>
+
+    <img src="https://www.genspark.ai/api/files/s/lDET1GIu?cache_control=3600" alt="Webデザインの作業風景" class="hero-image" />
+
+    <div class="content-section">
+      <h2>デザインと機能の完璧な融合</h2>
+      <p>
+        美しいだけのWebサイトでは意味がありません。私たちは、見た目の美しさと使いやすさ、そしてビジネスの成果を同時に実現するWebデザインを追求しています。
+      </p>
+      <p>
+        コーポレートサイト、ECサイト、ランディングページ、オウンドメディアなど、目的に応じた最適なデザインをご提案。レスポンシブ対応、SEO対策、アクセシビリティ配慮など、現代のWeb標準に準拠した制作を行います。
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>UI/UXデザイン</h3>
+        <p>ユーザーの行動を分析し、直感的で使いやすいインターフェースを設計します。</p>
+      </div>
+      <div class="feature-card">
+        <h3>レスポンシブ対応</h3>
+        <p>PC、タブレット、スマートフォンなど、あらゆるデバイスで最適な表示を実現します。</p>
+      </div>
+      <div class="feature-card">
+        <h3>SEO最適化</h3>
+        <p>検索エンジンに評価される構造設計で、集客力を高めます。</p>
+      </div>
+      <div class="feature-card">
+        <h3>CMS導入支援</h3>
+        <p>WordPress等のCMS導入で、お客様自身での更新・運用を可能にします。</p>
+      </div>
+    </div>
+
+    <img src="https://www.genspark.ai/api/files/s/FhyEiH4o?cache_control=3600" alt="レスポンシブWebデザインのデバイス表示" class="content-image" />
+
+    <div class="content-section">
+      <h2>制作の進め方</h2>
+      <p>
+        プロジェクトの成功には、綿密な計画とお客様とのコミュニケーションが不可欠です。私たちは、要件定義から公開後の運用サポートまで、一貫してサポートします。
+      </p>
+      
+      <div class="highlight-box">
+        <p><strong>1. ヒアリング・要件定義</strong><br>
+        事業内容、ターゲット、目的、競合分析などを詳細にヒアリングし、要件を明確化します。</p>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong>2. 情報設計・ワイヤーフレーム</strong><br>
+        サイト構造、ページ構成、導線設計を行い、骨格を固めます。</p>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong>3. デザイン制作</strong><br>
+        ブランドイメージに沿った視覚デザインを作成し、ご確認いただきます。</p>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong>4. コーディング・実装</strong><br>
+        デザインをもとに、HTML/CSS/JavaScriptでコーディング。CMS組み込みも行います。</p>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong>5. テスト・公開・運用サポート</strong><br>
+        各種ブラウザでのテストを経て公開。公開後の運用・保守もサポートします。</p>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2>技術スタック</h2>
+      <p>
+        最新のWeb技術とフレームワークを活用し、高速で安全、メンテナンス性の高いサイトを構築します。HTML5、CSS3、JavaScript、React、WordPress、Shopifyなど、プロジェクトに最適な技術を選定します。
+      </p>
+    </div>
+
+    <div class="cta-section">
+      <h2>Webデザインのご相談</h2>
+      <p>新規制作、リニューアル、運用改善など、どんなご相談でもお気軽にお問い合わせください。</p>
+      <a href="/cdn-cgi/l/email-protection#d5b6bca1aca7bca3b0a7ede5e6ec95b2b8b4bcb9fbb6bab8" class="btn">お問い合わせ</a>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

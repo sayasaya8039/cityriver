@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YouTube Dummy Killer | 合同会社シティーリバー</title>
+  <meta name="description" content="YouTubeのパクリ動画を検出してオリジナルを表示し、パクリチャンネルをブロック" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #ef4444;
+      --accent-light: #fef2f2;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo-text {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--text-primary); text-decoration: none;
+    }
+    .logo-img { height: 40px; width: auto; object-fit: contain; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none;
+      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--accent); }
+    main {
+      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
+    }
+    .breadcrumb {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .page-hero {
+      margin-bottom: 48px;
+    }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light); color: var(--accent);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    }
+    .page-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .page-desc {
+      font-size: 18px; color: var(--text-secondary);
+      line-height: 1.8; max-width: 700px;
+    }
+    .meta-bar {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--text-secondary);
+    }
+    .meta-item strong {
+      color: var(--text-primary); font-weight: 600;
+    }
+    .actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px; border: none;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .btn-outline {
+      background: white; color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent); background: var(--accent-light);
+    }
+    .content {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .content h2 {
+      font-size: 24px; font-weight: 700;
+      margin: 40px 0 16px; letter-spacing: -0.01em;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 {
+      font-size: 18px; font-weight: 600;
+      margin: 28px 0 12px;
+    }
+    .content p {
+      font-size: 16px; line-height: 1.8;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .content ul {
+      margin: 12px 0 20px 24px;
+      color: var(--text-secondary); font-size: 15px;
+    }
+    .content li {
+      margin-bottom: 6px; line-height: 1.7;
+    }
+    .content code {
+      background: var(--bg-secondary); padding: 2px 6px;
+      border-radius: 4px; font-size: 14px;
+    }
+    .content pre {
+      background: #1e293b; color: #e2e8f0;
+      border-radius: 12px; padding: 20px 24px;
+      overflow-x: auto; margin: 16px 0 24px;
+      font-size: 14px; line-height: 1.6;
+    }
+    .content pre code {
+      background: none; padding: 0; color: inherit;
+    }
+    .content a {
+      color: var(--accent); text-decoration: none;
+    }
+    .content a:hover { text-decoration: underline; }
+    .info-section {
+      margin-top: 40px; background: var(--bg-secondary);
+      border-radius: 16px; padding: 32px;
+    }
+    .info-section h2 {
+      margin-top: 0; font-size: 20px;
+    }
+    .perm-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      list-style: none; margin: 16px 0 0 0;
+    }
+    .perm-list li {
+      background: white; border: 1px solid var(--border);
+      padding: 4px 12px; border-radius: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--accent); text-decoration: none;
+      font-weight: 600; font-size: 15px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    footer {
+      padding: 40px; text-align: center;
+      color: var(--text-secondary); font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      main { padding: 60px 24px 80px; }
+      .page-title { font-size: 1.8rem; }
+      .meta-bar { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="../index.html" class="logo-text">
+        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
+        合同会社シティーリバー
+      </a>
+      <a href="../index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../extensions.html">拡張機能</a> / YouTube Dummy Killer
+    </div>
+
+    <div class="page-hero">
+      <div class="page-badge">SNS・動画</div>
+      <h1 class="page-title">YouTube Dummy Killer</h1>
+      <p class="page-desc">YouTubeのパクリ動画を検出してオリジナルを表示し、パクリチャンネルをブロック</p>
+      <div class="meta-bar">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <strong>v1.3.0</strong>
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Chrome / Edge
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Manifest V3
+        </div>
+      </div>
+      <div class="actions">
+        <a href="https://github.com/sayasaya8039/YouTube-Dummy-Killer" class="btn btn-primary" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+        <a href="../extensions.html" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          一覧に戻る
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>YouTubeのパクリ動画を自動検出し、オリジナル動画を表示。パクリチャンネルをブロックしておすすめから除外するChrome拡張機能。</p>
+        <h2>機能</h2>
+        <ul>
+        <li><strong>パクリ動画検出</strong> - 動画ページを開くと、タイトルで類似動画を検索し、最も古い投稿を「オリジナル」として特定</li>
+        <li><strong>オリジナル表示</strong> - パクリの可能性がある場合、オリジナル動画へのリンク付きオーバーレイを表示</li>
+        <li><strong>チャンネルブロック</strong> - パクリチャンネルをワンクリックでブロック</li>
+        <li><strong>おすすめフィルタリング</strong> - ブロック済みチャンネルの動画をおすすめ・関連動画から自動的に非表示</li>
+        <li><strong>設定カスタマイズ</strong> - 自動ブロック、通知表示、判定基準（時間差）を調整可能</li>
+        </ul>
+        <h2>スクリーンショット</h2>
+        <h3>ポップアップUI</h3>
+        <pre><code class="lang-">
+        ┌──────────────────────────────┐
+        │  YouTube Dummy Killer  v1.2.0│
+        ├──────────────────────────────┤
+        │  [メイン] [ブロック(3)] [設定]  │
+        ├──────────────────────────────┤
+        │  ● ステータス: 有効      [ON] │
+        │                              │
+        │  使い方                      │
+        │  1. YouTubeで動画を開く       │
+        │  2. パクリ検出時に通知表示    │
+        │  3. オリジナルへ移動 or ブロック│
+        │                              │
+        │  ブロック済み: 3              │
+        └──────────────────────────────┘
+        </code></pre>
+        <h3>パクリ検出オーバーレイ</h3>
+        <pre><code class="lang-">
+        ┌──────────────────────────────┐
+        │ ! パクリ動画の可能性があります  x│
+        ├──────────────────────────────┤
+        │ オリジナル（推定）            │
+        │ ┌─────┬──────────────────┐  │
+        │ │     │ 動画タイトル...    │  │
+        │ │     │ チャンネル名       │  │
+        │ │     │ 2024年1月15日     │  │
+        │ └─────┴──────────────────┘  │
+        │                              │
+        │ [   オリジナルを見る    ]     │
+        │ [ このチャンネルをブロック ]  │
+        │ [      閉じる          ]     │
+        └──────────────────────────────┘
+        </code></pre>
+        <h2>インストール</h2>
+        <h3>方法1: ZIPファイルから（推奨）</h3>
+        <p>1. <a href="../../releases" target="_blank" rel="noopener">Releases</a> から最新の <code>YouTube_Dummy_Killer_v*.zip</code> をダウンロード</p>
+        <p>2. ZIPを任意のフォルダに解凍</p>
+        <p>3. Chromeで <code>chrome://extensions</code> を開く</p>
+        <p>4. 右上の <strong>「デベロッパーモード」</strong> を有効化</p>
+        <p>5. <strong>「パッケージ化されていない拡張機能を読み込む」</strong> をクリック</p>
+        <p>6. 解凍したフォルダを選択</p>
+        <h3>方法2: ソースからビルド</h3>
+        <pre><code class="lang-bash">
+        # リポジトリをクローン
+        git clone https://github.com/sayasaya8039/YouTube-Dummy-Killer.git
+        cd YouTue_Dammy_Killer
+        
+        # 依存関係のインストール
+        bun install
+        
+        # ビルド
+        bun run build
+        
+        # Chrome に読み込み
+        # chrome://extensions → デベロッパーモード → 「パッケージ化されていない拡張機能を読み込む」
+        # → YouTube_Dummy_Killer フォルダを選択
+        </code></pre>
+        <h2>使い方</h2>
+        <p>1. 拡張機能をインストール後、YouTubeにアクセス</p>
+        <p>2. 動画ページを開くと自動的にパクリチェックが実行される</p>
+        <p>3. パクリの可能性がある場合、右上にオーバーレイが表示される</p>
+        <p>4. <strong>「オリジナルを見る」</strong> でオリジナル動画に移動</p>
+        <p>5. <strong>「このチャンネルをブロック」</strong> でチャンネルをブロック</p>
+        <p>6. ブロック済みチャンネルの管理はポップアップの「ブロック」タブから</p>
+        <h3>設定項目</h3>
+        <p>| 設定 | 説明 | デフォルト |</p>
+        <p>|------|------|-----------|</p>
+        <p>| 有効/無効 | 拡張機能のON/OFF | 有効 |</p>
+        <p>| 自動ブロック | パクリ検出時に自動でチャンネルをブロック | 無効 |</p>
+        <p>| 通知を表示 | パクリ検出時にオーバーレイを表示 | 有効 |</p>
+        <p>| 判定基準（時間差） | オリジナル判定の最小時間差 | 1日 |</p>
+        <h2>技術スタック</h2>
+        <p>| 技術 | バージョン | 用途 |</p>
+        <p>|------|-----------|------|</p>
+        <p>| TypeScript | 5.7 | 型安全な開発 |</p>
+        <p>| React | 19 | ポップアップUI |</p>
+        <p>| Vite | 6 | ビルドツール |</p>
+        <p>| Vitest | 4.0 | テストフレームワーク |</p>
+        <p>| Chrome Extension | Manifest V3 | 拡張機能API |</p>
+        <h2>セキュリティ</h2>
+        <p>v1.2.0で以下のセキュリティ改善を実施:</p>
+        <ul>
+        <li><strong>XSS対策</strong>: <code>innerHTML</code> を完全廃止し、安全なDOM API (<code>createElement</code> / <code>textContent</code>) に移行</li>
+        <li><strong>URL検証</strong>: <code>sanitizeUrl()</code> でプロトコルホワイトリスト検証、<code>isValidVideoId()</code> で動画ID形式を検証</li>
+        <li><strong>HTMLエスケープ</strong>: <code>escapeHtml()</code> で <code>& < > " '</code> の5文字をエスケープ</li>
+        <li><strong>送信者検証</strong>: <code>chrome.runtime.onMessage</code> で <code>sender.id === chrome.runtime.id</code> を検証</li>
+        <li><strong>ソースマップ無効化</strong>: 本番ビルドで <code>sourcemap: false</code> を設定</li>
+        </ul>
+        <h2>プロジェクト構成</h2>
+        <pre><code class="lang-">
+        YouTue_Dammy_Killer/
+        ├── src/
+        │   ├── App.tsx              # ポップアップUI（React）
+        │   ├── App.css              # ポップアップスタイル
+        │   ├── main.tsx             # Reactエントリポイント
+        │   ├── index.css            # グローバルCSS
+        │   ├── background/
+        │   │   └── background.ts   # Service Worker
+        │   ├── content/
+        │   │   ├── content.ts      # Content Script（YouTube DOM操作）
+        │   │   └── content.css
+        │   ├── lib/
+        │   │   ├── storage.ts      # chrome.storageユーティリティ
+        │   │   ├── youtube-api.ts  # YouTube検索・動画情報取得
+        │   │   └── utils.ts        # 汎用ユーティリティ（XSS対策含む）
+        │   ├── types/
+        │   │   └── index.ts        # 共有型定義
+        │   └── __tests__/
+        │       ├── setup.ts         # Chrome APIモック
+        │       ├── utils.test.ts    # ユーティリティテスト（26件）
+        │       ├── storage.test.ts  # ストレージテスト（9件）
+        │       └── youtube-api.test.ts # YouTube APIテスト（12件）
+        ├── icons/                   # 拡張機能アイコン
+        ├── manifest.json            # Manifest V3設定
+        ├── vitest.config.ts         # テスト設定
+        ├── vite.config.ts           # Popup ビルド設定
+        ├── vite.content.config.ts   # Content Script ビルド設定
+        ├── vite.background.config.ts # Background ビルド設定
+        ├── package.json
+        ├── tsconfig.json
+        └── YouTube_Dummy_Killer/    # ビルド出力
+        </code></pre>
+        <h2>開発</h2>
+        <pre><code class="lang-bash">
+        # 依存関係インストール
+        bun install
+        
+        # ビルド（全体）
+        bun run build
+        
+        # 個別ビルド
+        bun run build:popup       # ポップアップのみ
+        bun run build:content     # Content Scriptのみ
+        bun run build:background  # Service Workerのみ
+        
+        # テスト
+        bun run test              # 全テスト実行（47件）
+        bun run test:watch        # ウォッチモード
+        
+        # 型チェック
+        bun run typecheck
+        
+        # リント
+        bun run lint
+        </code></pre>
+        <h3>テスト</h3>
+        <p>Vitest + jsdomでユニットテストを実行。47テストケースで以下をカバー:</p>
+        <ul>
+        <li><strong>utils.test.ts</strong> (26件): <code>escapeHtml</code>, <code>sanitizeUrl</code>, <code>isValidVideoId</code>, <code>formatDate</code>, <code>debounce</code></li>
+        <li><strong>storage.test.ts</strong> (9件): <code>getSettings</code>, <code>updateSettings</code>, <code>blockChannel</code>, <code>unblockChannel</code>, <code>isChannelBlocked</code></li>
+        <li><strong>youtube-api.test.ts</strong> (12件): <code>parseRelativeTime</code>, <code>parsePublishedDate</code></li>
+        </ul>
+        <h3>デバッグ</h3>
+        <p>1. <code>chrome://extensions</code> でデベロッパーモードを有効化</p>
+        <p>2. 拡張機能の「詳細」→「Service Workerを検証」でバックグラウンドのDevToolsを開く</p>
+        <p>3. YouTubeページでF12 → Consoleタブで <code>[YDK]</code> のログを確認（DEBUGフラグ有効時のみ）</p>
+        <p>4. VSCodeの <code>Launch Chrome with Extension</code> 構成でデバッグ可能（<code>.vscode/launch.json</code> 参照）</p>
+        <h3>ZIP作成（配布用）</h3>
+        <pre><code class="lang-bash">
+        # PowerShell
+        Compress-Archive -Path YouTube_Dummy_Killer\* -DestinationPath YouTube_Dummy_Killer_v1.2.0.zip
+        
+        # Linux (zipコマンドがある場合)
+        cd YouTube_Dummy_Killer && zip -r ../YouTube_Dummy_Killer_v1.2.0.zip . && cd ..
+        </code></pre>
+        <h2>権限について</h2>
+        <p>この拡張機能は最小限の権限のみを使用します:</p>
+        <p>| 権限 | 用途 |</p>
+        <p>|------|------|</p>
+        <p>| <code>storage</code> | ブロックリスト・設定の保存 |</p>
+        <p>| <code>activeTab</code> | ポップアップからの一時的なタブアクセス |</p>
+        <p>| <code>host_permissions</code> (youtube.com) | YouTube上でのContent Script実行 |</p>
+        <ul>
+        <li>YouTube以外のサイトにはアクセスしません</li>
+        <li>ユーザーデータを外部に送信しません</li>
+        <li>YouTube内部の検索機能のみを使用します</li>
+        </ul>
+        <h2>変更履歴</h2>
+        <h3>v1.2.0 (2026-02-21)</h3>
+        <ul>
+        <li><strong>セキュリティ</strong>: innerHTML廃止、URL/videoIdバリデーション、sender検証追加</li>
+        <li><strong>パフォーマンス</strong>: MutationObserver統合+デバウンス、イベントリスナー自動クリーンアップ</li>
+        <li><strong>テスト</strong>: Vitest基盤構築、47テストケース追加</li>
+        <li><strong>コード品質</strong>: 条件付きロガー、セレクタ定数化、型安全性向上</li>
+        </ul>
+        <h3>v1.1.0 (2026-02-21)</h3>
+        <ul>
+        <li>初回リリース</li>
+        </ul>
+        <h2>注意事項</h2>
+        <ul>
+        <li>YouTube内部APIを使用しているため、YouTube側の仕様変更で動作しなくなる可能性があります</li>
+        <li>検索結果の「最も古い動画」をオリジナルと推定しますが、100%正確ではありません</li>
+        <li>YouTube Music や YouTube Kids では動作しません</li>
+        </ul>
+        <h2>ライセンス</h2>
+        <p>MIT</p>
+    </div>
+    
+        <div class="info-section">
+          <h2>使用する権限</h2>
+          <ul class="perm-list"><li>storage</li><li>activeTab</li></ul>
+        </div>
+
+    <a href="../extensions.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      拡張機能一覧に戻る
+    </a>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

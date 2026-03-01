@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini Stock Portfolio | 合同会社シティーリバー</title>
+  <meta name="description" content="日本株・米国株のポートフォリオ管理 - リアルタイム株価とニュース表示" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #10b981;
+      --accent-light: #ecfdf5;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo-text {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--text-primary); text-decoration: none;
+    }
+    .logo-img { height: 40px; width: auto; object-fit: contain; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none;
+      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--accent); }
+    main {
+      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
+    }
+    .breadcrumb {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .page-hero {
+      margin-bottom: 48px;
+    }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light); color: var(--accent);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    }
+    .page-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .page-desc {
+      font-size: 18px; color: var(--text-secondary);
+      line-height: 1.8; max-width: 700px;
+    }
+    .meta-bar {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--text-secondary);
+    }
+    .meta-item strong {
+      color: var(--text-primary); font-weight: 600;
+    }
+    .actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px; border: none;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .btn-outline {
+      background: white; color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent); background: var(--accent-light);
+    }
+    .content {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .content h2 {
+      font-size: 24px; font-weight: 700;
+      margin: 40px 0 16px; letter-spacing: -0.01em;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 {
+      font-size: 18px; font-weight: 600;
+      margin: 28px 0 12px;
+    }
+    .content p {
+      font-size: 16px; line-height: 1.8;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .content ul {
+      margin: 12px 0 20px 24px;
+      color: var(--text-secondary); font-size: 15px;
+    }
+    .content li {
+      margin-bottom: 6px; line-height: 1.7;
+    }
+    .content code {
+      background: var(--bg-secondary); padding: 2px 6px;
+      border-radius: 4px; font-size: 14px;
+    }
+    .content pre {
+      background: #1e293b; color: #e2e8f0;
+      border-radius: 12px; padding: 20px 24px;
+      overflow-x: auto; margin: 16px 0 24px;
+      font-size: 14px; line-height: 1.6;
+    }
+    .content pre code {
+      background: none; padding: 0; color: inherit;
+    }
+    .content a {
+      color: var(--accent); text-decoration: none;
+    }
+    .content a:hover { text-decoration: underline; }
+    .info-section {
+      margin-top: 40px; background: var(--bg-secondary);
+      border-radius: 16px; padding: 32px;
+    }
+    .info-section h2 {
+      margin-top: 0; font-size: 20px;
+    }
+    .perm-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      list-style: none; margin: 16px 0 0 0;
+    }
+    .perm-list li {
+      background: white; border: 1px solid var(--border);
+      padding: 4px 12px; border-radius: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--accent); text-decoration: none;
+      font-weight: 600; font-size: 15px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    footer {
+      padding: 40px; text-align: center;
+      color: var(--text-secondary); font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      main { padding: 60px 24px 80px; }
+      .page-title { font-size: 1.8rem; }
+      .meta-bar { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="../index.html" class="logo-text">
+        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
+        合同会社シティーリバー
+      </a>
+      <a href="../index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../extensions.html">拡張機能</a> / Mini Stock Portfolio
+    </div>
+
+    <div class="page-hero">
+      <div class="page-badge">生産性向上</div>
+      <h1 class="page-title">Mini Stock Portfolio</h1>
+      <p class="page-desc">日本株・米国株のポートフォリオ管理 - リアルタイム株価とニュース表示</p>
+      <div class="meta-bar">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <strong>v1.0.0</strong>
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Chrome / Edge
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Manifest V3
+        </div>
+      </div>
+      <div class="actions">
+        <a href="https://github.com/sayasaya8039/Mini_Stock_Portfolio" class="btn btn-primary" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+        <a href="../extensions.html" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          一覧に戻る
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>Chrome拡張機能：日本株・米国株のリアルタイム株価ポートフォリオ管理</p>
+        <h2>機能</h2>
+        <ul>
+        <li><strong>リアルタイム株価表示</strong> - 30秒間隔で自動更新</li>
+        <li><strong>日本株・米国株対応</strong> - 東証（7203.T）、NYSE/NASDAQ（AAPL）</li>
+        <li><strong>インタラクティブチャート</strong> - 1日〜1年の期間切り替え</li>
+        <li><strong>銘柄検索</strong> - 企業名または銘柄コードで検索</li>
+        <li><strong>損益計算</strong> - 保有株数と取得単価から自動計算</li>
+        <li><strong>ニュース表示</strong> - Google Newsから関連ニュースを取得</li>
+        <li><strong>ダークモード対応</strong> - システム設定に自動追従</li>
+        </ul>
+        <h2>スクリーンショット</h2>
+        <h2>インストール</h2>
+        <h3>Chrome Web Store（準備中）</h3>
+        <h3>開発版インストール</h3>
+        <p>1. リポジトリをクローン</p>
+        <pre><code class="lang-bash">
+           git clone https://github.com/sayasaya8039/Mini_Stock_Portfolio.git
+           cd Mini_Stock_Portfolio
+        </code></pre>
+        <p>2. 依存関係をインストール</p>
+        <pre><code class="lang-bash">
+           npm install
+        </code></pre>
+        <p>3. ビルド</p>
+        <pre><code class="lang-bash">
+           npm run build
+        </code></pre>
+        <p>4. Chromeにインストール</p>
+        <ul>
+        <li><code>chrome://extensions</code> を開く</li>
+        <li>「デベロッパーモード」をON</li>
+        <li>「パッケージ化されていない拡張機能を読み込む」をクリック</li>
+        <li><code>Mini_Stock_Portfolio</code> フォルダを選択</li>
+        </ul>
+        <h2>使い方</h2>
+        <h3>銘柄の追加</h3>
+        <p>1. 「+ 銘柄を追加」をクリック</p>
+        <p>2. 企業名または銘柄コードを入力して検索</p>
+        <p>3. 検索結果から銘柄を選択</p>
+        <p>4. 株数・取得単価を入力（任意）</p>
+        <p>5. 「追加」をクリック</p>
+        <h3>銘柄コードの形式</h3>
+        <p>| 市場 | 形式 | 例 |</p>
+        <p>|------|------|-----|</p>
+        <p>| 米国株 | そのまま | <code>AAPL</code>, <code>MSFT</code>, <code>GOOGL</code> |</p>
+        <p>| 日本株 | 証券コード.T | <code>7203.T</code>, <code>9432.T</code>, <code>6758.T</code> |</p>
+        <h3>チャート期間</h3>
+        <ul>
+        <li>1日 / 5日 / 1ヶ月 / 3ヶ月 / 6ヶ月 / 1年</li>
+        </ul>
+        <h2>技術スタック</h2>
+        <ul>
+        <li><strong>フロントエンド</strong>: React 18 + TypeScript</li>
+        <li><strong>ビルドツール</strong>: Vite + @crxjs/vite-plugin</li>
+        <li><strong>チャート</strong>: Recharts</li>
+        <li><strong>API</strong>: Yahoo Finance（非公式）</li>
+        <li><strong>ニュース</strong>: Google News RSS</li>
+        <li><strong>拡張機能</strong>: Chrome Extension Manifest V3</li>
+        </ul>
+        <h2>プロジェクト構造</h2>
+        <pre><code class="lang-">
+        Mini_Stock_Portfolio/
+        ├── src/
+        │   ├── popup/
+        │   │   ├── App.tsx          # メインアプリケーション
+        │   │   ├── App.css          # スタイル
+        │   │   ├── main.tsx         # エントリーポイント
+        │   │   └── index.html
+        │   ├── background/
+        │   │   └── service-worker.ts  # API通信（CORS回避）
+        │   ├── components/
+        │   │   ├── Portfolio/
+        │   │   │   ├── PortfolioList.tsx
+        │   │   │   ├── StockCard.tsx
+        │   │   │   └── AddStockForm.tsx
+        │   │   ├── Chart/
+        │   │   │   └── StockChart.tsx
+        │   │   └── News/
+        │   │       └── NewsList.tsx
+        │   ├── hooks/
+        │   │   ├── useStorage.ts      # chrome.storage管理
+        │   │   ├── useStockData.ts    # 株価データ取得
+        │   │   └── useNews.ts         # ニュース取得
+        │   └── types/
+        │       └── stock.ts           # 型定義
+        ├── public/
+        │   └── icons/                 # 拡張機能アイコン
+        ├── scripts/
+        │   └── generate_icons.py      # アイコン生成スクリプト
+        ├── manifest.json
+        ├── package.json
+        ├── vite.config.ts
+        └── tsconfig.json
+        </code></pre>
+        <h2>開発</h2>
+        <h3>開発サーバー起動</h3>
+        <pre><code class="lang-bash">
+        npm run dev
+        </code></pre>
+        <h3>ビルド</h3>
+        <pre><code class="lang-bash">
+        npm run build
+        </code></pre>
+        <h3>アイコン再生成</h3>
+        <pre><code class="lang-bash">
+        pip install Pillow
+        python scripts/generate_icons.py
+        </code></pre>
+        <h2>API について</h2>
+        <p>このプロジェクトは以下の非公式APIを使用しています：</p>
+        <ul>
+        <li><strong>Yahoo Finance API</strong> - 株価データ取得</li>
+        <li><strong>Google News RSS</strong> - ニュース取得</li>
+        </ul>
+        <p>これらは非公式APIのため、将来的に変更・停止される可能性があります。</p>
+        <h2>ライセンス</h2>
+        <p>MIT License</p>
+        <h2>作者</h2>
+        <ul>
+        <li>GitHub: [@sayasaya8039](https://github.com/sayasaya8039)</li>
+        </ul>
+        <p>---</p>
+        <p>🤖 Generated with <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a></p>
+    </div>
+    
+        <div class="info-section">
+          <h2>使用する権限</h2>
+          <ul class="perm-list"><li>storage</li><li>alarms</li></ul>
+        </div>
+
+    <a href="../extensions.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      拡張機能一覧に戻る
+    </a>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

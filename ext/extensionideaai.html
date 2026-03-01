@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ExtensionIdeaAI - 拡張機能アイデアジェネレーター | 合同会社シティーリバー</title>
+  <meta name="description" content="ブラウジング中のページを分析して、AIが拡張機能のアイデアを提案します。オフラインで動作します。" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #8b5cf6;
+      --accent-light: #f5f3ff;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo-text {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--text-primary); text-decoration: none;
+    }
+    .logo-img { height: 40px; width: auto; object-fit: contain; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none;
+      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--accent); }
+    main {
+      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
+    }
+    .breadcrumb {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .page-hero {
+      margin-bottom: 48px;
+    }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light); color: var(--accent);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    }
+    .page-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .page-desc {
+      font-size: 18px; color: var(--text-secondary);
+      line-height: 1.8; max-width: 700px;
+    }
+    .meta-bar {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--text-secondary);
+    }
+    .meta-item strong {
+      color: var(--text-primary); font-weight: 600;
+    }
+    .actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px; border: none;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .btn-outline {
+      background: white; color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent); background: var(--accent-light);
+    }
+    .content {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .content h2 {
+      font-size: 24px; font-weight: 700;
+      margin: 40px 0 16px; letter-spacing: -0.01em;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 {
+      font-size: 18px; font-weight: 600;
+      margin: 28px 0 12px;
+    }
+    .content p {
+      font-size: 16px; line-height: 1.8;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .content ul {
+      margin: 12px 0 20px 24px;
+      color: var(--text-secondary); font-size: 15px;
+    }
+    .content li {
+      margin-bottom: 6px; line-height: 1.7;
+    }
+    .content code {
+      background: var(--bg-secondary); padding: 2px 6px;
+      border-radius: 4px; font-size: 14px;
+    }
+    .content pre {
+      background: #1e293b; color: #e2e8f0;
+      border-radius: 12px; padding: 20px 24px;
+      overflow-x: auto; margin: 16px 0 24px;
+      font-size: 14px; line-height: 1.6;
+    }
+    .content pre code {
+      background: none; padding: 0; color: inherit;
+    }
+    .content a {
+      color: var(--accent); text-decoration: none;
+    }
+    .content a:hover { text-decoration: underline; }
+    .info-section {
+      margin-top: 40px; background: var(--bg-secondary);
+      border-radius: 16px; padding: 32px;
+    }
+    .info-section h2 {
+      margin-top: 0; font-size: 20px;
+    }
+    .perm-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      list-style: none; margin: 16px 0 0 0;
+    }
+    .perm-list li {
+      background: white; border: 1px solid var(--border);
+      padding: 4px 12px; border-radius: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--accent); text-decoration: none;
+      font-weight: 600; font-size: 15px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    footer {
+      padding: 40px; text-align: center;
+      color: var(--text-secondary); font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      main { padding: 60px 24px 80px; }
+      .page-title { font-size: 1.8rem; }
+      .meta-bar { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="../index.html" class="logo-text">
+        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
+        合同会社シティーリバー
+      </a>
+      <a href="../index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../extensions.html">拡張機能</a> / ExtensionIdeaAI - 拡張機能アイデアジェネレーター
+    </div>
+
+    <div class="page-hero">
+      <div class="page-badge">AI・プロンプト</div>
+      <h1 class="page-title">ExtensionIdeaAI - 拡張機能アイデアジェネレーター</h1>
+      <p class="page-desc">ブラウジング中のページを分析して、AIが拡張機能のアイデアを提案します。オフラインで動作します。</p>
+      <div class="meta-bar">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <strong>v1.0.8</strong>
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Chrome / Edge
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Manifest V3
+        </div>
+      </div>
+      <div class="actions">
+        
+        <a href="../extensions.html" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          一覧に戻る
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>ブラウジング中のページを分析して、AIがChrome拡張機能のアイデアを提案してくれるオフライン対応のChrome拡張機能です。</p>
+        <p>個人開発者が、毎日のウェブ閲覧からインスピレーションを得て、革新的な拡張機能を開発できるように設計されています。</p>
+        <h2>🔥 特徴</h2>
+        <h3>ページ自動分析</h3>
+        <ul>
+        <li>ページのDOM構造、テキスト、機能を自動的に分析</li>
+        <li>ページタイプ（ECサイト、SNS、ニュースサイト等）を自動判定</li>
+        <li>改善の機会（アクセシビリティ、パフォーマンス等）を検出</li>
+        </ul>
+        <h3>AIブレインストーム</h3>
+        <ul>
+        <li>Chrome Built-in AI API（Gemini Nano）でアイデアを生成</li>
+        <li><strong>オフライン完全対応</strong> - ネットが切れても動作</li>
+        <li>ページの特性に応じた最適なアイデアを提案</li>
+        </ul>
+        <h3>豊富なアイデア情報</h3>
+        <p>各アイデアには以下の情報が含まれます：</p>
+        <ul>
+        <li>魅力的なタイトルと機能説明</li>
+        <li>必要な権限（permissions, host_permissions）</li>
+        <li>実装のヒント（content script, popup等）</li>
+        <li>ターゲットユーザー層</li>
+        <li>バズりやすさ/需要の予測</li>
+        </ul>
+        <h3>カスタムプロンプト</h3>
+        <ul>
+        <li>デフォルト：バランスの良いアイデア</li>
+        <li>プライバシー重視：データ保護・プライバシー強化</li>
+        <li>生産性向上：作業効率改善</li>
+        <li>アクセシビリティ：障碍者向け支援</li>
+        </ul>
+        <h3>保存・管理機能</h3>
+        <ul>
+        <li>気に入ったアイデアをローカルストレージに保存</li>
+        <li>サイドパネルで保存済みアイデアを一覧表示</li>
+        <li>検索・フィルタリング機能</li>
+        <li>JSON形式でエクスポート可能</li>
+        </ul>
+        <h2>📸 スクリーンショット</h2>
+        <h3>ポップアップ画面</h3>
+        <pre><code class="lang-">
+        ┌─────────────────────────────┐
+        │ 💡 ExtensionIdeaAI      [➡] │
+        ├─────────────────────────────┤
+        │ アイデアの種類: [デフォルト▼]│
+        │                             │
+        │ 現在のページ                 │
+        │ https://example.com         │
+        │ [ECサイト] [検索] [カート]   │
+        │                             │
+        │   [✨ アイデアを生成]        │
+        │                             │
+        │ 生成されたアイデア           │
+        │ ┌─────────────────────────┐ │
+        │ │ 💾 価格追跡アラート      │ │
+        │ │ 商品の価格変化を追跡...   │ │
+        │ │ 👥 対象: 買い物ユーザー  │ │
+        │ │ 🔥 需要: 高い            │ │
+        │ │ [activeTab] [alarms]     │ │
+        │ └─────────────────────────┘ │
+        └─────────────────────────────┘
+        </code></pre>
+        <h2>🚀 インストール方法</h2>
+        <h3>Chromeウェブストア（予定）</h3>
+        <p>近日公開予定</p>
+        <h3>手動インストール（開発版）</h3>
+        <p>1. このリポジトリをクローンまたはダウンロード</p>
+        <p>2. Chromeを開き、<code>chrome://extensions</code> にアクセス</p>
+        <p>3. 「デベロッパーモード」をオン</p>
+        <p>4. 「パッケージ化されていない拡張機能を読み込む」をクリック</p>
+        <p>5. <code>ExtensionIdeaAI</code> フォルダを選択</p>
+        <h2>📖 使い方</h2>
+        <h3>基本的な使い方</h3>
+        <p>1. 任意のウェブページを開く</p>
+        <p>2. ツールバーの <strong>💡 ExtensionIdeaAI</strong> アイコンをクリック</p>
+        <p>3. ページが自動で分析されます</p>
+        <p>4. 「アイデアを生成」ボタンをクリック</p>
+        <p>5. AIが拡張機能のアイデアを3〜5個提案します</p>
+        <h3>ショートカット</h3>
+        <ul>
+        <li><code>Ctrl+Shift+E</code>（Mac: <code>Cmd+Shift+E</code>）: ポップアップを開く</li>
+        <li><code>Ctrl+Shift+K</code>（Mac: <code>Cmd+Shift+K</code>）: サイドパネルを開く</li>
+        </ul>
+        <h3>アイデアの保存</h3>
+        <p>1. 提案されたアイデアの <strong>💾</strong> ボタンをクリック</p>
+        <p>2. サイドパネルで保存済みアイデアを管理可能</p>
+        <p>3. エクスポート機能でバックアップ作成</p>
+        <h2>🛠️ 技術スタック</h2>
+        <ul>
+        <li><strong>Manifest V3</strong>: 最新の拡張機能規格</li>
+        <li><strong>Chrome Built-in AI API</strong>: Gemini Nano（オフライン動作）</li>
+        <li><strong>Vanilla JavaScript</strong>: 外部ライブラリなし</li>
+        <li><strong>Local Storage</strong>: アイデアのローカル保存</li>
+        </ul>
+        <h2>📁 ファイル構成</h2>
+        <pre><code class="lang-">
+        ExtensionIdeaAI/
+        ├── manifest.json          # 拡張機能の設定
+        ├── background.js          # Service Worker（AI連携）
+        ├── content.js             # Content Script（ページ分析）
+        ├── popup.html/css/js      # ポップアップUI
+        ├── sidepanel.html/js      # サイドパネルUI
+        ├── icons/                 # アイコン（16x16, 32x32, 48x48, 128x128）
+        └── create_icons.py        # アイコン生成スクリプト
+        </code></pre>
+        <h2>🔧 開発</h2>
+        <h3>開発環境</h3>
+        <ul>
+        <li>Chrome 127+（Built-in AI API対応バージョン）</li>
+        <li>Python 3.14+（アイコン生成用）</li>
+        </ul>
+        <h3>プロジェクトのセットアップ</h3>
+        <pre><code class="lang-bash">
+        # リポジトリのクローン
+        git clone https://github.com/yourusername/ExtensionIdeaAI.git
+        cd ExtensionIdeaAI
+        
+        # アイコン生成（既に生成済み）
+        python create_icons.py
+        
+        # Chromeに読み込んで開発
+        </code></pre>
+        <h3>Built-in AI APIについて</h3>
+        <p>この拡張機能はChromeの実験的な機能であるBuilt-in AI APIを使用しています。</p>
+        <p>有効にする方法：</p>
+        <p>1. <code>chrome://flags</code> にアクセス</p>
+        <p>2. 「Prompt API for Gemini Nano」を有効化</p>
+        <p>3. Chromeを再起動</p>
+        <h2>🎨 デザイン</h2>
+        <p>パステル水色系のカラーパレットで、可愛らしくもプロフェッショナルなUIデザイン。</p>
+        <ul>
+        <li>ライトモード / ダークモード対応</li>
+        <li>レスポンシブデザイン</li>
+        <li>アニメーション効果</li>
+        </ul>
+        <h2>🐛 既知の問題</h2>
+        <ul>
+        <li>Built-in AI APIは実験的機能のため、Chrome 127以上が必要</li>
+        <li>一部のページでContent Scriptが正しく動作しない可能性あり</li>
+        </ul>
+        <h2>📝 ライセンス</h2>
+        <p>MIT License - 詳細は <a href="LICENSE" target="_blank" rel="noopener">LICENSE</a> を参照してください</p>
+        <h2>🤝 コントリビューション</h2>
+        <p>バグ報告・機能要望・プルリクエストを歓迎しています！</p>
+        <p>1. リポジトリをフォーク</p>
+        <p>2. ブランチを作成 (<code>git checkout -b feature/AmazingFeature</code>)</p>
+        <p>3. コミット (<code>git commit -m '[feat] Add some AmazingFeature'</code>)</p>
+        <p>4. プッシュ (<code>git push origin feature/AmazingFeature</code>)</p>
+        <p>5. プルリクエストを作成</p>
+        <h2>📧 お問い合わせ</h2>
+        <ul>
+        <li>Issues: [GitHub Issues](https://github.com/yourusername/ExtensionIdeaAI/issues)</li>
+        <li>メール: your-email@example.com</li>
+        </ul>
+        <h2>⭐ スター</h2>
+        <p>このプロジェクトが気に入ったら、ぜひGitHubでスターをつけてください！</p>
+        <p>---</p>
+        <p><strong>ExtensionIdeaAI</strong> - 個人開発者のアイデア創造を支援する拡張機能</p>
+    </div>
+    
+        <div class="info-section">
+          <h2>使用する権限</h2>
+          <ul class="perm-list"><li>activeTab</li><li>storage</li><li>sidePanel</li><li>scripting</li></ul>
+        </div>
+
+    <a href="../extensions.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      拡張機能一覧に戻る
+    </a>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

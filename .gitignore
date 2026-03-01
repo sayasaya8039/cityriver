@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+*.tmp
+mnt/
+hono-app/node_modules/
+logo_base64.txt
+skills_section.tmp
