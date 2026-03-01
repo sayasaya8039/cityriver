@@ -1,0 +1,362 @@
+[
+  {
+    "dir": "AgentLimits",
+    "slug": "agent-limits",
+    "name": "AgentLimits",
+    "desc": "複数AIエージェント（Claude, GPT, Gemini等）のAPI使用量をリアルタイム監視するデスクトップウィジェット",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "開発ツール",
+    "tech": "Tauri v2, SvelteKit, TypeScript"
+  },
+  {
+    "dir": "AI_File_Explorer",
+    "slug": "ai-file-explorer",
+    "name": "AI File Explorer",
+    "desc": "AIによるファイル分類・タグ付け機能を備えたファイルマネージャー。コンテンツを自動解析し、直感的なファイル管理を実現",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "Python 3.10+, PySide6, OpenAI API"
+  },
+  {
+    "dir": "ai-file-explorer-rust",
+    "slug": "ai-file-explorer-rust",
+    "name": "AI File Explorer (Rust版)",
+    "desc": "セマンティック検索に対応したクロスプラットフォームAIファイルエクスプローラー。高速なネイティブ性能を実現",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "Rust, Tauri 2, React, TypeScript"
+  },
+  {
+    "dir": "AI_Noise_Gate",
+    "slug": "ai-noise-gate",
+    "name": "AI Noise Gate",
+    "desc": "Silero VADを使った音声活動検出による仮想マイク。AIがリアルタイムでノイズを除去し、クリアな音声のみを出力",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "Python 3.10+, Silero VAD (ONNX), Virtual Audio"
+  },
+  {
+    "dir": "Ao_screenshots_folders_date",
+    "slug": "screenshots-folder-organizer",
+    "name": "スクリーンショット日付整理",
+    "desc": "スクリーンショットを撮影日時別にフォルダへ自動分類・整理するユーティリティ",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ユーティリティ",
+    "tech": "Python, OS API"
+  },
+  {
+    "dir": "Auto_Claude",
+    "slug": "auto-claude",
+    "name": "Auto Claude",
+    "desc": "自律型マルチエージェントコーディングフレームワーク。Electron UIからClaude AIによる自動コード生成・修正を実行",
+    "ver": "2.7.2",
+    "github": "https://github.com/AndyMik90/Auto-Claude",
+    "category": "開発ツール",
+    "tech": "Electron, Python 3.12+, TypeScript"
+  },
+  {
+    "dir": "Automatic_household_accounting_category_allocation",
+    "slug": "household-accounting",
+    "name": "自動家計簿カテゴリ分類",
+    "desc": "家計の支出を自動的にカテゴリ別に分類・集計するアプリケーション。レシートデータからAIが最適なカテゴリを判定",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "プロダクティビティ",
+    "tech": "Rust, Tauri, AI API"
+  },
+  {
+    "dir": "Automatic_screenshot_blurring",
+    "slug": "auto-screenshot-blur",
+    "name": "自動スクリーンショットぼかし",
+    "desc": "スクリーンショット内の個人情報や機密部分を自動検出してぼかし処理を適用するプライバシー保護ツール",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "プライバシー",
+    "tech": "Python, OpenCV, AI Detection"
+  },
+  {
+    "dir": "bnmp",
+    "slug": "bnmp",
+    "name": "bnmp",
+    "desc": "Zig製の超高速Nodeパッケージマネージャー。npm/pnpm/yarn/bunの代替として、圧倒的な速度でパッケージ管理を実現",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "開発ツール",
+    "tech": "Zig"
+  },
+  {
+    "dir": "Claude_code_usage_display",
+    "slug": "claude-usage-display",
+    "name": "Claude Code 使用量モニター",
+    "desc": "Anthropic Claude APIの使用量・コストをリアルタイムで表示するデスクトップウィジェット",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "開発ツール",
+    "tech": "Electron, TypeScript"
+  },
+  {
+    "dir": "Clipboard_history_AI",
+    "slug": "clipboard-history-ai",
+    "name": "Clipboard History AI",
+    "desc": "AIによるカテゴリ分類・セマンティック検索機能付きクリップボード履歴マネージャー。コピーした内容を自動整理",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "Python 3.10+, PyQt6, AI API"
+  },
+  {
+    "dir": "Codex_code_usage_display",
+    "slug": "codex-usage-display",
+    "name": "Codex 使用量モニター",
+    "desc": "OpenAI Codex APIの使用量・コストをリアルタイム監視するデスクトップウィジェット",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "開発ツール",
+    "tech": "TypeScript, Electron"
+  },
+  {
+    "dir": "Copy_and_Paste_Super_Evolution_Clipboard",
+    "slug": "super-clipboard",
+    "name": "コピペ超進化クリップボード",
+    "desc": "コピー＆ペーストを超強化するクリップボード拡張。履歴管理、定型文、テンプレート機能を搭載",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "プロダクティビティ",
+    "tech": "Electron, TypeScript"
+  },
+  {
+    "dir": "Drag_and_Drop_Media_Converter",
+    "slug": "media-converter",
+    "name": "Drag & Drop メディアコンバーター",
+    "desc": "ファイルをドラッグ＆ドロップするだけで動画・音声・画像を変換。FFmpeg統合でほぼすべてのフォーマットに対応",
+    "ver": "0.4.0",
+    "github": null,
+    "category": "メディア",
+    "tech": "Rust, egui, FFmpeg"
+  },
+  {
+    "dir": "FusionTube",
+    "slug": "fusiontube",
+    "name": "FusionTube",
+    "desc": "プライバシー重視のYouTubeデスクトップクライアント。AI要約、yt-dlpダウンロード、Invidious経由の匿名視聴に対応",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "メディア",
+    "tech": "Electron 34, Vue 3, TypeScript, Invidious, yt-dlp"
+  },
+  {
+    "dir": "Gemini_code_usage_display",
+    "slug": "gemini-usage-display",
+    "name": "Gemini 使用量モニター",
+    "desc": "Google Gemini APIの使用量・コストをリアルタイム監視するデスクトップウィジェット",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "開発ツール",
+    "tech": "TypeScript, Electron"
+  },
+  {
+    "dir": "Internet_files_shere",
+    "slug": "internet-file-share",
+    "name": "インターネットファイル共有",
+    "desc": "ローカルネットワークやインターネット経由でファイルを簡単に共有できるユーティリティ",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ユーティリティ",
+    "tech": "Electron, TypeScript, WebRTC"
+  },
+  {
+    "dir": "Local_file_search_enhanced_AI_filters",
+    "slug": "local-file-search",
+    "name": "ローカルファイル検索 (AI強化版)",
+    "desc": "エンベディングとAIフィルターによるセマンティックファイル検索。自然言語でファイルを探せる次世代検索ツール",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "React 19, TypeScript, Vite, Tauri v2, Rust"
+  },
+  {
+    "dir": "No_Code_RPA",
+    "slug": "no-code-rpa",
+    "name": "ノーコード RPA",
+    "desc": "プログラミング不要でWindows上の繰り返し作業を自動化できるRPAツール。GUI操作をビジュアルにフロー設計",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "プロダクティビティ",
+    "tech": "Electron, TypeScript"
+  },
+  {
+    "dir": "Notification_AI_Priority_Filter",
+    "slug": "notification-filter",
+    "name": "通知AI優先度フィルター",
+    "desc": "Windows通知をAIが自動で優先度判定し、重要なものだけを表示。集中モードとの連携で生産性を向上",
+    "ver": "2.1.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "Tauri v2, React 19, TypeScript, AI API"
+  },
+  {
+    "dir": "Pict_cutter",
+    "slug": "pict-cutter",
+    "name": "Pict Cutter",
+    "desc": "アイコン生成・画像トリミングユーティリティ。バッチ処理で複数サイズのアイコンを一括作成",
+    "ver": "1.1.0",
+    "github": null,
+    "category": "メディア",
+    "tech": "Python, PySide6, OpenCV, Pillow"
+  },
+  {
+    "dir": "PowerPlanAI",
+    "slug": "power-plan-ai",
+    "name": "PowerPlanAI",
+    "desc": "AIがCPU周波数やパフォーマンスを最適化するWindows電源プラン管理ツール。使用パターンを学習して自動調整",
+    "ver": "1.1.0",
+    "github": null,
+    "category": "システム",
+    "tech": "Python 3.11+, PyQt6, AI API"
+  },
+  {
+    "dir": "PraiseWidget",
+    "slug": "praise-widget",
+    "name": "PraiseWidget",
+    "desc": "AIが生成する励ましメッセージを表示するデスクトップウィジェット。毎日のモチベーションアップに",
+    "ver": "1.0.18",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "Python, PyQt6, AI API"
+  },
+  {
+    "dir": "PrivacyShot",
+    "slug": "privacy-shot",
+    "name": "PrivacyShot",
+    "desc": "プライバシーを保護するスクリーンショットツール。撮影時に個人情報を自動検出してマスク処理",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "プライバシー",
+    "tech": "Rust, Windows API"
+  },
+  {
+    "dir": "Production_management_app",
+    "slug": "production-management",
+    "name": "プロダクション管理アプリ",
+    "desc": "カンバンスタイルのプロジェクト・タスク管理アプリケーション。ドラッグ＆ドロップでタスクを直感的に管理",
+    "ver": "0.19.0",
+    "github": null,
+    "category": "プロダクティビティ",
+    "tech": "Rust, egui"
+  },
+  {
+    "dir": "Python_Win_AutoUpdate",
+    "slug": "python-auto-update",
+    "name": "Python Win AutoUpdate",
+    "desc": "Pythonデスクトップアプリ向け自動更新フレームワーク。バージョン管理とワンクリック更新機能を提供",
+    "ver": "1.1.0",
+    "github": null,
+    "category": "開発ツール",
+    "tech": "Python 3.10+, PyQt6"
+  },
+  {
+    "dir": "SAYA64 Extreme",
+    "slug": "saya64-extreme",
+    "name": "SAYA64 Extreme",
+    "desc": "包括的なシステム情報表示・ハードウェア監視・ベンチマークツール。CPU/GPU/RAM温度、使用率、ファン速度をリアルタイム表示",
+    "ver": "2.2.0",
+    "github": null,
+    "category": "システム",
+    "tech": ".NET 8.0, WPF, MVVM, LibreHardwareMonitor"
+  },
+  {
+    "dir": "SBV2",
+    "slug": "sbv2",
+    "name": "Style-Bert-VITS2",
+    "desc": "Bert-VITS2ベースのニューラルTTS（テキスト読み上げ）エンジン。高品質な日本語音声合成を実現",
+    "ver": "2.7.0",
+    "github": null,
+    "category": "メディア",
+    "tech": "Python, Style-Bert-VITS2, PyTorch"
+  },
+  {
+    "dir": "Side_sliding_utility_bar",
+    "slug": "side-utility-bar",
+    "name": "サイドスライドユーティリティバー",
+    "desc": "画面端からスライドして表示されるコンテキスト対応ユーティリティバー。よく使うツールに素早くアクセス",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ユーティリティ",
+    "tech": "Tauri, TypeScript"
+  },
+  {
+    "dir": "smux",
+    "slug": "smux",
+    "name": "smux",
+    "desc": "Windows向けマルチターミナルマルチプレクサー。ConPTY統合でtmuxライクな操作をWindowsネイティブで実現",
+    "ver": "0.2.2",
+    "github": null,
+    "category": "開発ツール",
+    "tech": "Rust, ConPTY API, gpui"
+  },
+  {
+    "dir": "upscayl",
+    "slug": "upscayl",
+    "name": "Upscayl",
+    "desc": "Real-ESRGANなどの超解像モデルを使ったAI画像アップスケーラー。低解像度画像を高品質に拡大",
+    "ver": "2.0.0",
+    "github": "https://github.com/upscayl/upscayl",
+    "category": "メディア",
+    "tech": "Electron, TypeScript, React, Real-ESRGAN"
+  },
+  {
+    "dir": "Virtual_AI_Plant_Garden",
+    "slug": "virtual-plant-garden",
+    "name": "バーチャルAI植物園",
+    "desc": "AIが育成をサポートする仮想植物園。植物の成長シミュレーション・育て方アドバイスをAIが提供",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "Electron, TypeScript, AI API"
+  },
+  {
+    "dir": "volume_manager",
+    "slug": "volume-manager",
+    "name": "Volume Manager",
+    "desc": "Windowsオーディオデバイスの音量をアプリ別に制御できるシステムトレイ常駐型ボリューム管理ツール",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "システム",
+    "tech": "Python 3.8+, PyQt6, Windows Audio API"
+  },
+  {
+    "dir": "Window_Management_Utilities",
+    "slug": "window-management",
+    "name": "ウィンドウ管理ユーティリティ",
+    "desc": "グローバルホットキーでウィンドウのピン留め・透明度変更・クリックスルーを制御。マルチモニター対応",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "システム",
+    "tech": "Tauri v2, Svelte 5, Rust, Win32 API"
+  },
+  {
+    "dir": "オフラインデスクトップAIチャットコンパニオン",
+    "slug": "offline-ai-chat",
+    "name": "オフラインAIチャットコンパニオン",
+    "desc": "インターネット接続不要で動作するローカルLLM搭載AIチャットボット。プライバシーを完全に保護しながらAI対話を実現",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "Python, Local LLM, llama.cpp"
+  },
+  {
+    "dir": "Limitless_AI",
+    "slug": "limitless-ai-calendar-sync",
+    "name": "Limitless AI Calendar Sync",
+    "desc": "Limitless AIの会話ログからイベント情報をAIで自動抽出し、Googleカレンダーに同期するシステムトレイ常駐アプリ",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AIツール",
+    "tech": "Python, Limitless AI API, OpenAI API, Google Calendar API"
+  }
+]

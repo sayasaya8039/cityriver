@@ -1,0 +1,37 @@
+# 依存関係
+node_modules/
+venv/
+.venv/
+
+# キャッシュ
+.cache/
+.next/
+__pycache__/
+*.pyc
+.turbo/
+
+# Git
+.git/
+
+# ログ・一時ファイル
+*.log
+*.tmp
+
+# 機密情報
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets/
+
+# ビルド成果物（一時）
+dist/
+build/
+
+# note記事（GitHubにアップロードしない）
+articles/
+
+# IDE
+.idea/
+.vscode/settings.json

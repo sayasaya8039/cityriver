@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>自動家計簿カテゴリ分類 | 合同会社シティーリバー</title>
+  <meta name="description" content="家計の支出を自動的にカテゴリ別に分類・集計するアプリケーション。レシートデータからAIが最適なカテゴリを判定" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #0a0a0a;
+      --text-secondary: #6b7280;
+      --accent: #f59e0b;
+      --accent-light: #fffbeb;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 20px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo-text {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 16px; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--text-primary); text-decoration: none;
+    }
+    .logo-img { height: 40px; width: auto; object-fit: contain; }
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none;
+      font-weight: 500; font-size: 14px; transition: color 0.3s ease;
+    }
+    .nav-link:hover { color: var(--accent); }
+    main {
+      max-width: 900px; margin: 0 auto; padding: 80px 40px 120px;
+    }
+    .breadcrumb {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .page-hero {
+      margin-bottom: 48px;
+    }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light); color: var(--accent);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; margin-bottom: 16px;
+    }
+    .page-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .page-desc {
+      font-size: 18px; color: var(--text-secondary);
+      line-height: 1.8; max-width: 700px;
+    }
+    .meta-bar {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--text-secondary);
+    }
+    .meta-item strong {
+      color: var(--text-primary); font-weight: 600;
+    }
+    .actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 12px; border: none;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    }
+    .btn-outline {
+      background: white; color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent); background: var(--accent-light);
+    }
+    .content {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .content h2 {
+      font-size: 24px; font-weight: 700;
+      margin: 40px 0 16px; letter-spacing: -0.01em;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content p {
+      font-size: 16px; line-height: 1.8;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .content ul {
+      margin: 12px 0 20px 24px;
+      color: var(--text-secondary); font-size: 15px;
+    }
+    .content li {
+      margin-bottom: 6px; line-height: 1.7;
+    }
+    .content a {
+      color: var(--accent); text-decoration: none;
+    }
+    .content a:hover { text-decoration: underline; }
+    .info-section {
+      margin-top: 40px; background: var(--bg-secondary);
+      border-radius: 16px; padding: 32px;
+    }
+    .info-section h2 {
+      margin-top: 0; font-size: 20px;
+    }
+    .tech-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      list-style: none; margin: 16px 0 0 0;
+    }
+    .tech-list li {
+      background: white; border: 1px solid var(--border);
+      padding: 4px 12px; border-radius: 8px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--accent); text-decoration: none;
+      font-weight: 600; font-size: 15px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    footer {
+      padding: 40px; text-align: center;
+      color: var(--text-secondary); font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      main { padding: 60px 24px 80px; }
+      .page-title { font-size: 1.8rem; }
+      .meta-bar { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <a href="../index.html" class="logo-text">
+        <img src="../Logo.png" alt="CityRiver LLC" class="logo-img">
+        合同会社シティーリバー
+      </a>
+      <a href="../index.html#contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="../index.html">ホーム</a> / <a href="../index.html#products">プロダクト</a> / <a href="../windows-apps.html">Windowsアプリ</a> / 自動家計簿カテゴリ分類
+    </div>
+
+    <div class="page-hero">
+      <div class="page-badge">プロダクティビティ</div>
+      <h1 class="page-title">自動家計簿カテゴリ分類</h1>
+      <p class="page-desc">家計の支出を自動的にカテゴリ別に分類・集計するアプリケーション。レシートデータからAIが最適なカテゴリを判定</p>
+      <div class="meta-bar">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <strong>v1.0.0</strong>
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Rust, Tauri, AI API
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          プロダクティビティ
+        </div>
+      </div>
+      <div class="actions">
+        <a href="../windows-apps.html" class="btn btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          一覧に戻る
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>家計の支出を自動的にカテゴリ別に分類・集計するアプリケーション。レシートデータからAIが最適なカテゴリを判定</p>
+
+      <h2>主な機能</h2>
+      <ul>
+        <li>AIによるインテリジェントな分析・提案機能</li>
+        <li>自動化による効率的なワークフロー</li>
+        <li>シンプルで直感的なインターフェース</li>
+        <li>Rust製の安全で高速な実装</li>
+      </ul>
+
+      <h2>技術スタック</h2>
+      <ul>
+        <li><strong>Rust</strong></li>
+        <li><strong>Tauri</strong></li>
+        <li><strong>AI API</strong></li>
+      </ul>
+    </div>
+
+    <div class="info-section">
+      <h2>使用技術</h2>
+      <ul class="tech-list"><li>Rust</li><li>Tauri</li><li>AI API</li></ul>
+    </div>
+
+    <a href="../windows-apps.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Windowsアプリ一覧に戻る
+    </a>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
+  </footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
