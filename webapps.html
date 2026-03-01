@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Webアプリ一覧 | 合同会社シティーリバー</title>
-  <meta name="description" content="合同会社シティーリバーが開発・提供するWebアプリケーションの一覧ページです。" />
+  <meta name="description" content="合同会社シティーリバーが開発・提供するWebアプリケーションの一覧。AI、ヘルスケア、ビジネス、ライフスタイルなど33種以上。" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
@@ -95,7 +95,7 @@
     }
 
     .page-header {
-      margin-bottom: 64px;
+      margin-bottom: 48px;
       text-align: center;
     }
 
@@ -127,25 +127,102 @@
       margin: 0 auto;
     }
 
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 24px 0;
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .category-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .category-btn {
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .category-btn:hover,
+    .category-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .category-section {
+      margin-bottom: 56px;
+    }
+
+    .category-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-title .emoji {
+      font-size: 24px;
+    }
+
+    .category-count {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
     .product-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
     }
 
     .product-item {
       background: white;
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px 28px;
+      padding: 28px 24px;
       transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
     }
 
     .product-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(14, 165, 233, 0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(14, 165, 233, 0.08);
       border-color: var(--accent);
     }
 
@@ -153,97 +230,91 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 12px;
+      gap: 12px;
+      margin-bottom: 10px;
     }
 
     .product-item h3 {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 600;
       letter-spacing: -0.01em;
+      line-height: 1.4;
     }
 
     .product-item-tag {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 100px;
       background: var(--accent-light);
       color: var(--accent);
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .product-item p {
       color: var(--text-secondary);
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.7;
-      margin-bottom: 20px;
       flex: 1;
     }
 
-    .product-item-actions {
+    .product-item-footer {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
     }
 
-    .btn {
+    .detail-link {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
+      gap: 4px;
+      font-size: 13px;
       font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
-    }
-
-    .btn-outline {
-      background: white;
-      color: var(--text-primary);
-      border: 1.5px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--accent);
-      background: var(--accent-light);
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 80px 40px;
-      color: var(--text-secondary);
-    }
-
-    .empty-state-icon {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
-      background: var(--accent-light);
       color: var(--accent);
-      display: flex;
+      text-decoration: none;
+      transition: gap 0.2s ease;
+    }
+
+    .detail-link:hover {
+      gap: 8px;
+    }
+
+    .gh-link {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
     }
 
-    .empty-state h3 {
-      font-size: 20px;
+    .gh-link:hover {
+      background: var(--bg-secondary);
       color: var(--text-primary);
-      margin-bottom: 8px;
+    }
+
+    .demo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #10b981;
+      text-decoration: none;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #ecfdf5;
+      transition: all 0.2s ease;
+    }
+
+    .demo-link:hover {
+      background: #d1fae5;
     }
 
     footer {
@@ -259,6 +330,8 @@
       main { padding: 60px 24px 80px; }
       .page-title { font-size: 2rem; }
       .product-list { grid-template-columns: 1fr; }
+      .stats-bar { gap: 24px; }
+      .stat-number { font-size: 22px; }
     }
   </style>
 </head>
@@ -287,23 +360,511 @@
       <p class="page-subtitle">ブラウザで動作するWebアプリケーション。インストール不要ですぐに利用可能。</p>
     </div>
 
-    <div class="product-list">
-      <div class="empty-state">
-        <div class="empty-state-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <h3>準備中</h3>
-        <p>Webアプリは現在開発中です。公開までお待ちください。</p>
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-number">33+</div>
+        <div class="stat-label">Webアプリ</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">6</div>
+        <div class="stat-label">カテゴリ</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">React・Svelte・Hono</div>
+        <div class="stat-label">主要テクノロジー</div>
       </div>
     </div>
+
+    <nav class="category-nav">
+      <a href="#ai" class="category-btn">AI系</a>
+      <a href="#health" class="category-btn">ヘルスケア</a>
+      <a href="#business" class="category-btn">ビジネス</a>
+      <a href="#comm" class="category-btn">コミュニケーション</a>
+      <a href="#lifestyle" class="category-btn">ライフスタイル</a>
+      <a href="#utility" class="category-btn">ユーティリティ</a>
+    </nav>
+
+
+    <section id="ai" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F916;</span> AI系</h2>
+      <p class="category-count">6 件のWebアプリ</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>AI絵本メーカー</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>AIを使ってオリジナル絵本を自動生成するWebアプリ。Gemini AIとReplicate連携でストーリーとイラストを生成し、PDF出力可能</p>
+          <div class="product-item-footer">
+            <a href="webapp/ai-ehon-maker.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>AIプロンプト管理ツール</h3>
+            <span class="product-item-tag">v0.0.0</span>
+          </div>
+          <p>AIプロンプトを効率的に管理・共有・販売できるWebアプリケーション</p>
+          <div class="product-item-footer">
+            <a href="webapp/prompt-manager.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://prompt-manager-bce.pages.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>AI Website Builder</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>AI-powered website builder like Readdy.ai - Honoベースのバックエンド</p>
+          <div class="product-item-footer">
+            <a href="webapp/ai-website-builder.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>イラスト自動リマスター</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>古いイラストを自動でリマスターするWebアプリ。低解像度の画像を高解像度にアップスケールし、現代風のスタイルに自動変換</p>
+          <div class="product-item-footer">
+            <a href="webapp/illust-remaster.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Qwen画像エディター</h3>
+            <span class="product-item-tag">v2.4.2</span>
+          </div>
+          <p>Qwen AIモデルを活用した高機能画像編集Webアプリ。Gradio/HuggingFace連携、WASM高速処理対応</p>
+          <div class="product-item-footer">
+            <a href="webapp/qwen-image-edit.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://qwen-image-edit.sayasaya.workers.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            <a href="https://github.com/sayasaya8039/Qwen-Image-Edit" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>Readdy AI Clone</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>テキスト・画像・URLから瞬時にReact/Next.jsアプリケーションを生成する次世代AIウェブビルダー</p>
+          <div class="product-item-footer">
+            <a href="webapp/web-readdy-ai.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="health" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F48A;</span> ヘルスケア</h2>
+      <p class="category-count">5 件のWebアプリ</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>カロリーチェッカー</h3>
+            <span class="product-item-tag">v1.2.0</span>
+          </div>
+          <p>品名を入力してカロリーを検索するWebアプリ・Chrome拡張機能</p>
+          <div class="product-item-footer">
+            <a href="webapp/calorie-checker.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://calorie-checker.pages.dev/" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            <a href="https://github.com/sayasaya8039/calorie-checker" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>健康診断書翻訳・改善アドバイザー</h3>
+            <span class="product-item-tag">v0.1.1</span>
+          </div>
+          <p>健康診断書を多言語翻訳し、AIが健康改善アドバイスを提供するWebアプリ。AssemblyScript(WASM)高速処理対応</p>
+          <div class="product-item-footer">
+            <a href="webapp/health-certificate-translator.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>こころの日記</h3>
+            <span class="product-item-tag">v1.4.0</span>
+          </div>
+          <p>こころの日記：気分ログ・AIアドバイス・緊急連絡機能。メンタルヘルスケアWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/kokoro-no-nikki.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>レシピ栄養計算ツール</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>材料入力でカロリー・栄養素を自動計算し、ダイエットプランを生成するWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/recipe-nutrition-calculator.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>ペット症状まとめ</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>ペットの症状キーワードから獣医情報サイトを検索し、AIで要約してPDFで保存できるWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/vet-symptom-summarizer.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://vet-symptom-frontend.pages.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="business" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F4BC;</span> ビジネス</h2>
+      <p class="category-count">5 件のWebアプリ</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>壁打ち道場</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>AIが面接官になって壁打ち練習できる模擬面接Webアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/kabedachi-dojo.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>かんたん請求書メーカー</h3>
+            <span class="product-item-tag">v1.7.0</span>
+          </div>
+          <p>フリーランス向け請求書生成Webアプリ - 多通貨対応・税自動計算・PDF出力</p>
+          <div class="product-item-footer">
+            <a href="webapp/easy-invoice-generator.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://easy-invoice-gen.pages.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>LightFlow</h3>
+            <span class="product-item-tag">v1.24.0</span>
+          </div>
+          <p>リモートチーム向けリアルタイムコラボレーションツール。リッチテキストエディタ、ファイル共有、タスク管理機能搭載</p>
+          <div class="product-item-footer">
+            <a href="webapp/lightflow.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>サブスク管理ダッシュボード</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>サブスクリプションサービスの支出を一覧管理・分析できるダッシュボードWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/subscription-management-dashboard.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>デジタル同意書マネージャー</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>フリーランス向けデジタル同意書管理ツール - AI文書生成、電子署名、GDPR/HIPAA対応</p>
+          <div class="product-item-footer">
+            <a href="webapp/consent-manager.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="comm" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F4AC;</span> コミュニケーション</h2>
+      <p class="category-count">4 件のWebアプリ</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>ファミリーミニマップ</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>家族の居場所をゆるやかに共有するPWAアプリ。地図上でリアルタイム位置共有</p>
+          <div class="product-item-footer">
+            <a href="webapp/family-mini-map.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>iMessage風メッセンジャー</h3>
+            <span class="product-item-tag">v0.2.0</span>
+          </div>
+          <p>iMessageスタイルのPWAメッセンジャーアプリ。リアルタイムチャット対応</p>
+          <div class="product-item-footer">
+            <a href="webapp/imessage-pwa-messenger.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>言いにくいこと代筆＆シミュレーター</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>言いにくいことを上手に伝えるための文章を生成し、相手の反応をシミュレーションできるWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/iinikusai-simulator.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://iinikusai-simulator.pages.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>X Twitter Lite</h3>
+            <span class="product-item-tag">v0.0.0</span>
+          </div>
+          <p>軽量版Xクライアント - PWA対応のTwitter/X軽量Webアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/x-twitter-lite.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://x-twitter-lite.sayasaya.workers.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="lifestyle" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F3E0;</span> ライフスタイル</h2>
+      <p class="category-count">10 件のWebアプリ</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>AI愚痴聞きシュレッダー</h3>
+            <span class="product-item-tag">v0.2.0</span>
+          </div>
+          <p>AI愚痴聞きシュレッダー - ストレスをぶつけてスッキリ！シュレッダーで粉砕するエンタメアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/ai-complaint-shredder.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>ARメニュー可視化</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>レストランのメニューをカメラで撮影し、料理の画像をAR表示するWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/ar-menu-visualization.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>今日の運勢＆ラッキーアイテム</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>毎日の運勢とラッキーアイテムを占うWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/fortune-and-lucky-item.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>ゴミ分別検出器</h3>
+            <span class="product-item-tag">v0.2.1</span>
+          </div>
+          <p>ゴミの画像を撮影してAIが分別方法を判定・通知するWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/gomi-detector.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>レシート家計簿</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>スマホでレシートを撮影するだけで、AIが自動で家計簿に登録するLINE Bot連携Webアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/receipt-line-bot.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://receipt-scanner-977.pages.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>メニュー可視化カメラ</h3>
+            <span class="product-item-tag">v0.2.0</span>
+          </div>
+          <p>レストランのメニューをカメラで撮影し、料理の画像を生成・表示するWebアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/menu-visualization-camera.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>RPGスキルツリーメーカー</h3>
+            <span class="product-item-tag">v1.0.0</span>
+          </div>
+          <p>RPGゲーム風のスキルツリーを自由に作成・可視化できるWebアプリ。AIによるスキル提案機能付き</p>
+          <div class="product-item-footer">
+            <a href="webapp/rpg-skill-tree-maker.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>スマート・プリント・マネージャー</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>スマート・プリント・マネージャー - 学校プリント管理PWA。お便りや配布物をスマホで管理</p>
+          <div class="product-item-footer">
+            <a href="webapp/smart-print-manager.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>ギフト選びの神</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>AIが最適なギフトを提案してくれるプレゼント選び支援Webアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/gift-selection-god.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>旅行パッキング予報士</h3>
+            <span class="product-item-tag">v2.2.0</span>
+          </div>
+          <p>天気予報×文化情報×AIで「忘れがちな物」まで完全カバーするパッキングリスト作成アプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/travel-packing-forecaster.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://travel-packing-forecaster.pages.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            <a href="https://github.com/sayasaya8039/Travel_Packing_Forecaster" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="utility" class="category-section">
+      <h2 class="category-title"><span class="emoji">&#x1F527;</span> ユーティリティ</h2>
+      <p class="category-count">3 件のWebアプリ</p>
+      <div class="product-list">
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>メール・SMS詐欺判定機</h3>
+            <span class="product-item-tag">v0.1.2</span>
+          </div>
+          <p>メールやSMSの内容をAIで分析し、フィッシング詐欺かどうかを判定するWebアプリ。OCR画像読み取り対応</p>
+          <div class="product-item-footer">
+            <a href="webapp/mailsms-fraud-detection.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://mailsms-fraud-detection.pages.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>割り勘の神様</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>AIを活用した賢い割り勘計算Webアプリ。柔軟な割合設定とドラッグ&amp;ドロップ対応</p>
+          <div class="product-item-footer">
+            <a href="webapp/warikan-no-kamisama.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <a href="https://warikan-no-kamisama.sayasaya.workers.dev" class="demo-link" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Demo</a>
+            <a href="https://github.com/sayasaya8039/the-god-of-splitting-the-bill" class="gh-link" target="_blank" rel="noopener" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-item-header">
+            <h3>WiFi Pass Snap</h3>
+            <span class="product-item-tag">v0.1.0</span>
+          </div>
+          <p>Wi-Fiパスワードをカメラでスキャンして簡単に共有するPWAアプリ</p>
+          <div class="product-item-footer">
+            <a href="webapp/wifi-pass-snap.html" class="detail-link">詳細を見る <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            <div style="display:flex;align-items:center;gap:8px;">
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
     &copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.
   </footer>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

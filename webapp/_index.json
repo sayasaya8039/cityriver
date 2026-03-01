@@ -1,0 +1,343 @@
+[
+  {
+    "dir": "AI_Complaint_Shredder",
+    "slug": "ai-complaint-shredder",
+    "name": "AI愚痴聞きシュレッダー",
+    "desc": "AI愚痴聞きシュレッダー - ストレスをぶつけてスッキリ！シュレッダーで粉砕するエンタメアプリ",
+    "ver": "0.2.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "React, Vite, Tailwind CSS, Framer Motion, TypeScript"
+  },
+  {
+    "dir": "AI_mock_interview",
+    "slug": "kabedachi-dojo",
+    "name": "壁打ち道場",
+    "desc": "AIが面接官になって壁打ち練習できる模擬面接Webアプリ",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "ビジネス",
+    "tech": "Next.js, React, Tailwind CSS, Gemini AI, Cloudflare Pages, TypeScript"
+  },
+  {
+    "dir": "AI_Picture_Book_Maker",
+    "slug": "ai-ehon-maker",
+    "name": "AI絵本メーカー",
+    "desc": "AIを使ってオリジナル絵本を自動生成するWebアプリ。Gemini AIとReplicate連携でストーリーとイラストを生成し、PDF出力可能",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "AI系",
+    "tech": "Next.js, React, Tailwind CSS, Gemini AI, Replicate, jsPDF, TypeScript"
+  },
+  {
+    "dir": "AI_prompt_management_tool",
+    "slug": "prompt-manager",
+    "name": "AIプロンプト管理ツール",
+    "desc": "AIプロンプトを効率的に管理・共有・販売できるWebアプリケーション",
+    "ver": "0.0.0",
+    "github": null,
+    "url": "https://prompt-manager-bce.pages.dev",
+    "category": "AI系",
+    "tech": "React, Vite, TanStack Router, Zustand, Dexie (IndexedDB), Tailwind CSS, Biome, TypeScript"
+  },
+  {
+    "dir": "ai-website-builder",
+    "slug": "ai-website-builder",
+    "name": "AI Website Builder",
+    "desc": "AI-powered website builder like Readdy.ai - Honoベースのバックエンド",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AI系",
+    "tech": "Hono, Cloudflare Workers, TypeScript"
+  },
+  {
+    "dir": "AR_menu_visualization",
+    "slug": "ar-menu-visualization",
+    "name": "ARメニュー可視化",
+    "desc": "レストランのメニューをカメラで撮影し、料理の画像をAR表示するWebアプリ",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "Next.js, React, Tesseract.js (OCR), Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "Automatic_remastering_of_old_illustrations",
+    "slug": "illust-remaster",
+    "name": "イラスト自動リマスター",
+    "desc": "古いイラストを自動でリマスターするWebアプリ。低解像度の画像を高解像度にアップスケールし、現代風のスタイルに自動変換",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "AI系",
+    "tech": "React, Vite, Hono, Cloudflare Workers, Tailwind CSS, Bun (monorepo), TypeScript"
+  },
+  {
+    "dir": "Average_calories_of_Product_name",
+    "slug": "calorie-checker",
+    "name": "カロリーチェッカー",
+    "desc": "品名を入力してカロリーを検索するWebアプリ・Chrome拡張機能",
+    "ver": "1.2.0",
+    "github": "https://github.com/sayasaya8039/calorie-checker",
+    "url": "https://calorie-checker.pages.dev/",
+    "category": "ヘルスケア",
+    "tech": "React, Vite, TypeScript"
+  },
+  {
+    "dir": "Easy_Invoice_Generator",
+    "slug": "easy-invoice-generator",
+    "name": "かんたん請求書メーカー",
+    "desc": "フリーランス向け請求書生成Webアプリ - 多通貨対応・税自動計算・PDF出力",
+    "ver": "1.7.0",
+    "github": null,
+    "url": "https://easy-invoice-gen.pages.dev",
+    "category": "ビジネス",
+    "tech": "React, Vite, Zustand, PDFMake, Clerk Auth, DnD Kit, Tailwind CSS, Cloudflare Pages, TypeScript"
+  },
+  {
+    "dir": "Family_Mini_Map",
+    "slug": "family-mini-map",
+    "name": "ファミリーミニマップ",
+    "desc": "家族の居場所をゆるやかに共有するPWAアプリ。地図上でリアルタイム位置共有",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "コミュニケーション",
+    "tech": "Next.js, React, Supabase, Leaflet, Tailwind CSS, Cloudflare Pages, TypeScript"
+  },
+  {
+    "dir": "Fortune_and_lucky_item",
+    "slug": "fortune-and-lucky-item",
+    "name": "今日の運勢＆ラッキーアイテム",
+    "desc": "毎日の運勢とラッキーアイテムを占うWebアプリ",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "SvelteKit, Svelte 5, Hono, Tailwind CSS, Cloudflare Workers, TypeScript"
+  },
+  {
+    "dir": "Garbage_disposal_detector_notification",
+    "slug": "gomi-detector",
+    "name": "ゴミ分別検出器",
+    "desc": "ゴミの画像を撮影してAIが分別方法を判定・通知するWebアプリ",
+    "ver": "0.2.1",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "SvelteKit, Svelte 5, Gemini AI, Biome, TypeScript"
+  },
+  {
+    "dir": "Health_certificate_translation_improvement_advisor",
+    "slug": "health-certificate-translator",
+    "name": "健康診断書翻訳・改善アドバイザー",
+    "desc": "健康診断書を多言語翻訳し、AIが健康改善アドバイスを提供するWebアプリ。AssemblyScript(WASM)高速処理対応",
+    "ver": "0.1.1",
+    "github": null,
+    "category": "ヘルスケア",
+    "tech": "React, Vite, Zustand, Gemini AI, AssemblyScript (WASM), Cloudflare Pages, TypeScript"
+  },
+  {
+    "dir": "Household_Accounts_Expenses_Input",
+    "slug": "receipt-line-bot",
+    "name": "レシート家計簿",
+    "desc": "スマホでレシートを撮影するだけで、AIが自動で家計簿に登録するLINE Bot連携Webアプリ",
+    "ver": "1.0.0",
+    "github": null,
+    "url": "https://receipt-scanner-977.pages.dev",
+    "category": "ライフスタイル",
+    "tech": "Hono, Cloudflare Workers, D1 Database, Biome, TypeScript"
+  },
+  {
+    "dir": "iMessage_style_PWA_messenger",
+    "slug": "imessage-pwa-messenger",
+    "name": "iMessage風メッセンジャー",
+    "desc": "iMessageスタイルのPWAメッセンジャーアプリ。リアルタイムチャット対応",
+    "ver": "0.2.0",
+    "github": null,
+    "category": "コミュニケーション",
+    "tech": "Next.js, React, Supabase, Serwist (Service Worker), Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "Interview_wall_hitting",
+    "slug": "iinikusai-simulator",
+    "name": "言いにくいこと代筆＆シミュレーター",
+    "desc": "言いにくいことを上手に伝えるための文章を生成し、相手の反応をシミュレーションできるWebアプリ",
+    "ver": "0.1.0",
+    "github": null,
+    "url": "https://iinikusai-simulator.pages.dev",
+    "category": "コミュニケーション",
+    "tech": "React, Vite, Hono, Gemini AI, Cloudflare Workers, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "MailSMS_fraud_detection_machine",
+    "slug": "mailsms-fraud-detection",
+    "name": "メール・SMS詐欺判定機",
+    "desc": "メールやSMSの内容をAIで分析し、フィッシング詐欺かどうかを判定するWebアプリ。OCR画像読み取り対応",
+    "ver": "0.1.2",
+    "github": null,
+    "url": "https://mailsms-fraud-detection.pages.dev",
+    "category": "ユーティリティ",
+    "tech": "Next.js, React, Tesseract.js (OCR), next-pwa, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "Mental_Health_Journal",
+    "slug": "kokoro-no-nikki",
+    "name": "こころの日記",
+    "desc": "こころの日記：気分ログ・AIアドバイス・緊急連絡機能。メンタルヘルスケアWebアプリ",
+    "ver": "1.4.0",
+    "github": null,
+    "category": "ヘルスケア",
+    "tech": "Hono, Cloudflare Workers, Firebase, Gemini AI, Dexie (IndexedDB), Zod, TypeScript"
+  },
+  {
+    "dir": "Menu_Visualization_Camera",
+    "slug": "menu-visualization-camera",
+    "name": "メニュー可視化カメラ",
+    "desc": "レストランのメニューをカメラで撮影し、料理の画像を生成・表示するWebアプリ",
+    "ver": "0.2.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "Hono, Cloudflare Workers, TypeScript"
+  },
+  {
+    "dir": "Qwen-Image-Edit-2511",
+    "slug": "qwen-image-edit",
+    "name": "Qwen画像エディター",
+    "desc": "Qwen AIモデルを活用した高機能画像編集Webアプリ。Gradio/HuggingFace連携、WASM高速処理対応",
+    "ver": "2.4.2",
+    "github": "https://github.com/sayasaya8039/Qwen-Image-Edit",
+    "url": "https://qwen-image-edit.sayasaya.workers.dev",
+    "category": "AI系",
+    "tech": "React, Vite, Hono, HuggingFace Inference, ONNX Runtime, AssemblyScript (WASM), Tailwind CSS, Bun, TypeScript"
+  },
+  {
+    "dir": "Recipe_Nutrition_Calculator",
+    "slug": "recipe-nutrition-calculator",
+    "name": "レシピ栄養計算ツール",
+    "desc": "材料入力でカロリー・栄養素を自動計算し、ダイエットプランを生成するWebアプリ",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ヘルスケア",
+    "tech": "React, Vite, React Router, Recharts, Zustand, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "Remote_team_collaboration_tools",
+    "slug": "lightflow",
+    "name": "LightFlow",
+    "desc": "リモートチーム向けリアルタイムコラボレーションツール。リッチテキストエディタ、ファイル共有、タスク管理機能搭載",
+    "ver": "1.24.0",
+    "github": null,
+    "category": "ビジネス",
+    "tech": "Next.js, React, Firebase, Yjs (CRDT), TipTap Editor, DnD Kit, Zustand, Tailwind CSS, Bun, TypeScript"
+  },
+  {
+    "dir": "RPG_Skill_Tree_Maker",
+    "slug": "rpg-skill-tree-maker",
+    "name": "RPGスキルツリーメーカー",
+    "desc": "RPGゲーム風のスキルツリーを自由に作成・可視化できるWebアプリ。AIによるスキル提案機能付き",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "React, Vite, XYFlow (React Flow), Dagre, Gemini AI, Zustand, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "Smart_Print_Manager",
+    "slug": "smart-print-manager",
+    "name": "スマート・プリント・マネージャー",
+    "desc": "スマート・プリント・マネージャー - 学校プリント管理PWA。お便りや配布物をスマホで管理",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "React, Vite, TanStack Query, React Router, Dexie (IndexedDB), Tailwind CSS, Biome, PWA, TypeScript"
+  },
+  {
+    "dir": "Subscription_Management_Dashboard",
+    "slug": "subscription-management-dashboard",
+    "name": "サブスク管理ダッシュボード",
+    "desc": "サブスクリプションサービスの支出を一覧管理・分析できるダッシュボードWebアプリ",
+    "ver": "1.0.0",
+    "github": null,
+    "category": "ビジネス",
+    "tech": "React, Vite, Tailwind CSS, Biome, Cloudflare Pages, TypeScript"
+  },
+  {
+    "dir": "The_God_of_Gift_Selection",
+    "slug": "gift-selection-god",
+    "name": "ギフト選びの神",
+    "desc": "AIが最適なギフトを提案してくれるプレゼント選び支援Webアプリ",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "ライフスタイル",
+    "tech": "React, Vite, Gemini AI, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "The_God_of_Splitting_the_Bill",
+    "slug": "warikan-no-kamisama",
+    "name": "割り勘の神様",
+    "desc": "AIを活用した賢い割り勘計算Webアプリ。柔軟な割合設定とドラッグ&ドロップ対応",
+    "ver": "0.1.0",
+    "github": "https://github.com/sayasaya8039/the-god-of-splitting-the-bill",
+    "url": "https://warikan-no-kamisama.sayasaya.workers.dev",
+    "category": "ユーティリティ",
+    "tech": "SvelteKit, Svelte 5, Hono, Gemini AI, Cloudflare Workers, Tailwind CSS, Biome, TypeScript"
+  },
+  {
+    "dir": "Travel_Packing_Forecaster",
+    "slug": "travel-packing-forecaster",
+    "name": "旅行パッキング予報士",
+    "desc": "天気予報×文化情報×AIで「忘れがちな物」まで完全カバーするパッキングリスト作成アプリ",
+    "ver": "2.2.0",
+    "github": "https://github.com/sayasaya8039/Travel_Packing_Forecaster",
+    "url": "https://travel-packing-forecaster.pages.dev",
+    "category": "ライフスタイル",
+    "tech": "React, Vite, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "Veterinary_site_automatic_symptom_summary",
+    "slug": "vet-symptom-summarizer",
+    "name": "ペット症状まとめ",
+    "desc": "ペットの症状キーワードから獣医情報サイトを検索し、AIで要約してPDFで保存できるWebアプリ",
+    "ver": "1.0.0",
+    "github": null,
+    "url": "https://vet-symptom-frontend.pages.dev",
+    "category": "ヘルスケア",
+    "tech": "React, Vite, Hono, Cloudflare Workers, OpenAI/Gemini/Claude, html2pdf.js, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "Web_readdy_ai",
+    "slug": "web-readdy-ai",
+    "name": "Readdy AI Clone",
+    "desc": "テキスト・画像・URLから瞬時にReact/Next.jsアプリケーションを生成する次世代AIウェブビルダー",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "AI系",
+    "tech": "Next.js, React, Supabase, OpenAI GPT-4o, JSZip, Tailwind CSS, TypeScript"
+  },
+  {
+    "dir": "WiFi_Pass_Snap",
+    "slug": "wifi-pass-snap",
+    "name": "WiFi Pass Snap",
+    "desc": "Wi-Fiパスワードをカメラでスキャンして簡単に共有するPWAアプリ",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "ユーティリティ",
+    "tech": "React, Vite, Tesseract.js (OCR), Tailwind CSS, PWA, TypeScript"
+  },
+  {
+    "dir": "X_Twitter_Lite",
+    "slug": "x-twitter-lite",
+    "name": "X Twitter Lite",
+    "desc": "軽量版Xクライアント - PWA対応のTwitter/X軽量Webアプリ",
+    "ver": "0.0.0",
+    "github": null,
+    "url": "https://x-twitter-lite.sayasaya.workers.dev",
+    "category": "コミュニケーション",
+    "tech": "React, Vite, Hono, Cloudflare Workers, WASM, Tailwind CSS, PWA, TypeScript"
+  },
+  {
+    "dir": "フリーランス向けデジタル同意書マネージャー",
+    "slug": "consent-manager",
+    "name": "デジタル同意書マネージャー",
+    "desc": "フリーランス向けデジタル同意書管理ツール - AI文書生成、電子署名、GDPR/HIPAA対応",
+    "ver": "0.1.0",
+    "github": null,
+    "category": "ビジネス",
+    "tech": "React, Vite, Hono, Cloudflare Pages, Anthropic Claude/OpenAI/Gemini AI, i18next, jsPDF, signature_pad, Tailwind CSS, TypeScript"
+  }
+]
