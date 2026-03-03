@@ -223,9 +223,20 @@ products.get('/winapp/:slug', (c) => {
   if (!item) return c.notFound()
   let content = renderDetailPage(item, '/windows-apps', 'Winアプリ一覧', 'Windowsアプリケーション')
   if (slug === 'smux') {
+    const smuxScreenshots = `
+      <div style="margin-top:24px"><a href="/winapp/smux-reference.html" class="btn bp" style="display:inline-flex;align-items:center;gap:6px">&#x1F4CB; 設定 &amp; コマンド一覧</a></div>
+      <h2>スクリーンショット</h2>
+      <div style="margin-bottom:32px">
+        <img src="/winapp/images/smux-claude-code.png" alt="smux で Claude Code を実行中" style="width:100%;border-radius:12px;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.08)" loading="lazy">
+        <p style="margin-top:14px;font-size:15px;color:var(--ts);line-height:1.7"><strong style="color:var(--tp)">Claude Code teammate-mode との連携。</strong>左側サイドバーにワークスペース名・Gitブランチ・作業ディレクトリを表示。tmux互換CLIにより <code>claude --teammate-mode tmux</code> でAIエージェントとのシームレスな協調作業が可能。</p>
+      </div>
+      <div style="margin-bottom:32px">
+        <img src="/winapp/images/smux-split-panes.png" alt="4分割ペインで並列 AI コーディング" style="width:100%;border-radius:12px;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.08)" loading="lazy">
+        <p style="margin-top:14px;font-size:15px;color:var(--ts);line-height:1.7"><strong style="color:var(--tp)">4分割ペインによる並列AIコーディング。</strong>Ctrl+D / Ctrl+Shift+D でペインを自由に分割し、各ペインで独立したClaude Codeセッションを同時実行。GPU加速描画により4ペイン同時でも滑らかな操作感を維持。</p>
+      </div>`
     content = content.replace(
       '</ul>',
-      '</ul><div style="margin-top:24px"><a href="/winapp/smux-reference.html" class="btn bp" style="display:inline-flex;align-items:center;gap:6px">📋 設定 &amp; コマンド一覧</a></div>'
+      `</ul>${smuxScreenshots}`
     )
   }
   return c.html(layout(content, item.name, item.desc))

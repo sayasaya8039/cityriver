@@ -104,6 +104,25 @@
       border-color: var(--accent); background: var(--accent-light);
     }
 
+    .screenshots { margin-top: 56px; }
+    .screenshots h2 {
+      font-size: 24px; font-weight: 700;
+      letter-spacing: -0.01em; margin-bottom: 24px;
+    }
+    .screenshot-block { margin-bottom: 32px; }
+    .screenshot-block img {
+      width: 100%; border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
+    }
+    .screenshot-block img:hover { transform: scale(1.01); }
+    .screenshot-caption {
+      margin-top: 14px; font-size: 15px;
+      color: var(--text-secondary); line-height: 1.7;
+    }
+    .screenshot-caption strong { color: var(--text-primary); }
+
     .features { margin-top: 56px; }
     .features h2, .shortcuts h2, .tech-section h2, .install h2 {
       font-size: 24px; font-weight: 700;
@@ -284,6 +303,28 @@
         </a>
       </div>
     </div>
+
+    <section class="screenshots">
+      <h2>スクリーンショット</h2>
+      <div class="screenshot-block">
+        <img src="images/smux-claude-code.png" alt="smux で Claude Code を実行中の画面" loading="lazy" />
+        <div class="screenshot-caption">
+          <strong>Claude Code teammate-mode との連携。</strong>
+          左側のサイドバーにはワークスペース名・Gitブランチ・作業ディレクトリが表示され、ターミナルペイン内で Claude Code が動作しています。
+          背景画像のカスタマイズ、Fluent Design のダークテーマ、ステータスバーのポート表示など、開発に必要な情報を一画面に集約。
+          smux は tmux 互換 CLI を備えており、<code>claude --teammate-mode tmux</code> でシームレスに AI エージェントと協調作業が可能です。
+        </div>
+      </div>
+      <div class="screenshot-block">
+        <img src="images/smux-split-panes.png" alt="smux の4分割ペインで複数の Claude Code を並列実行" loading="lazy" />
+        <div class="screenshot-caption">
+          <strong>4分割ペインによる並列 AI コーディング。</strong>
+          Ctrl+D / Ctrl+Shift+D でペインを自由に分割し、各ペインで独立した Claude Code セッションを同時実行。
+          それぞれが異なるファイル（view.rs、browser_panel.rs など）の編集タスクを並行処理しています。
+          各ペインのタブにはターミナル名が表示され、素早い切り替えが可能。GPU 加速描画により、4ペイン同時表示でも滑らかな操作感を維持します。
+        </div>
+      </div>
+    </section>
 
     <section class="features">
       <h2>主な機能</h2>
