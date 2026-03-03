@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>smux 設定 &amp; コマンド一覧 &#8212; GPU加速ターミナルマルチプレクサー | 合同会社シティーリバー</title>
+  <meta name="description" content="smux の全設定項目、キーボードショートカット、CLIコマンドのリファレンスページ。" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="icon" href="../favicon.ico" />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+    :root{--bg-primary:#0d1117;--bg-secondary:#161b22;--bg-tertiary:#1c2129;--bg-card:#21262d;--text-primary:#e6edf3;--text-secondary:#8b949e;--text-muted:#484f58;--accent:#f59e0b;--accent-dim:rgba(245,158,11,.15);--green:#a6e3a1;--green-dim:rgba(166,227,161,.1);--blue:#89b4fa;--pink:#f5c2e7;--red:#f38ba8;--peach:#fab387;--teal:#94e2d5;--border:rgba(240,246,252,.1);--border-bright:rgba(240,246,252,.2)}
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+    body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans",sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.7;min-height:100vh}
+    code,.mono{font-family:"JetBrains Mono","Cascadia Code","Fira Code",monospace}
+    header{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.85);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border)}
+    .nav{max-width:1200px;margin:0 auto;padding:16px 40px;display:flex;justify-content:space-between;align-items:center}
+    .logo-text{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600;color:var(--text-primary);text-decoration:none}
+    .logo-img{height:36px;width:auto}
+    .nav-link{color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:14px;transition:color .3s}
+    .nav-link:hover{color:var(--accent)}
+    .page-layout{display:flex;max-width:1200px;margin:0 auto;min-height:calc(100vh - 69px)}
+    .toc{position:sticky;top:69px;width:240px;min-width:240px;height:calc(100vh - 69px);overflow-y:auto;padding:32px 0 32px 40px;border-right:1px solid var(--border)}
+    .toc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:16px}
+    .toc a{display:block;padding:5px 12px;margin-bottom:2px;font-size:13px;color:var(--text-secondary);text-decoration:none;border-radius:6px;border-left:2px solid transparent;transition:all .2s}
+    .toc a:hover{color:var(--accent);background:var(--accent-dim);border-left-color:var(--accent)}
+    .toc .toc-group{margin-top:16px;margin-bottom:4px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);padding-left:12px}
+    main{flex:1;padding:40px 48px 100px;max-width:900px}
+    .breadcrumb{font-size:13px;color:var(--text-muted);margin-bottom:32px}
+    .breadcrumb a{color:var(--accent);text-decoration:none}
+    .breadcrumb a:hover{text-decoration:underline}
+    .hero{margin-bottom:48px}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-dim);color:var(--accent);padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+    .hero h1{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
+    .hero h1 .version{font-size:.5em;color:var(--accent);font-weight:600;vertical-align:middle;margin-left:8px}
+    .hero-sub{font-size:15px;color:var(--text-secondary);max-width:650px}
+    .term-card{background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:32px}
+    .term-titlebar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-tertiary);border-bottom:1px solid var(--border)}
+    .term-dot{width:10px;height:10px;border-radius:50%}.term-dot.r{background:#f38ba8}.term-dot.y{background:#f9e2af}.term-dot.g{background:#a6e3a1}
+    .term-title{font-size:12px;font-weight:600;color:var(--text-secondary);margin-left:8px;font-family:"JetBrains Mono",monospace}
+    .term-body{padding:20px 24px}
+    section{margin-bottom:48px}.section-anchor{scroll-margin-top:90px}
+    h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .config-path{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+    .path-item{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;flex:1;min-width:200px}
+    .path-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+    .path-num.p1{background:var(--accent-dim);color:var(--accent)}.path-num.p2{background:var(--green-dim);color:var(--green)}.path-num.p3{background:rgba(137,180,250,.1);color:var(--blue)}
+    .path-text{font-size:13px}.path-text code{color:var(--green);font-size:12px}.path-text .label{color:var(--text-secondary);font-size:11px;display:block}
+    table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.5}
+    thead th{text-align:left;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);border-bottom:1px solid var(--border-bright);background:var(--bg-tertiary)}
+    tbody td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+    tbody tr:hover{background:rgba(245,158,11,.03)}
+    td code{background:var(--bg-card);color:var(--green);padding:2px 7px;border-radius:4px;font-size:12px;border:1px solid var(--border)}
+    td .type{color:var(--blue);font-size:11px;font-weight:500}
+    td .default{color:var(--peach);font-size:12px;font-family:"JetBrains Mono",monospace}
+    .shortcut-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+    .shortcut-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;transition:all .2s}
+    .shortcut-item:hover{border-color:var(--accent);background:rgba(245,158,11,.03)}
+    .shortcut-label{font-size:13px;color:var(--text-secondary)}
+    kbd{display:inline-flex;align-items:center;gap:3px;background:var(--bg-card);border:1px solid var(--border-bright);border-bottom:2px solid var(--border-bright);border-radius:5px;padding:3px 8px;font-size:11px;font-weight:600;font-family:"JetBrains Mono",monospace;color:var(--text-primary);box-shadow:0 1px 2px rgba(0,0,0,.3);min-width:24px;text-align:center}
+    .cli-grid{display:flex;flex-direction:column;gap:6px}
+    .cli-row{display:grid;grid-template-columns:240px 1fr;gap:12px;padding:10px 14px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;align-items:baseline;transition:all .2s}
+    .cli-row:hover{border-color:var(--accent)}
+    .cli-cmd{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:600}
+    .cli-cmd .prompt{color:var(--accent);margin-right:4px}
+    .cli-cmd .cmd-name{color:var(--green)}
+    .cli-desc{font-size:13px;color:var(--text-secondary)}
+    .code-block{background:var(--bg-tertiary);border:1px solid var(--border);border-radius:10px;padding:20px 24px;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text-primary)}
+    .code-block .comment{color:#6c7086}.code-block .key{color:var(--blue)}.code-block .string{color:var(--green)}.code-block .number{color:var(--peach)}.code-block .bool{color:var(--pink)}
+    .back-link{display:inline-flex;align-items:center;gap:6px;margin-top:48px;padding-top:24px;border-top:1px solid var(--border);color:var(--accent);text-decoration:none;font-weight:600;font-size:14px}
+    .back-link:hover{text-decoration:underline}
+    footer{padding:40px;text-align:center;color:var(--text-muted);font-size:13px;border-top:1px solid var(--border)}
+    @media(max-width:900px){.toc{display:none}main{padding:32px 24px 80px}.hero h1{font-size:1.8rem}.shortcut-grid{grid-template-columns:1fr}.cli-row{grid-template-columns:1fr}.config-path{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header><nav class="nav"><a href="../index.html" class="logo-text"><img src="../Logo.png" alt="CityRiver LLC" class="logo-img">合同会社シティーリバー</a><a href="../index.html#contact" class="nav-link">Contact</a></nav></header>
+
+  <div class="page-layout">
+    <aside class="toc">
+      <div class="toc-title">目次</div>
+      <a href="#config-file">設定ファイル</a>
+      <a href="#config-colors">カラー設定</a>
+      <a href="#config-font">フォント設定</a>
+      <a href="#config-general">一般設定</a>
+      <a href="#config-background">背景画像</a>
+      <a href="#config-keybindings">カスタムキーバインド</a>
+      <div class="toc-group">ショートカット</div>
+      <a href="#keys-workspace">ワークスペース</a>
+      <a href="#keys-pane">ペイン</a>
+      <a href="#keys-tab">タブ</a>
+      <a href="#keys-view">表示</a>
+      <a href="#keys-browser">ブラウザ</a>
+      <a href="#keys-other">その他</a>
+      <div class="toc-group">CLIコマンド</div>
+      <a href="#cli-pane">ペイン操作</a>
+      <a href="#cli-workspace">ワークスペース</a>
+      <a href="#cli-tab">タブ操作</a>
+      <a href="#cli-browser">ブラウザ</a>
+      <a href="#cli-session">セッション</a>
+      <a href="#cli-notify">通知</a>
+      <a href="#cli-config">設定管理</a>
+      <a href="#cli-tmux">tmux互換</a>
+      <div class="toc-group">その他</div>
+      <a href="#config-example">設定例</a>
+    </aside>
+
+    <main>
+      <div class="breadcrumb"><a href="../index.html">ホーム</a> / <a href="../windows-apps.html">Windowsアプリ</a> / <a href="smux.html">smux</a> / 設定 &amp; コマンド一覧</div>
+
+      <div class="hero">
+        <div class="hero-badge">リファレンス</div>
+        <h1>smux<span class="version">v0.8.4</span></h1>
+        <p class="hero-sub">設定項目、キーボードショートカット、CLIコマンドの完全リファレンス。</p>
+      </div>
+
+      <!-- 設定ファイル -->
+      <section>
+        <h2 id="config-file" class="section-anchor">&#x2699;&#xFE0F; 設定ファイル</h2>
+        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;">設定は以下の優先順位で読み込まれます。</p>
+        <div class="config-path">
+          <div class="path-item"><span class="path-num p1">1</span><div class="path-text"><span class="label">最優先（smux設定）</span><code>%APPDATA%\smux\config.json</code></div></div>
+          <div class="path-item"><span class="path-num p2">2</span><div class="path-text"><span class="label">フォールバック（Ghostty互換）</span><code>%APPDATA%\ghostty\config</code></div></div>
+          <div class="path-item"><span class="path-num p3">3</span><div class="path-text"><span class="label">デフォルト</span>Catppuccin Mocha テーマ</div></div>
+        </div>
+      </section>
+
+      <!-- カラー設定 -->
+      <section>
+        <h2 id="config-colors" class="section-anchor">&#x1F3A8; カラー設定</h2>
+        <div class="term-card"><div class="term-titlebar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-title">colors</span></div><div class="term-body">
+          <table><thead><tr><th>プロパティ</th><th>型</th><th>デフォルト</th><th>説明</th></tr></thead><tbody>
+            <tr><td><code>colors.background</code></td><td><span class="type">u32</span></td><td><span class="default">0x1e1e2e</span></td><td>背景色</td></tr>
+            <tr><td><code>colors.foreground</code></td><td><span class="type">u32</span></td><td><span class="default">0xcdd6f4</span></td><td>前景色（テキスト）</td></tr>
+            <tr><td><code>colors.cursor</code></td><td><span class="type">u32</span></td><td><span class="default">0xf5e0dc</span></td><td>カーソル色</td></tr>
+            <tr><td><code>colors.selection_bg</code></td><td><span class="type">u32</span></td><td><span class="default">0x585b70</span></td><td>選択範囲の背景色</td></tr>
+            <tr><td><code>colors.selection_fg</code></td><td><span class="type">u32</span></td><td><span class="default">0xcdd6f4</span></td><td>選択範囲の前景色</td></tr>
+            <tr><td><code>colors.ansi[0-15]</code></td><td><span class="type">[u32; 16]</span></td><td><span class="default">Catppuccin</span></td><td>ANSI 16色パレット</td></tr>
+          </tbody></table>
+        </div></div>
+      </section>
+
+      <!-- フォント設定 -->
+      <section>
+        <h2 id="config-font" class="section-anchor">&#x1F524; フォント設定</h2>
+        <div class="term-card"><div class="term-titlebar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-title">font</span></div><div class="term-body">
+          <table><thead><tr><th>プロパティ</th><th>型</th><th>デフォルト</th><th>説明</th></tr></thead><tbody>
+            <tr><td><code>font.family</code></td><td><span class="type">String</span></td><td><span class="default">"Cascadia Code"</span></td><td>フォントファミリー</td></tr>
+            <tr><td><code>font.size</code></td><td><span class="type">f32</span></td><td><span class="default">14.0</span></td><td>フォントサイズ（pt）</td></tr>
+            <tr><td><code>font.line_height</code></td><td><span class="type">f32</span></td><td><span class="default">1.3</span></td><td>行の高さ（倍率）</td></tr>
+            <tr><td><code>font.ligatures</code></td><td><span class="type">bool</span></td><td><span class="default">true</span></td><td>リガチャ有効</td></tr>
+          </tbody></table>
+        </div></div>
+      </section>
+
+      <!-- 一般設定 -->
+      <section>
+        <h2 id="config-general" class="section-anchor">&#x2699;&#xFE0F; 一般設定</h2>
+        <div class="term-card"><div class="term-titlebar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-title">config.json</span></div><div class="term-body">
+          <table><thead><tr><th>プロパティ</th><th>型</th><th>デフォルト</th><th>説明</th></tr></thead><tbody>
+            <tr><td><code>sidebar_visible</code></td><td><span class="type">bool</span></td><td><span class="default">true</span></td><td>サイドバー表示</td></tr>
+            <tr><td><code>sidebar_width</code></td><td><span class="type">f32</span></td><td><span class="default">240.0</span></td><td>サイドバー幅（px）</td></tr>
+            <tr><td><code>shell</code></td><td><span class="type">String</span></td><td><span class="default">"powershell.exe"</span></td><td>デフォルトシェル</td></tr>
+            <tr><td><code>scrollback_lines</code></td><td><span class="type">usize</span></td><td><span class="default">10000</span></td><td>スクロールバック行数</td></tr>
+            <tr><td><code>confirm_close_process</code></td><td><span class="type">bool</span></td><td><span class="default">true</span></td><td>プロセス実行中の閉じる確認</td></tr>
+            <tr><td><code>workspace_placement</code></td><td><span class="type">enum</span></td><td><span class="default">"End"</span></td><td>新規WS配置 (Top / AfterCurrent / End)</td></tr>
+            <tr><td><code>browser_host_mode</code></td><td><span class="type">enum</span></td><td><span class="default">"popup"</span></td><td>ブラウザモード (child / popup)</td></tr>
+          </tbody></table>
+        </div></div>
+      </section>
+
+      <!-- 背景画像 -->
+      <section>
+        <h2 id="config-background" class="section-anchor">&#x1F5BC;&#xFE0F; 背景画像</h2>
+        <div class="term-card"><div class="term-titlebar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-title">background</span></div><div class="term-body">
+          <table><thead><tr><th>プロパティ</th><th>型</th><th>デフォルト</th><th>説明</th></tr></thead><tbody>
+            <tr><td><code>background.image_path</code></td><td><span class="type">String?</span></td><td><span class="default">null</span></td><td>背景画像の絶対パス</td></tr>
+            <tr><td><code>background.image_opacity</code></td><td><span class="type">f32</span></td><td><span class="default">0.3</span></td><td>不透明度（0.0~1.0）</td></tr>
+          </tbody></table>
+        </div></div>
+      </section>
+
+      <!-- カスタムキーバインド -->
+      <section>
+        <h2 id="config-keybindings" class="section-anchor">&#x1F527; カスタムキーバインド設定</h2>
+        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;"><code>keybindings</code> でアクション名にキーストロークを割り当て。<code>null</code> で無効化。</p>
+        <div class="code-block"><span class="comment">// config.json 内</span><br><span class="key">"keybindings"</span>: {<br>&nbsp;&nbsp;<span class="key">"Quit"</span>: <span class="string">"ctrl-shift-q"</span>,<br>&nbsp;&nbsp;<span class="key">"NewTab"</span>: <span class="bool">null</span> <span class="comment">// 無効化</span><br>}</div>
+      </section>
+
+      <!-- ショートカット：ワークスペース -->
+      <section>
+        <h2 id="keys-workspace" class="section-anchor">&#x2328;&#xFE0F; ショートカット &#8212; ワークスペース</h2>
+        <div class="shortcut-grid">
+          <div class="shortcut-item"><span class="shortcut-label">新規ワークスペース</span><kbd>Ctrl+N</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">閉じる</span><kbd>Ctrl+W</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">次のワークスペース</span><kbd>Ctrl+Shift+]</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">前のワークスペース</span><kbd>Ctrl+Shift+[</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">WS 1~9へジャンプ</span><kbd>Ctrl+1</kbd>~<kbd>9</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">リネーム</span><kbd>Ctrl+Shift+R</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">ピン切替</span><kbd>Ctrl+Alt+P</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">タブカラー変更</span><kbd>Ctrl+Shift+C</kbd></div>
+        </div>
+      </section>
+
+      <!-- ショートカット：ペイン -->
+      <section>
+        <h2 id="keys-pane" class="section-anchor">&#x2328;&#xFE0F; ショートカット &#8212; ペイン</h2>
+        <div class="shortcut-grid">
+          <div class="shortcut-item"><span class="shortcut-label">右に分割</span><kbd>Ctrl+D</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">下に分割</span><kbd>Ctrl+Shift+D</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">左ペイン</span><kbd>Alt+&#x2190;</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">右ペイン</span><kbd>Alt+&#x2192;</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">上ペイン</span><kbd>Alt+&#x2191;</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">下ペイン</span><kbd>Alt+&#x2193;</kbd></div>
+        </div>
+      </section>
+
+      <!-- ショートカット：タブ -->
+      <section>
+        <h2 id="keys-tab" class="section-anchor">&#x2328;&#xFE0F; ショートカット &#8212; タブ</h2>
+        <div class="shortcut-grid">
+          <div class="shortcut-item"><span class="shortcut-label">新規タブ</span><kbd>Ctrl+T</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">次のタブ</span><kbd>Ctrl+]</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">前のタブ</span><kbd>Ctrl+[</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">タブ 1~9へ</span><kbd>Ctrl+Alt+1</kbd>~<kbd>9</kbd></div>
+        </div>
+      </section>
+
+      <!-- ショートカット：表示 -->
+      <section>
+        <h2 id="keys-view" class="section-anchor">&#x2328;&#xFE0F; ショートカット &#8212; 表示</h2>
+        <div class="shortcut-grid">
+          <div class="shortcut-item"><span class="shortcut-label">サイドバー</span><kbd>Ctrl+B</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">通知パネル</span><kbd>Ctrl+I</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">未読にジャンプ</span><kbd>Ctrl+Shift+U</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">検索</span><kbd>Ctrl+F</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">ズームイン</span><kbd>Ctrl+=</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">ズームアウト</span><kbd>Ctrl+-</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">ズームリセット</span><kbd>Ctrl+0</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">スクロールバッククリア</span><kbd>Ctrl+Shift+K</kbd></div>
+        </div>
+      </section>
+
+      <!-- ショートカット：ブラウザ -->
+      <section>
+        <h2 id="keys-browser" class="section-anchor">&#x2328;&#xFE0F; ショートカット &#8212; ブラウザ</h2>
+        <div class="shortcut-grid">
+          <div class="shortcut-item"><span class="shortcut-label">ブラウザトグル</span><kbd>Ctrl+Shift+L</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">URLバー</span><kbd>Ctrl+L</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">DevTools</span><kbd>F12</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">リロード</span><kbd>Ctrl+R</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">戻る</span><kbd>Alt+&#x2190;</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">進む</span><kbd>Alt+&#x2192;</kbd></div>
+        </div>
+      </section>
+
+      <!-- ショートカット：その他 -->
+      <section>
+        <h2 id="keys-other" class="section-anchor">&#x2328;&#xFE0F; ショートカット &#8212; その他</h2>
+        <div class="shortcut-grid">
+          <div class="shortcut-item"><span class="shortcut-label">コマンドパレット</span><kbd>Ctrl+Shift+P</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">設定</span><kbd>Ctrl+,</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">終了</span><kbd>Ctrl+Q</kbd></div>
+        </div>
+      </section>
+
+      <!-- CLI：ペイン操作 -->
+      <section>
+        <h2 id="cli-pane" class="section-anchor">&#x1F4BB; CLI &#8212; ペイン操作</h2>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">split-window -h</span></div><div class="cli-desc">右にペイン分割</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">split-window -v</span></div><div class="cli-desc">下にペイン分割</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">list-panes</span></div><div class="cli-desc">全ペイン一覧</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">select-pane -t %0</span></div><div class="cli-desc">ID指定でフォーカス</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">focus-pane left</span></div><div class="cli-desc">方向指定でフォーカス移動</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">kill-pane -t %0</span></div><div class="cli-desc">ペインを閉じる</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">capture-pane -t %0 -p</span></div><div class="cli-desc">ペイン内容をキャプチャ</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">send-keys -t %0 "ls" Enter</span></div><div class="cli-desc">キー入力を送信</div></div>
+        </div>
+      </section>
+
+      <!-- CLI：ワークスペース -->
+      <section>
+        <h2 id="cli-workspace" class="section-anchor">&#x1F4BB; CLI &#8212; ワークスペース</h2>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">workspace-new [name]</span></div><div class="cli-desc">新規作成</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">workspace-list</span></div><div class="cli-desc">一覧</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">workspace-switch 2</span></div><div class="cli-desc">切替</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">workspace-rename 0 "Dev"</span></div><div class="cli-desc">リネーム</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">workspace-close</span></div><div class="cli-desc">閉じる</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">next-workspace</span></div><div class="cli-desc">次へ</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">prev-workspace</span></div><div class="cli-desc">前へ</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">workspace-pin 3</span></div><div class="cli-desc">ピン切替</div></div>
+        </div>
+      </section>
+
+      <!-- CLI：タブ操作 -->
+      <section>
+        <h2 id="cli-tab" class="section-anchor">&#x1F4BB; CLI &#8212; タブ操作</h2>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">add-tab -t %0</span></div><div class="cli-desc">新規タブ追加</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">close-tab -t %0</span></div><div class="cli-desc">タブを閉じる</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">cycle-tab -t %0</span></div><div class="cli-desc">次のタブ</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">select-tab -t %0 2</span></div><div class="cli-desc">タブ選択</div></div>
+        </div>
+      </section>
+
+      <!-- CLI：ブラウザ -->
+      <section>
+        <h2 id="cli-browser" class="section-anchor">&#x1F4BB; CLI &#8212; ブラウザ</h2>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-toggle</span></div><div class="cli-desc">表示/非表示</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-close</span></div><div class="cli-desc">閉じる</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-navigate &lt;url&gt;</span></div><div class="cli-desc">URLへナビゲート</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-eval "js"</span></div><div class="cli-desc">JS実行</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-snapshot</span></div><div class="cli-desc">スナップショット</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-click &lt;sel&gt;</span></div><div class="cli-desc">クリック</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-fill &lt;sel&gt; "text"</span></div><div class="cli-desc">テキスト入力</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">browser-screenshot</span></div><div class="cli-desc">スクリーンショット</div></div>
+        </div>
+      </section>
+
+      <!-- CLI：セッション -->
+      <section>
+        <h2 id="cli-session" class="section-anchor">&#x1F4BB; CLI &#8212; セッション</h2>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">session-save</span></div><div class="cli-desc">セッション保存</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">session-restore</span></div><div class="cli-desc">セッション復元</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">has-session</span></div><div class="cli-desc">起動確認</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">info</span></div><div class="cli-desc">ステータス（JSON）</div></div>
+        </div>
+      </section>
+
+      <!-- CLI：通知 -->
+      <section>
+        <h2 id="cli-notify" class="section-anchor">&#x1F4BB; CLI &#8212; 通知</h2>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">notify "Title" "Body"</span></div><div class="cli-desc">通知送信</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">notification-list</span></div><div class="cli-desc">通知一覧</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">notification-read &lt;id&gt;</span></div><div class="cli-desc">既読にする</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">notification-clear</span></div><div class="cli-desc">全クリア</div></div>
+        </div>
+      </section>
+
+      <!-- CLI：設定管理 -->
+      <section>
+        <h2 id="cli-config" class="section-anchor">&#x1F4BB; CLI &#8212; 設定管理</h2>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">config-get</span></div><div class="cli-desc">全設定をJSON出力</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">config-get font.size</span></div><div class="cli-desc">値を取得</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">config-set font.size 16</span></div><div class="cli-desc">値を変更</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">config-reload</span></div><div class="cli-desc">再読み込み</div></div>
+        </div>
+      </section>
+
+      <!-- CLI：tmux互換 -->
+      <section>
+        <h2 id="cli-tmux" class="section-anchor">&#x1F4BB; CLI &#8212; tmux互換</h2>
+        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">Claude Code teammate-mode用。未実装サブコマンドもexit 0で応答。</p>
+        <div class="cli-grid">
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">new-session</span></div><div class="cli-desc">新規セッション</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">new-window</span></div><div class="cli-desc">新規ウィンドウ</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">list-windows</span></div><div class="cli-desc">ウィンドウ一覧</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">show-options</span></div><div class="cli-desc">オプション表示</div></div>
+          <div class="cli-row"><div class="cli-cmd"><span class="prompt">$</span> smux <span class="cmd-name">display-message -p</span></div><div class="cli-desc">メッセージ出力</div></div>
+        </div>
+      </section>
+
+      <!-- 設定例 -->
+      <section>
+        <h2 id="config-example" class="section-anchor">&#x1F4DD; 設定例</h2>
+        <div class="term-card"><div class="term-titlebar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-title">%APPDATA%\smux\config.json</span></div><div class="term-body">
+          <div class="code-block" style="border:none;background:transparent;padding:0;">
+{<br>
+&nbsp;&nbsp;<span class="key">"colors"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"background"</span>: <span class="string">"0x1e1e2e"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"foreground"</span>: <span class="string">"0xcdd6f4"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"cursor"</span>: <span class="string">"0xf5e0dc"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"selection_bg"</span>: <span class="string">"0x585b70"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"selection_fg"</span>: <span class="string">"0xcdd6f4"</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="key">"font"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"family"</span>: <span class="string">"Cascadia Code"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"size"</span>: <span class="number">14.0</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"line_height"</span>: <span class="number">1.3</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"ligatures"</span>: <span class="bool">true</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="key">"sidebar_visible"</span>: <span class="bool">true</span>,<br>
+&nbsp;&nbsp;<span class="key">"sidebar_width"</span>: <span class="number">240.0</span>,<br>
+&nbsp;&nbsp;<span class="key">"shell"</span>: <span class="string">"powershell.exe"</span>,<br>
+&nbsp;&nbsp;<span class="key">"scrollback_lines"</span>: <span class="number">10000</span>,<br>
+&nbsp;&nbsp;<span class="key">"confirm_close_process"</span>: <span class="bool">true</span>,<br>
+&nbsp;&nbsp;<span class="key">"workspace_placement"</span>: <span class="string">"End"</span>,<br>
+&nbsp;&nbsp;<span class="key">"browser_host_mode"</span>: <span class="string">"popup"</span>,<br>
+&nbsp;&nbsp;<span class="key">"background"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"image_path"</span>: <span class="bool">null</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"image_opacity"</span>: <span class="number">0.3</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="key">"keybindings"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"Quit"</span>: <span class="string">"ctrl-shift-q"</span><br>
+&nbsp;&nbsp;}<br>
+}
+          </div>
+        </div></div>
+      </section>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="smux.html" class="back-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> smux トップに戻る</a>
+        <a href="../windows-apps.html" class="back-link" style="border-top:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Windowsアプリ一覧</a>
+      </div>
+    </main>
+  </div>
+
+  <footer>&copy; <span id="year"></span> 合同会社シティーリバー / CityRiver LLC. All rights reserved.</footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
