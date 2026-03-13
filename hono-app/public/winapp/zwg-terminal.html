@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZWG Terminal — Modern Terminal Emulator for Windows</title>
+  <meta name="description" content="ZWG Terminal は Zig・WASM・GPUI で構築された、次世代の Windows ターミナルエミュレーター。高速・軽量・美しいターミナル体験を。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #0f1520;
+      --bg-card: #131a28;
+      --bg-glass: rgba(19, 26, 40, 0.7);
+      --accent-cyan: #00d4ff;
+      --accent-green: #00ff88;
+      --accent-purple: #7c3aed;
+      --accent-orange: #ff6b35;
+      --text-primary: #e8eaf0;
+      --text-secondary: #8892a4;
+      --text-muted: #4a5568;
+      --border: rgba(0, 212, 255, 0.15);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --glow-cyan: 0 0 40px rgba(0, 212, 255, 0.3);
+      --glow-green: 0 0 40px rgba(0, 255, 136, 0.3);
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-jp: 'Noto Sans JP', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-jp);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* Grid background */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ============ HEADER ============ */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(10, 14, 23, 0.85);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: var(--glow-cyan);
+      letter-spacing: 0.02em;
+    }
+
+    .logo-text {
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.05em;
+    }
+
+    .logo-text span {
+      color: var(--accent-cyan);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    nav a {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--accent-cyan);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+
+    nav a:hover { color: var(--accent-cyan); }
+    nav a:hover::after { transform: scaleX(1); }
+
+    .header-cta {
+      padding: 0.5rem 1.2rem;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    .header-cta:hover {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* Hamburger for mobile */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 2rem 4rem;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+    }
+
+    .hero-glow-1 {
+      background: rgba(0, 212, 255, 0.12);
+      top: -10%;
+      left: -10%;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    .hero-glow-2 {
+      background: rgba(124, 58, 237, 0.1);
+      bottom: -10%;
+      right: -10%;
+      animation: pulse 8s ease-in-out infinite reverse;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .hero-content {
+      max-width: 800px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+      animation: fadeInDown 0.6s ease both;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    .hero h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .hero h1 .accent {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+      animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    .hero-tech-stack {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease 0.5s both;
+    }
+
+    .tech-badge {
+      padding: 0.3rem 0.8rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .tech-badge.highlight {
+      border-color: rgba(0, 212, 255, 0.3);
+      color: var(--accent-cyan);
+      background: rgba(0, 212, 255, 0.06);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease 0.6s both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, var(--accent-cyan), #0099cc);
+      color: var(--bg-primary);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 0.04em;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    /* Terminal mockup */
+    .hero-terminal {
+      margin-top: 4rem;
+      position: relative;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeInUp 1s ease 0.8s both;
+    }
+
+    .terminal-window {
+      background: rgba(13, 17, 26, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(0, 212, 255, 0.1),
+        0 40px 80px rgba(0, 0, 0, 0.6),
+        0 0 60px rgba(0, 212, 255, 0.08);
+    }
+
+    .terminal-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #28c840; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    .terminal-line { display: flex; gap: 0.5rem; }
+    .terminal-prompt { color: var(--accent-green); }
+    .terminal-cmd { color: var(--text-primary); }
+    .terminal-output { color: var(--text-secondary); padding-left: 1rem; }
+    .terminal-accent { color: var(--accent-cyan); }
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--accent-cyan);
+      vertical-align: text-bottom;
+      animation: cursor-blink 1s step-end infinite;
+    }
+
+    @keyframes cursor-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ============ SECTIONS ============ */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    /* ============ FEATURES ============ */
+    .features { background: transparent; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5px;
+      margin-top: 4rem;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      padding: 2.5rem;
+      position: relative;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-card:hover {
+      background: rgba(19, 26, 40, 0.9);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover .feature-icon {
+      background: rgba(0, 212, 255, 0.15);
+      box-shadow: var(--glow-cyan);
+      transform: scale(1.05);
+    }
+
+    .feature-title {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--text-primary);
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ============ TECH SPECS ============ */
+    .tech-specs {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .specs-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+
+    .specs-list {
+      list-style: none;
+    }
+
+    .specs-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+      gap: 1rem;
+    }
+
+    .specs-item:last-child { border-bottom: none; }
+
+    .specs-key {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    .specs-val {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      text-align: right;
+    }
+
+    .code-block {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 2;
+      color: var(--text-secondary);
+    }
+
+    .code-comment { color: var(--text-muted); }
+    .code-key { color: var(--accent-green); }
+    .code-val { color: var(--accent-cyan); }
+    .code-str { color: #ff9d5c; }
+
+    /* ============ DOWNLOAD ============ */
+    .download { background: transparent; }
+
+    .download-box {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(124, 58, 237, 0.05));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+
+    .download-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .download-title {
+      font-family: var(--font-mono);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .download-desc {
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      font-size: 1rem;
+    }
+
+    .download-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .download-meta {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .meta-icon { color: var(--accent-green); }
+
+    /* Beta badge */
+    .beta-ribbon {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.9rem;
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-orange);
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ============ FOOTER ============ */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border-subtle);
+      padding: 3rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      max-width: 280px;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-bottom: 0.6rem;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--accent-cyan); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-link {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .social-link:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* ============ ANIMATIONS ============ */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+
+      .specs-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .download-box { padding: 2.5rem 1.5rem; }
+
+      .footer-top { flex-direction: column; }
+      .footer-links { gap: 2rem; }
+    }
+
+    @media (max-width: 480px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+
+    /* ============ SCROLLBAR ============ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.2);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0, 212, 255, 0.4); }
+  </style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <a href="#" class="logo">
+      <div class="logo-icon">ZWG</div>
+      <span class="logo-text">ZWG <span>Terminal</span></span>
+    </a>
+    <nav>
+      <a href="#features">機能</a>
+      <a href="#tech">技術仕様</a>
+      <a href="#download">ダウンロード</a>
+      <a href="https://note.com/alvis8039" target="_blank">ブログ</a>
+    </nav>
+    <a href="#download" class="header-cta">Beta を試す →</a>
+    <div class="hamburger" id="hamburger" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <main>
+    <section class="hero">
+      <div class="hero-glow hero-glow-1"></div>
+      <div class="hero-glow hero-glow-2"></div>
+
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          BETA TESTING NOW OPEN
+        </div>
+
+        <h1>
+          次世代の<br>
+          <span class="accent">ターミナル</span><br>
+          エミュレーター
+        </h1>
+
+        <p class="hero-subtitle">
+          ZWG Terminal は Zig・WASM・GPUI で構築された Windows 向けターミナルエミュレーター。<br>
+          驚異的な速度と美しさで、開発体験を根本から変えます。
+        </p>
+
+        <div class="hero-tech-stack">
+          <span class="tech-badge highlight">Zig</span>
+          <span class="tech-badge">+</span>
+          <span class="tech-badge highlight">WASM</span>
+          <span class="tech-badge">+</span>
+          <span class="tech-badge highlight">GPUI</span>
+          <span class="tech-badge">for Windows</span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#download" class="btn-primary">
+            ⬇ Beta ダウンロード
+          </a>
+          <a href="#features" class="btn-secondary">
+            ✦ 機能を見る
+          </a>
+        </div>
+
+        <!-- Terminal mockup -->
+        <div class="hero-terminal">
+          <div class="terminal-window">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div>
+              <div class="terminal-dot yellow"></div>
+              <div class="terminal-dot green"></div>
+              <span class="terminal-title">ZWG Terminal — ~/projects/my-app</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line">
+                <span class="terminal-prompt">❯</span>
+                <span class="terminal-cmd">zwg --version</span>
+              </div>
+              <div class="terminal-output">
+                <span class="terminal-accent">ZWG Terminal</span> v0.1.0-beta (Zig + WASM + GPUI)
+              </div>
+              <div class="terminal-line" style="margin-top:0.5rem">
+                <span class="terminal-prompt">❯</span>
+                <span class="terminal-cmd">zwg session new</span>
+              </div>
+              <div class="terminal-output">✓ New session created: <span class="terminal-accent">dev-01</span></div>
+              <div class="terminal-output">✓ GPU rendering: <span style="color:var(--accent-green)">enabled</span></div>
+              <div class="terminal-output">✓ Startup time: <span class="terminal-accent">12ms</span> 🚀</div>
+              <div class="terminal-line" style="margin-top:0.5rem">
+                <span class="terminal-prompt">❯</span>
+                <span class="terminal-cursor"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features" id="features">
+      <div class="section-inner">
+        <div class="reveal">
+          <p class="section-label">// features</p>
+          <h2 class="section-title">ZWG Terminal が選ばれる理由</h2>
+          <p class="section-desc">他のターミナルとは一線を画す、こだわりの機能群をご覧ください。</p>
+        </div>
+
+        <div class="features-grid reveal">
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">GPU レンダリング</h3>
+            <p class="feature-desc">GPUI を活用したハードウェアアクセラレーテッドな描画で、どんな負荷でも滑らかに動作します。遅延ゼロのタイピング体験を。</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🦎</div>
+            <h3 class="feature-title">Zig で書かれた堅牢なコア</h3>
+            <p class="feature-desc">Zig 言語による型安全で高性能なコアロジック。メモリ安全性と実行速度を両立した、信頼性の高いアーキテクチャです。</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3 class="feature-title">WASM プラグインシステム</h3>
+            <p class="feature-desc">WebAssembly ベースのプラグイン機構により、任意の言語で拡張機能を開発可能。サンドボックス環境で安全に動作します。</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3 class="feature-title">超高速レンダリング 600fps 維持</h3>
+            <p class="feature-desc">GPUI による GPU 直接描画で、常時 600fps を維持。大量のログ出力やリアルタイム処理でもフレームドロップなし。従来のターミナルとは次元の違う滑らかさを体感できます。</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3 class="feature-title">美しい UI / テーマ</h3>
+            <p class="feature-desc">精緻にデザインされたデフォルトテーマと、細かくカスタマイズできる設定システム。フォント・カラー・レイアウトを自由に。</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🪟</div>
+            <h3 class="feature-title">Windows ネイティブ最適化</h3>
+            <p class="feature-desc">WSL2 との完全統合、Windows Terminal プロトコルのフルサポート。Windows 開発者のために最適化されています。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TECH SPECS ============ -->
+    <section class="tech-specs" id="tech">
+      <div class="section-inner">
+        <div class="reveal">
+          <p class="section-label">// tech_specs</p>
+          <h2 class="section-title">技術仕様</h2>
+          <p class="section-desc">ZWG Terminal を支える技術スタックの詳細です。</p>
+        </div>
+
+        <div class="specs-layout reveal">
+          <ul class="specs-list">
+            <li class="specs-item">
+              <span class="specs-key">言語</span>
+              <span class="specs-val">Zig 0.13+</span>
+            </li>
+            <li class="specs-item">
+              <span class="specs-key">レンダリングエンジン</span>
+              <span class="specs-val">GPUI (GPU Accelerated)</span>
+            </li>
+            <li class="specs-item">
+              <span class="specs-key">プラグインランタイム</span>
+              <span class="specs-val">WebAssembly (WASM)</span>
+            </li>
+            <li class="specs-item">
+              <span class="specs-key">対応 OS</span>
+              <span class="specs-val">Windows 10/11 (x64)</span>
+            </li>
+            <li class="specs-item">
+              <span class="specs-key">WSL2 対応</span>
+              <span class="specs-val">✓ フル統合</span>
+            </li>
+            <li class="specs-item">
+              <span class="specs-key">起動時間</span>
+              <span class="specs-val">&lt; 20ms</span>
+            </li>
+            <li class="specs-item">
+              <span class="specs-key">ライセンス</span>
+              <span class="specs-val">MIT</span>
+            </li>
+            <li class="specs-item">
+              <span class="specs-key">現バージョン</span>
+              <span class="specs-val">v0.1.0-beta</span>
+            </li>
+          </ul>
+
+          <div class="code-block">
+            <div class="code-comment"># ZWG Terminal 設定例 (zwg.toml)</div>
+            <br>
+            <div><span class="code-key">[general]</span></div>
+            <div>&nbsp;&nbsp;<span class="code-key">theme</span> = <span class="code-str">"dark-cyber"</span></div>
+            <div>&nbsp;&nbsp;<span class="code-key">font_family</span> = <span class="code-str">"JetBrains Mono"</span></div>
+            <div>&nbsp;&nbsp;<span class="code-key">font_size</span> = <span class="code-val">14</span></div>
+            <br>
+            <div><span class="code-key">[rendering]</span></div>
+            <div>&nbsp;&nbsp;<span class="code-key">gpu_acceleration</span> = <span class="code-val">true</span></div>
+            <div>&nbsp;&nbsp;<span class="code-key">fps_limit</span> = <span class="code-val">120</span></div>
+            <br>
+            <div><span class="code-key">[wasm]</span></div>
+            <div>&nbsp;&nbsp;<span class="code-key">plugins_dir</span> = <span class="code-str">"~/.zwg/plugins"</span></div>
+            <div>&nbsp;&nbsp;<span class="code-key">sandbox</span> = <span class="code-val">true</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DOWNLOAD ============ -->
+    <section class="download" id="download">
+      <div class="section-inner">
+        <div class="download-box reveal">
+          <div class="beta-ribbon">
+            🧪 BETA 版 — ベータテスター募集中！
+          </div>
+
+          <h2 class="download-title">
+            ZWG Terminal を今すぐ体験する
+          </h2>
+          <p class="download-desc">
+            ベータ版を無料でダウンロードして、次世代のターミナル体験をお試しください。<br>
+            フィードバックは GitHub または note のコメントでお待ちしています！🙏
+          </p>
+
+          <div class="download-actions">
+            <a href="https://github.com/sayasaya8039/ZWG_Terminal/releases/download/v1.0.1/ZWG_Terminal_Setup.exe" class="btn-primary">
+              ⬇ Beta ダウンロード (v1.0.1)
+            </a>
+            <a href="https://note.com/alvis8039" target="_blank" class="btn-secondary">
+              📖 使い方を読む
+            </a>
+          </div>
+
+          <div class="download-meta">
+            <div class="meta-item">
+              <span class="meta-icon">✓</span>
+              Windows 10/11 対応
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon">✓</span>
+              完全無料
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon">✓</span>
+              MIT ライセンス
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon">✓</span>
+              オープンソース
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <div class="logo-icon">ZWG</div>
+            <span class="logo-text">ZWG <span>Terminal</span></span>
+          </a>
+          <p>Zig · WASM · GPUI で作られた、<br>Windows 向け次世代ターミナルエミュレーター。</p>
+        </div>
+
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>プロダクト</h4>
+            <a href="#features">機能一覧</a>
+            <a href="#tech">技術仕様</a>
+            <a href="#download">ダウンロード</a>
+            <a href="#">更新履歴</a>
+          </div>
+          <div class="footer-col">
+            <h4>リソース</h4>
+            <a href="https://note.com/alvis8039" target="_blank">note ブログ</a>
+            <a href="https://github.com/sayasaya11" target="_blank">GitHub</a>
+            <a href="#">ドキュメント</a>
+            <a href="#">プラグイン開発</a>
+          </div>
+          <div class="footer-col">
+            <h4>CityRiver LLC</h4>
+            <a href="https://note.com/alvis8039" target="_blank">開発者ブログ</a>
+            <a href="#">サポートメンバー</a>
+            <a href="#">お問い合わせ</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2025 CityRiver LLC. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="https://github.com/sayasaya11" target="_blank" class="social-link" title="GitHub">GH</a>
+          <a href="https://note.com/alvis8039" target="_blank" class="social-link" title="note">NT</a>
+          <a href="https://twitter.com" target="_blank" class="social-link" title="X">𝕏</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Header scroll effect
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.style.padding = '0.6rem 2rem';
+      } else {
+        header.style.padding = '1rem 2rem';
+      }
+    });
+
+    // Hamburger (mobile nav toggle)
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.querySelector('nav');
+    let navOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      navOpen = !navOpen;
+      if (navOpen) {
+        nav.style.cssText = `
+          display: flex;
+          flex-direction: column;
+          position: fixed;
+          top: 64px;
+          left: 0;
+          right: 0;
+          background: rgba(10,14,23,0.98);
+          padding: 2rem;
+          gap: 1.5rem;
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+          backdrop-filter: blur(20px);
+          z-index: 99;
+        `;
+      } else {
+        nav.removeAttribute('style');
+      }
+    });
+
+    // Smooth typing effect for terminal (optional enhancement)
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click', () => {
+        if (navOpen) {
+          nav.removeAttribute('style');
+          navOpen = false;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
