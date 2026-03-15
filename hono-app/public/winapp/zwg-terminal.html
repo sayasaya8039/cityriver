@@ -609,6 +609,44 @@
     .code-val { color: var(--accent-cyan); }
     .code-str { color: #ff9d5c; }
 
+    .support-area {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .support-text {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .btn-paypal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 1.8rem;
+      background: #003087;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid #003087;
+      transition: all 0.3s;
+      letter-spacing: 0.03em;
+      box-shadow: 0 0 20px rgba(0, 48, 135, 0.4);
+    }
+
+    .btn-paypal:hover {
+      background: #0070ba;
+      border-color: #0070ba;
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(0, 112, 186, 0.5);
+    }
+
     /* ============ DOWNLOAD ============ */
     .download { background: transparent; }
 
@@ -1072,6 +1110,14 @@
             </a>
             <a href="https://note.com/alvis8039" target="_blank" class="btn-secondary">
               📖 使い方を読む
+            </a>
+          </div>
+
+          <div class="support-area">
+            <p class="support-text">💙 開発を応援してくれると嬉しいです！</p>
+            <a href="https://paypal.me/alvis8039" target="_blank" class="btn-paypal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+              PayPal で支援する
             </a>
           </div>
 
