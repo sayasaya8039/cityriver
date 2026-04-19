@@ -16,7 +16,7 @@ function getUniqueCategories(items: Product[]): string[] {
   for (const item of items) {
     cats.add(item.category)
   }
-  return Array.from(cats).sort()
+  return Array.from(cats)
 }
 
 function groupByCategory(items: Product[]): Map<string, Product[]> {
@@ -29,74 +29,64 @@ function groupByCategory(items: Product[]): Map<string, Product[]> {
   return map
 }
 
+const CAT_EMOJI: Record<string, string> = {
+  '生産性向上': '⚡',
+  'note.com': '📝',
+  'ユーティリティ': '🔧',
+  'ショッピング': '🛒',
+  'SNS・動画': '📦',
+  'AI・プロンプト': '📦',
+  'エンタメ': '🎮',
+  'ライフスタイル': '🌱',
+  'ビジネス': '💼',
+  'デザイン': '🎨',
+}
+
+const ARROW_ICON =
+  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+
 function renderListingPage(
   items: Product[],
   title: string,
-  badge: string,
-  badgeBg: string,
-  badgeColor: string,
+  headerBadge: string,
+  _badgeBg: string,
+  _badgeColor: string,
   detailPrefix: string
 ): string {
   const categories = getUniqueCategories(items)
   const grouped = groupByCategory(items)
 
-  const categoryButtons = categories
-    .map((cat) => `<button class="cb" data-cat="${cat}">${cat}</button>`)
-    .join('')
+  const categoryButtons = [
+    `<button class="cb act" data-cat="">すべて</button>`,
+    ...categories.map(
+      (cat) => `<button class="cb" data-cat="${cat}">${CAT_EMOJI[cat] || '📦'} ${cat}</button>`
+    ),
+  ].join('')
 
   let cardsHtml = ''
   for (const [cat, prods] of grouped) {
     const cards = prods
       .map(
-        (p) => `
-        <a href="${detailPrefix}/${p.slug}" class="cd" data-name="${p.name}" data-desc="${p.desc}">
-          <div class="cf" style="margin-bottom:12px">
-            <span class="ctg">${p.category}</span>
-            ${p.github ? `<span class="gl">${githubIcon()}</span>` : ''}
-          </div>
-          <h3>${p.name}</h3>
-          <p>${p.desc}</p>
-          <div class="cf">
-            <span class="mi" style="margin:0">v${p.ver}</span>
-            <span class="cl2">詳細 →</span>
-          </div>
-        </a>`
+        (p) => `<div class="cd rv" data-name="${p.name}" data-desc="${p.desc}" data-cat="${cat}">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px"><h3>${p.name}</h3><span class="ctg">v${p.ver}</span></div>
+<p>${p.desc}</p>
+<div class="cf"><a href="${detailPrefix}/${p.slug}.html" class="cl2">詳細を見る ${ARROW_ICON}</a><div style="display:flex;align-items:center;gap:8px">${p.github ? `<a href="${p.github}" class="gl" target="_blank" rel="noopener">${githubIcon()}</a>` : ''}</div></div>
+</div>`
       )
       .join('')
 
-    cardsHtml += `
-      <div class="cs2" id="cat-${cat}" data-category="${cat}">
-        <h3 style="font-size:18px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)">${cat}</h3>
-        <div class="cg">${cards}</div>
-      </div>`
+    cardsHtml += `<div class="cs2" data-cat="${cat}" style="margin-bottom:48px"><h2 style="font-size:20px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px">${CAT_EMOJI[cat] || '📦'} ${cat}</h2><p style="font-size:13px;color:var(--text-s);margin-bottom:20px">${prods.length} 件</p><div class="cg">${cards}</div></div>`
   }
 
   return `
-<section style="padding-top:40px">
-  <div class="ct">
-    <div class="bc rv">
-      <a href="/">ホーム</a>
-      <span>/</span>
-      <span>${title}</span>
-    </div>
-    <div class="ph rv">
-      <span class="pb" style="background:${badgeBg};color:${badgeColor}">${badge}</span>
-      <h1>${title}</h1>
-      <p>${items.length}個のプロダクト</p>
-    </div>
-    <div class="si3 rv">
-      <input type="text" id="searchInput" class="si4" placeholder="プロダクトを検索...">
-    </div>
-    <div class="cn rv">
-      <button class="cb act" data-cat="all">すべて</button>
-      ${categoryButtons}
-    </div>
-    ${cardsHtml}
-    <div style="margin-top:40px" class="rv">
-      <a href="/" class="btn bs">← ホームに戻る</a>
-    </div>
-  </div>
-</section>
+<section style="padding-top:40px"><div class="ct">
+<div class="bc"><a href="/">ホーム</a><span>/</span><a href="/#products">プロダクト</a><span>/</span>${title}</div>
+<div class="ph"><div class="pb" style="background:var(--al);color:var(--accent)">${headerBadge}</div><h1>${title}</h1><p>${items.length}+ のプロダクトをご覧いただけます</p></div>
+<div class="si3"><input class="si4" id="searchInput" type="text" placeholder="🔍 アプリ名で検索..."></div>
+<div class="cn">${categoryButtons}</div>
+${cardsHtml}
+<div style="margin-top:40px"><a href="/" class="btn bs">← ホームに戻る</a></div>
+</div></section>
 `
 }
 
@@ -164,49 +154,37 @@ function renderDetailPage(
 }
 
 // Listing pages
-products.get('/extensions', (c) => {
+const extensionsHandler = (c: any) => {
   const content = renderListingPage(
     extensions,
-    'Chrome拡張機能',
-    '🧩 Extensions',
+    'ブラウザ拡張機能一覧',
+    '🧩 ブラウザ拡張機能一覧',
     'var(--al)',
     'var(--accent)',
     '/ext'
   )
-  return c.html(layout(content, 'Chrome拡張機能', 'Chrome拡張機能の一覧'))
-})
+  return c.html(layout(content, 'ブラウザ拡張機能一覧', 'Chrome拡張機能の一覧'))
+}
+products.get('/extensions', (c) => c.redirect('/extensions.html', 301))
 
-products.get('/webapps', (c) => {
-  const content = renderListingPage(
-    webapps,
-    'Webアプリケーション',
-    '🌐 Web Apps',
-    'var(--cl)',
-    'var(--cyan)',
-    '/webapp'
-  )
-  return c.html(layout(content, 'Webアプリケーション', 'Webアプリケーションの一覧'))
-})
-
-products.get('/windows-apps', (c) => {
-  const content = renderListingPage(
-    winapps,
-    'Windowsアプリケーション',
-    '🖥️ Windows Apps',
-    'var(--aml)',
-    'var(--amber)',
-    '/winapp'
-  )
-  return c.html(layout(content, 'Windowsアプリケーション', 'Windowsアプリケーションの一覧'))
-})
+// 一覧ページは public/ の静的 HTML が Source of Truth（id:032）
+products.get('/webapps', (c) => c.redirect('/webapps.html', 301))
+products.get('/windows-apps', (c) => c.redirect('/windows-apps.html', 301))
 
 // Detail pages
 products.get('/ext/:slug', (c) => {
   const slug = c.req.param('slug')
-  const item = extensions.find((e) => e.slug === slug)
-  if (!item) return c.notFound()
-  const content = renderDetailPage(item, '/extensions', '拡張機能一覧', 'Chrome拡張機能')
-  return c.html(layout(content, item.name, item.desc))
+  return c.redirect(`/ext/${slug}.html`, 301)
+})
+
+// 静的 HTML が public/winapp/ に存在する slug は .html へ 301（id:032）
+const staticWinappSlugs = new Set(['coppy'])
+products.get('/winapp/:slug', (c, next) => {
+  const slug = c.req.param('slug')
+  if (staticWinappSlugs.has(slug)) {
+    return c.redirect(`/winapp/${slug}.html`, 301)
+  }
+  return next()
 })
 
 products.get('/webapp/:slug', (c) => {

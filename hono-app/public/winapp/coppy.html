@@ -1,0 +1,387 @@
+<!DOCTYPE html><html lang="ja"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Coppy - Clipboard History | 合同会社シティーリバー</title>
+<meta name="description" content="コピーした内容を自動でカテゴリ分けして保存する Windows アプリ"/>
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png"/>
+<link rel="icon" href="../favicon.ico"/>
+<style>/* CityRiver Design System - shared.css */
+:root{
+  --accent:#4F46E5;--al:#EEF2FF;
+  --cyan:#0891B2;--cl:#ECFEFF;
+  --amber:#D97706;--aml:#FFFBEB;
+  --green:#059669;--gl:#ECFDF5;
+  --bg:#FFF;--bg-section:#F8FAFC;
+  --text:#0F172A;--text-s:#64748B;
+  --border:#E2E8F0;--card-bg:#FFF;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.08);
+  --radius:16px;--nav-bg:rgba(255,255,255,.8)
+}
+[data-theme=dark]{
+  --bg:#0F172A;--bg-section:#1E293B;
+  --text:#F1F5F9;--text-s:#94A3B8;
+  --border:#334155;--card-bg:#1E293B;
+  --shadow:0 1px 3px rgba(0,0,0,.3);
+  --shadow-lg:0 10px 25px rgba(0,0,0,.4);
+  --nav-bg:rgba(15,23,42,.85);
+  --al:#1E1B4B;--cl:#164E63;--aml:#451A03;--gl:#064E3B
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
+
+/* Background blobs */
+.bg-blobs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none}
+.bg-blobs span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;animation:blobFloat 20s ease-in-out infinite}
+.bg-blobs span:nth-child(1){width:500px;height:500px;background:var(--accent);top:-10%;left:-5%;animation-delay:0s}
+.bg-blobs span:nth-child(2){width:400px;height:400px;background:var(--cyan);top:40%;right:-8%;animation-delay:-7s}
+.bg-blobs span:nth-child(3){width:350px;height:350px;background:var(--amber);bottom:-5%;left:30%;animation-delay:-14s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.05)}66%{transform:translate(-20px,30px) scale(.95)}}
+
+/* Navigation */
+.nw{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:background .3s}
+.nv{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.nl img{height:32px;width:32px;border-radius:8px}
+.nk{display:flex;align-items:center;gap:6px}
+.nk a{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-s);transition:all .2s}
+.nk a:hover{color:var(--text);background:var(--bg-section)}
+.nc{background:var(--accent)!important;color:#fff!important;border-radius:8px!important;padding:8px 18px!important;font-weight:600!important}
+.nc:hover{opacity:.9}
+
+/* Theme toggle */
+.tt{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;color:var(--text-s);display:flex;align-items:center;transition:all .2s}
+.tt:hover{color:var(--text);border-color:var(--text-s)}
+
+/* Hamburger */
+.hb{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hb span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hb.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hb.active span:nth-child(2){opacity:0}
+.hb.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* Mobile menu */
+.mm{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;gap:4px;z-index:99;box-shadow:var(--shadow-lg)}
+.mm.active{display:flex}
+.mm a{padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:background .2s}
+.mm a:hover{background:var(--bg-section)}
+
+/* Content wrapper */
+.cw{padding-top:64px}
+
+/* Reveal animation */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+
+/* Container */
+.ct{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Hero */
+.hero{padding:120px 40px 80px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.3;margin-bottom:20px;letter-spacing:-.02em}
+.gt{background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hbg{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;background:var(--al);color:var(--accent);margin-bottom:20px}
+.hs{font-size:clamp(14px,2vw,17px);color:var(--text-s);max-width:640px;margin:0 auto 32px;line-height:1.9}
+.ha{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;font-weight:600;font-size:14px;transition:all .25s;cursor:pointer;border:none;text-decoration:none}
+.bp{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bp:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,70,229,.4)}
+.bs{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.bs:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Section header */
+section{padding:80px 0}
+.sh{text-align:center;margin-bottom:48px}
+.sb{display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:12px}
+.st{font-size:clamp(24px,3.5vw,36px);font-weight:800;margin-bottom:12px;letter-spacing:-.01em}
+.ss{font-size:15px;color:var(--text-s);max-width:560px;margin:0 auto;line-height:1.8}
+
+/* Services grid */
+.svg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.sc{display:block;padding:28px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.sc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.sc h3{font-size:17px;font-weight:700;margin:14px 0 8px}
+.sc p{font-size:13px;color:var(--text-s);line-height:1.7}
+.si2{font-size:32px;display:block}
+
+/* Stats row */
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:40px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);margin-bottom:40px;text-align:center}
+.si{display:flex;flex-direction:column;align-items:center}
+.sn{font-size:clamp(28px,4vw,42px);font-weight:800;background:linear-gradient(135deg,var(--accent),#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:13px;color:var(--text-s);margin-top:4px;font-weight:500}
+
+/* Product grid */
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.pc{display:block;padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s;text-decoration:none}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.pc h3{font-size:18px;font-weight:700;margin:18px 0 8px}
+.pc p{font-size:14px;color:var(--text-s);line-height:1.7;margin-bottom:16px}
+.ci{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff}
+.pu{background:linear-gradient(135deg,#7C3AED,#4F46E5)}
+.cy{background:linear-gradient(135deg,#0891B2,#06B6D4)}
+.am{background:linear-gradient(135deg,#D97706,#F59E0B)}
+.cl2{font-size:13px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.cl2:hover{gap:10px}
+
+/* Info grid */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px}
+.ic{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.ic h3{font-size:18px;font-weight:700;margin-bottom:20px}
+.ir{display:flex;padding:12px 0;border-bottom:1px solid var(--border)}
+.ir:last-child{border-bottom:none}
+.ir dt{min-width:100px;font-size:13px;color:var(--text-s);font-weight:500}
+.ir dd{font-size:14px;font-weight:500}
+.ir a{color:var(--accent)}
+
+/* Contact */
+.cs{text-align:center;padding:48px;border-radius:var(--radius);background:linear-gradient(135deg,var(--accent),#7C3AED);color:#fff}
+.cs h2{font-size:28px;font-weight:800;margin-bottom:12px}
+.cs p{font-size:15px;opacity:.9;margin-bottom:28px;line-height:1.8}
+.ca{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cs .bp{background:#fff;color:var(--accent)}
+.cs .bs{border-color:rgba(255,255,255,.4);color:#fff}
+.cs .bs:hover{background:rgba(255,255,255,.15);border-color:#fff}
+
+/* Footer */
+footer{background:var(--bg-section);border-top:1px solid var(--border);padding:32px 0}
+.fi{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fc{font-size:13px;color:var(--text-s)}
+.fl{display:flex;gap:20px}
+.fl a{font-size:13px;color:var(--text-s);transition:color .2s}
+.fl a:hover{color:var(--accent)}
+
+/* Back to top */
+.bt{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;z-index:50;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.bt.vis{opacity:1;transform:translateY(0)}
+.bt:hover{transform:translateY(-2px)}
+
+/* Breadcrumb */
+.bc{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-s);margin-bottom:24px;flex-wrap:wrap}
+.bc a{transition:color .2s}
+.bc a:hover{color:var(--accent)}
+.bc span{opacity:.4}
+
+/* Page header */
+.ph{margin-bottom:32px}
+.pb{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:14px}
+.ph h1{font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:8px}
+.ph p{font-size:15px;color:var(--text-s)}
+
+/* Search */
+.si3{margin-bottom:24px}
+.si4{width:100%;padding:14px 20px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);font-size:15px;color:var(--text);outline:none;transition:border-color .2s}
+.si4:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--al)}
+
+/* Category nav */
+.cn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.cb{padding:8px 18px;border-radius:999px;font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--bg);color:var(--text-s);cursor:pointer;transition:all .2s}
+.cb:hover{border-color:var(--accent);color:var(--accent)}
+.cb.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Card grid */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.cd{padding:24px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border);transition:all .3s}
+.cd:hover{box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.cd h3{font-size:16px;font-weight:700}
+.cd p{font-size:13px;color:var(--text-s);line-height:1.7;margin-bottom:14px}
+.ctg{font-size:11px;padding:3px 10px;border-radius:999px;background:var(--bg-section);color:var(--text-s);font-weight:600;white-space:nowrap}
+.cf{display:flex;justify-content:space-between;align-items:center}
+.gl{color:var(--text-s);transition:color .2s;display:flex;align-items:center}
+.gl:hover{color:var(--text)}
+
+/* Category section */
+.cs2{scroll-margin-top:80px}
+
+/* Detail page */
+.dh{margin-bottom:40px}
+.dh h1{font-size:clamp(24px,4vw,32px);font-weight:800;margin-bottom:12px}
+.ds{font-size:16px;color:var(--text-s);line-height:1.8;margin-bottom:20px}
+.mb{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.mi{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;background:var(--bg-section);color:var(--text-s);border:1px solid var(--border)}
+.da{display:flex;gap:12px;flex-wrap:wrap}
+.dc{padding:32px;border-radius:var(--radius);background:var(--card-bg);border:1px solid var(--border)}
+.dc h2{font-size:20px;font-weight:700;margin:28px 0 14px;padding-top:20px;border-top:1px solid var(--border)}
+.dc h2:first-of-type{margin-top:20px;padding-top:0;border-top:none}
+.dc p{font-size:14px;color:var(--text-s);line-height:1.8;margin-bottom:12px}
+.dc ul{list-style:none;padding:0}
+.dc ul li{padding:8px 0 8px 24px;position:relative;font-size:14px;color:var(--text-s)}
+.dc ul li::before{content:"\2713";position:absolute;left:0;color:var(--accent);font-weight:700}
+.tl li::before{content:"\25CF"!important;font-size:8px;top:12px}
+.dc a{color:var(--accent)}
+
+/* Responsive */
+@media(max-width:768px){
+  .nk{display:none}
+  .nv>div:last-child{display:flex}
+  .hb{display:flex}
+  .hero{padding:100px 20px 60px}
+  .sr{grid-template-columns:repeat(2,1fr);padding:24px}
+  .ig{grid-template-columns:1fr}
+  .cg{grid-template-columns:1fr}
+  .pg{grid-template-columns:1fr}
+  .fi{flex-direction:column;text-align:center}
+  .fl{justify-content:center}
+}
+@media(min-width:769px){
+  .nv>div:last-child .tt{display:none}
+}
+</style></head><body>
+<div class="bg-blobs"><span></span><span></span><span></span></div>
+<header class="nw"><nav class="nv">
+<a href="../index.html" class="nl"><img src="Logo.png" alt="CityRiver">合同会社シティーリバー</a>
+<div class="nk"><a href="../index.html#services">事業内容</a><a href="../index.html#products">プロダクト</a><a href="../index.html#profile">会社情報</a><a href="../index.html#contact" class="nc">お問い合わせ</a><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></div>
+<div style="display:flex;gap:8px;align-items:center"><button class="tt" aria-label="テーマ切替"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="hb" aria-label="メニュー"><span></span><span></span><span></span></button></div>
+</nav></header>
+<div class="mm"><a href="../index.html">ホーム</a><a href="../index.html#services">事業内容</a><a href="../index.html#products">プロダクト</a><a href="../extensions.html">拡張機能</a><a href="../webapps.html">Webアプリ</a><a href="../windows-apps.html">Windowsアプリ</a><a href="../index.html#contact">お問い合わせ</a></div><div class="cw"><section style="padding-top:40px"><div class="ct" style="max-width:900px">
+<div class="bc"><a href="../index.html">ホーム</a><span>/</span><a href="../index.html#products">プロダクト</a><span>/</span><a href="../windows-apps.html">Windowsアプリ</a><span>/</span>Coppy</div>
+<div class="dh"><div class="pb" style="background:var(--al);color:var(--accent)">Windowsアプリ</div><h1>Coppy - Clipboard History</h1><p class="ds">コピーした内容を自動でカテゴリ分けして保存する、システムトレイ常駐型 Windows アプリケーション</p>
+<div class="mb"><div class="mi"><strong>v1.2.3</strong></div><div class="mi">Python 3.10+</div><div class="mi">PyQt6</div><div class="mi">SQLite</div><div class="mi">MIT License</div></div>
+<div class="da"><a href="https://github.com/sayasaya8039/Clipboard_history_AI" class="btn bp" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> GitHub</a><a href="../windows-apps.html" class="btn bs"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> 一覧に戻る</a>
+<a href="https://paypal.me/alvis8039" target="_blank" class="btn" style="background:#003087;color:#fff;box-shadow:0 4px 14px rgba(0,48,135,.3)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg> PayPal で支援する</a></div></div>
+<div class="dc">
+<p>クリップボードにコピーした内容を自動で監視し、ルールベースでカテゴリ分類して履歴として保存する、システムトレイ常駐型アプリケーションです。</p>
+
+<h2>主な機能</h2>
+<ul>
+<li><strong>自動カテゴリ分類</strong> — URL、メールアドレス、コード、電話番号、ファイルパス、画像、テキストを自動判別</li>
+<li><strong>履歴管理</strong> — 検索、お気に入り、ワンクリックコピー、URL をブラウザで開く</li>
+<li><strong>データ入出力</strong> — 履歴・定型文の CSV 出力 / 取込（UTF-8 / Shift_JIS 対応）</li>
+<li><strong>永続保存</strong> — 設定 / 履歴 / 定型文を <code>%APPDATA%\Coppy</code> 配下に保存</li>
+<li><strong>システムトレイ常駐</strong> — バックグラウンドで動作し、トレイアイコンから操作</li>
+<li><strong>テーマ切替</strong> — ダーク / ライト / システムテーマ対応</li>
+<li><strong>Figma ベース設定UI</strong> — 洗練された設定ダイアログ</li>
+</ul>
+
+<h2>使い方</h2>
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:14px">
+<thead><tr style="border-bottom:2px solid var(--border);text-align:left">
+<th style="padding:10px 12px;font-weight:700">操作</th>
+<th style="padding:10px 12px;font-weight:700">動作</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">トレイアイコン左クリック</td><td style="padding:10px 12px;color:var(--text-s)">履歴ウィンドウを表示</td></tr>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">トレイアイコン右クリック</td><td style="padding:10px 12px;color:var(--text-s)">メニューを表示</td></tr>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">履歴アイテムダブルクリック</td><td style="padding:10px 12px;color:var(--text-s)">クリップボードにコピー</td></tr>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">URLクリック</td><td style="padding:10px 12px;color:var(--text-s)">ブラウザで開く</td></tr>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">⭐ボタン</td><td style="padding:10px 12px;color:var(--text-s)">お気に入り登録 / 解除</td></tr>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">📋ボタン</td><td style="padding:10px 12px;color:var(--text-s)">クリップボードにコピー</td></tr>
+<tr><td style="padding:10px 12px">🗑ボタン</td><td style="padding:10px 12px;color:var(--text-s)">履歴から削除</td></tr>
+</tbody></table>
+</div>
+
+<h2>設定</h2>
+<p>トレイアイコン右クリックの「設定」から以下を管理できます。</p>
+<ul>
+<li>一般</li>
+<li>履歴</li>
+<li>アイテム</li>
+<li>ショートカット</li>
+<li>外観</li>
+<li>出力 / 取込</li>
+</ul>
+
+<h2>インストール</h2>
+<h3 style="font-size:16px;font-weight:700;margin:16px 0 8px">推奨: インストーラー版（エンドユーザー向け）</h3>
+<p><a href="https://github.com/sayasaya8039/Clipboard_history_AI/releases/latest" target="_blank" rel="noopener">Releases</a> から以下のいずれかを入手してください。</p>
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:14px">
+<thead><tr style="border-bottom:2px solid var(--border);text-align:left">
+<th style="padding:10px 12px;font-weight:700">ファイル</th>
+<th style="padding:10px 12px;font-weight:700">用途</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px"><code>coppy-&lt;version&gt;-setup.exe</code></td><td style="padding:10px 12px;color:var(--text-s)"><strong>推奨</strong> — インストーラー。スタートメニュー / デスクトップショートカット / 自動起動オプション付き</td></tr>
+<tr><td style="padding:10px 12px"><code>coppy.exe</code></td><td style="padding:10px 12px;color:var(--text-s)">ポータブル版。インストール不要、そのまま実行可能</td></tr>
+</tbody></table>
+</div>
+<p>Python ランタイムのインストールは不要です。</p>
+
+<h3 style="font-size:16px;font-weight:700;margin:16px 0 8px">開発者向けセットアップ</h3>
+<p>必要条件: Python 3.10 以上 / Windows 10・11</p>
+<pre style="background:var(--bg-section);border:1px solid var(--border);border-radius:12px;padding:20px;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text-s)"><code>git clone https://github.com/sayasaya8039/Clipboard_history_AI.git
+cd Clipboard_history_AI
+pip install -r requirements.txt
+python main.py</code></pre>
+
+<h3 style="font-size:16px;font-weight:700;margin:16px 0 8px">ビルド</h3>
+<h4 style="font-size:14px;font-weight:600;margin:12px 0 6px">ポータブル EXE</h4>
+<pre style="background:var(--bg-section);border:1px solid var(--border);border-radius:12px;padding:20px;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text-s)"><code>python -m PyInstaller ClipboardHistory.spec --noconfirm</code></pre>
+<p><code>dist/coppy.exe</code> が生成されます。</p>
+
+<h4 style="font-size:14px;font-weight:600;margin:12px 0 6px">インストーラー</h4>
+<p><a href="https://jrsoftware.org/isinfo.php" target="_blank" rel="noopener">Inno Setup 6</a> が必要です。</p>
+<pre style="background:var(--bg-section);border:1px solid var(--border);border-radius:12px;padding:20px;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text-s)"><code>"%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" installer\coppy.iss</code></pre>
+<p><code>dist/coppy-&lt;version&gt;-setup.exe</code> が生成されます。</p>
+
+<h2>プロジェクト構造</h2>
+<pre style="background:var(--bg-section);border:1px solid var(--border);border-radius:12px;padding:20px;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text-s)"><code>Coppy/
+├── main.py                 # エントリーポイント
+├── config.py               # 設定管理
+├── database.py             # SQLite 操作
+├── csv_transfer.py         # 履歴 / 定型文の CSV 出力・取込
+├── categorizer.py          # ルールベース分類
+├── clipboard_monitor.py    # クリップボード監視
+├── startup.py              # Windows スタートアップ登録
+├── ui/
+│   ├── main_window.py      # メインウィンドウ
+│   ├── detail_panels.py    # 詳細パネル
+│   ├── dialogs.py          # ダイアログ
+│   ├── iconography.py      # アイコンフォント
+│   ├── settings_dialog.py  # 設定ダイアログ
+│   ├── tray_icon.py        # システムトレイ
+│   ├── widgets.py          # 共通ウィジェット
+│   ├── styles.py           # テーマ / スタイル
+│   └── sample_data.py      # サンプルデータ
+├── resources/
+│   ├── icon.ico
+│   └── icon.png
+├── tests/
+├── ClipboardHistory.spec
+├── installer/
+│   └── coppy.iss           # Inno Setup インストーラースクリプト
+├── foreground_tracker.py   # 前面ウィンドウ追跡（貼り付け対象特定）
+├── requirements.txt
+└── README.md</code></pre>
+
+<h2>技術スタック</h2>
+<ul class="tl">
+<li>言語: Python 3.10+</li>
+<li>GUI: PyQt6</li>
+<li>データベース: SQLite</li>
+<li>ビルド: PyInstaller</li>
+</ul>
+
+<h2>ライセンス</h2>
+<p>MIT License</p>
+
+<h2>ソースコード</h2>
+<p><a href="https://github.com/sayasaya8039/Clipboard_history_AI" target="_blank" rel="noopener">GitHub</a> で公開中。Issue・Pull Request を歓迎します。</p>
+</div>
+<a href="../windows-apps.html" class="btn bs" style="margin-top:40px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Windowsアプリに戻る</a>
+</div></section></div>
+<footer><div class="fi"><div class="fc">&copy; <span class="yr"></span> 合同会社シティーリバー / CityRiver LLC</div><div class="fl"><a href="../index.html">ホーム</a><a href="../extensions.html">拡張機能</a><a href="../webapps.html">Webアプリ</a><a href="../windows-apps.html">Windowsアプリ</a></div></div></footer>
+<button class="bt" aria-label="トップへ戻る"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button><script>
+const H=document.documentElement,S=localStorage.getItem('theme');
+if(S)H.dataset.theme=S;else if(matchMedia('(prefers-color-scheme:dark)').matches)H.dataset.theme='dark';
+document.querySelectorAll('.tt').forEach(b=>b.addEventListener('click',()=>{const n=H.dataset.theme==='dark'?'light':'dark';H.dataset.theme=n;localStorage.setItem('theme',n)}));
+document.querySelectorAll('.hb').forEach(h=>h.addEventListener('click',()=>{h.classList.toggle('active');document.querySelector('.mm')?.classList.toggle('active')}));
+const O=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');O.unobserve(x.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(e=>O.observe(e));
+function aC(){document.querySelectorAll('[data-count]').forEach(e=>{const t=parseInt(e.dataset.count);let c=0;const s=Math.max(1,Math.floor(t/40));const i=setInterval(()=>{c+=s;if(c>=t){c=t;clearInterval(i)}e.textContent=c+(e.dataset.suffix||'')},30)})}
+const CO=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){aC();CO.unobserve(x.target)}}),{threshold:.3});
+document.querySelectorAll('.sr').forEach(e=>CO.observe(e));
+const BT=document.querySelector('.bt');
+if(BT){window.addEventListener('scroll',()=>BT.classList.toggle('vis',scrollY>400));BT.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}))}
+document.querySelectorAll('.yr').forEach(e=>e.textContent=new Date().getFullYear());
+const SI=document.querySelector('.si4');
+if(SI)SI.addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.cd[data-name]').forEach(c=>{c.style.display=(c.dataset.name.toLowerCase().includes(q)||c.dataset.desc?.toLowerCase().includes(q))?'':'none'})});
+document.querySelectorAll('.cb[data-cat]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.cb').forEach(x=>x.classList.remove('act'));b.classList.add('act');const c=b.dataset.cat;document.querySelectorAll('.cd[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none');document.querySelectorAll('.cs2[data-cat]').forEach(x=>x.style.display=(!c||x.dataset.cat===c)?'':'none')}));
+</script></body></html>
